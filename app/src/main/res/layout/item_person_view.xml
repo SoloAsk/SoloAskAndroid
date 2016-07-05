@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_person_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_common_layout">
+
+    <com.soloask.android.view.BoundImageView
+        android:id="@id/img_respondent"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginLeft="@dimen/item_common_margin"
+        android:layout_marginTop="@dimen/item_common_margin"
+        android:background="@drawable/avater_hemingke" />
+
+    <TextView
+        android:id="@id/tv_respondent_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/img_respondent"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/img_respondent"
+        android:text="Wade"
+        android:textColor="@color/color_user_name"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@id/tv_respondent_describe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_respondent_name"
+        android:layout_below="@id/tv_respondent_name"
+        android:layout_marginTop="3dp"
+        android:text="NBA player"
+        android:textColor="@color/color_user_titles"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_respondent_followers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_respondent_name"
+        android:layout_below="@id/tv_respondent_describe"
+        android:layout_marginBottom="@dimen/item_common_margin"
+        android:layout_marginTop="3dp"
+        android:text="Answered 1 question, earned $3.5"
+        android:textColor="@color/color_user_title"
+        android:textSize="12sp" />
+
+    <include
+        layout="@layout/divider_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_below="@id/tv_respondent_followers"></include>
+
+
+</RelativeLayout>

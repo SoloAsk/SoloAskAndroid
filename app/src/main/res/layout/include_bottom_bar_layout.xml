@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <TextView
+            android:id="@+id/tab_01"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="7dp"
+            android:text="@string/tab_name1"
+            android:textColor="@color/tab_text_nomal"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tab_02"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="7dp"
+            android:text="@string/tab_name2"
+            android:textColor="@color/tab_text_nomal"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tab_03"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="7dp"
+            android:text="@string/tab_name3"
+            android:textColor="@color/tab_text_nomal"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+</RelativeLayout>

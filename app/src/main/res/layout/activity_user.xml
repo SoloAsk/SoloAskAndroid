@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/common_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.soloask.android.view.BoundImageView
+                        android:id="@+id/img_user_icon"
+                        android:layout_width="51dp"
+                        android:layout_height="51dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp"
+                        android:background="@drawable/ic_me_default" />
+
+                    <TextView
+                        android:id="@+id/tv_edit_profile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignTop="@id/img_user_icon"
+                        android:layout_marginRight="@dimen/item_common_margin"
+                        android:drawablePadding="3dp"
+                        android:drawableTop="@drawable/ic_edit"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_user_login"
+                    style="@style/CommonButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/item_common_margin"
+                    android:layout_marginTop="@dimen/item_common_margin"
+                    android:text="@string/btn_login"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/ll_user_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:text="Love"
+                        android:textColor="@color/color_user_name"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_user_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:text="Doctor"
+                        android:textColor="@color/color_user_title" />
+
+                    <TextView
+                        android:id="@+id/tv_user_describe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/item_common_margin"
+                        android:layout_marginRight="@dimen/item_common_margin"
+                        android:layout_marginTop="10dp"
+                        android:text="something"
+                        android:textColor="@color/color_user_name" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/item_common_margin"
+                            android:text="@string/user_payment_for_asking"
+                            android:textColor="@color/color_user_title" />
+
+                        <TextView
+                            android:id="@+id/tv_user_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="$3.14"
+                            android:textColor="@color/color_common_red" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/item_common_margin"
+                            android:text="@string/user_earned"
+                            android:textColor="@color/color_user_title" />
+
+                        <TextView
+                            android:id="@+id/tv_user_income"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="$0"
+                            android:textColor="@color/color_common_red" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@id/tv_user_describe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="@dimen/item_common_margin"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/user_payment_rules"
+                        android:textColor="@color/color_user_title" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <include layout="@layout/divider_horizontal"></include>
+
+            <TextView
+                android:id="@+id/tv_my_question"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/item_common_margin"
+                android:background="@drawable/selector_common_layout"
+                android:drawableLeft="@drawable/ic_my_questions"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/item_common_margin"
+                android:text="@string/title_my_ask"
+                android:textColor="@color/color_user_name" />
+
+            <include layout="@layout/divider_horizontal"></include>
+
+            <TextView
+                android:id="@+id/tv_my_answer"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/selector_common_layout"
+                android:drawableLeft="@drawable/ic_my_answers"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/item_common_margin"
+                android:text="@string/title_my_answer"
+                android:textColor="@color/color_user_name" />
+
+            <include layout="@layout/divider_horizontal"></include>
+
+            <TextView
+                android:id="@+id/tv_my_listen"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/selector_common_layout"
+                android:drawableLeft="@drawable/ic_my_visited"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/item_common_margin"
+                android:text="@string/title_my_listen"
+                android:textColor="@color/color_user_name" />
+
+            <include layout="@layout/divider_horizontal"></include>
+
+            <TextView
+                android:id="@+id/tv_withdraw"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/item_common_margin"
+                android:background="@drawable/selector_common_layout"
+                android:drawableLeft="@drawable/ic_my_withdraw"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/item_common_margin"
+                android:text="@string/title_withdraw"
+                android:textColor="@color/color_user_name" />
+
+            <include layout="@layout/divider_horizontal"></include>
+
+            <TextView
+                android:id="@+id/tv_about"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/selector_common_layout"
+                android:drawableLeft="@drawable/ic_about"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/item_common_margin"
+                android:text="@string/title_about"
+                android:textColor="@color/color_user_name" />
+
+            <include layout="@layout/divider_horizontal"></include>
+
+            <TextView
+                android:id="@+id/tv_logout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/item_common_margin"
+                android:layout_marginTop="@dimen/item_common_margin"
+                android:background="@drawable/selector_common_layout"
+                android:gravity="center"
+                android:text="@string/logout"
+                android:textColor="@color/color_common_red"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

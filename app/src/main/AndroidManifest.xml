@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.soloask.android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application
+        android:name="com.soloask.android.MainApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_rewardstalk"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="com.soloask.android.activity.LauncherActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.soloask.android.activity.MainActivity"></activity>
+        <activity
+            android:name="com.soloask.android.activity.QuestionDetailActivity"
+            android:label="@string/title_question_detail"></activity>
+        <activity
+            android:name="com.soloask.android.activity.UserProfileActivity"
+            android:label="@string/title_ask_question"></activity>
+        <activity
+            android:name="com.soloask.android.activity.LoginActivity"
+            android:label="@string/title_login"></activity>
+        <activity
+            android:name="com.soloask.android.activity.AnswerActivity"
+            android:label="@string/title_answer_question"></activity>
+        <activity android:name="com.soloask.android.activity.MyCommonActivity"></activity>
+        <activity
+            android:name="com.soloask.android.activity.EditProfileActivity"
+            android:label="@string/title_edit_profile"></activity>
+        <activity
+            android:name="com.soloask.android.activity.WithDrawActivity"
+            android:label="@string/title_withdraw"></activity>
+        <activity
+            android:name="com.soloask.android.activity.UserActivity"
+            android:label="@string/tab_name3"></activity>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="57750fbe67e58e8ee3002cba"></meta-data>
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="c4e88ed3b7ce3669af146510a477cf8a"></meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Channel ID" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1618281258486160"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="dc34240161e62021570b3644826fd0bb90794dec" />
+    </application>
+
+</manifest>

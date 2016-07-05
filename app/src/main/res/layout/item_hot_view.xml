@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_hot_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_common_layout">
+
+    <TextView
+        android:id="@+id/tv_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/item_common_margin"
+        android:layout_marginRight="@dimen/item_common_margin"
+        android:layout_marginTop="@dimen/item_common_margin"
+        android:text="Why did you choose as the star points A platform ? You have to check-in fee it ? How high ? On what charge ?"
+        android:textColor="@color/color_question"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_respondent_describe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_question"
+        android:layout_marginLeft="@dimen/item_common_margin"
+        android:layout_marginTop="10dp"
+        android:text="LeBron James | NBA player"
+        android:textColor="@color/color_user_title"
+        android:textSize="11sp" />
+
+    <include
+        android:id="@+id/rl_voice_answer"
+        layout="@layout/layout_voice_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_respondent_describe"
+        android:layout_marginTop="10dp"></include>
+
+    <TextView
+        android:id="@+id/tv_listeners_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/rl_voice_answer"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/rl_voice_answer"
+        android:layout_below="@id/tv_respondent_describe"
+        android:layout_marginRight="@dimen/item_common_margin"
+        android:gravity="center"
+        android:text="28 heard"
+        android:textColor="@color/color_common_red"
+        android:textSize="12sp" />
+
+    <include
+        layout="@layout/divider_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_below="@id/tv_listeners_amount"
+        android:layout_marginTop="@dimen/item_common_margin"></include>
+
+
+</RelativeLayout>

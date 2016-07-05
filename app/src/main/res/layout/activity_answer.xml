@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <include layout="@layout/top_quetioner_common_view"></include>
+
+                <TextView
+                    android:id="@+id/tv_quetion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_common_margin"
+                    android:layout_marginRight="@dimen/item_common_margin"
+                    android:layout_marginTop="10dp"
+                    android:text="Why did you choose as the star points A platform ? You have to check-in fee it ? How high ? On what charge ?" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/item_common_margin">
+
+                    <TextView
+                        android:id="@+id/tv_answered_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="@dimen/item_common_margin"
+                        android:text="1 hour ago" />
+
+                    <TextView
+                        android:id="@+id/btn_refuse_answer"
+                        style="@style/CommonButtonStyle"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/item_common_margin"
+                        android:background="@drawable/selector_btn_refuse"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/btn_refuse"
+                        android:textColor="@color/price_normal" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/item_common_margin"
+                android:layout_marginRight="@dimen/item_common_margin"
+                android:layout_marginTop="@dimen/item_common_margin"
+                android:gravity="center"
+                android:text="@string/check_ask_question"
+                android:textColor="@color/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="90dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_recording_progress"
+                    android:layout_width="58dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="right"
+                    android:text="0''"
+                    android:textColor="@android:color/holo_red_light"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/img_recording_voice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/ic_answer_record" />
+
+                <TextView
+                    android:id="@+id/tv_answer_restart"
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/selector_rerecord_btn"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:text="@string/btn_rerecord"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_recording_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:text="@string/recording_start" />
+
+            <TextView
+                android:id="@+id/tv_answer_send"
+                style="@style/CommonButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/item_common_margin"
+                android:layout_marginTop="@dimen/item_common_margin"
+                android:enabled="false"
+                android:text="@string/btn_send" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/layout_progressbar"></include>
+
+</RelativeLayout>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_my_listen_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_common_layout"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@id/tv_quetion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/item_common_margin"
+        android:layout_marginRight="@dimen/item_common_margin"
+        android:layout_marginTop="@dimen/item_common_margin"
+        android:singleLine="false"
+        android:text="Dialogue under some emergency situations to pilots and controllers , so that we feel for the tension"
+        android:textColor="@color/color_user_name"
+        android:textSize="15sp" />
+
+    <RelativeLayout
+        android:id="@id/rl_user_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.soloask.android.view.BoundImageView
+            android:id="@+id/img_respondent"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="@dimen/item_common_margin"
+            android:layout_marginLeft="@dimen/item_common_margin"
+            android:layout_marginTop="@dimen/item_common_margin"
+            android:background="@drawable/avater_hemingke" />
+
+        <TextView
+            android:id="@id/tv_respondent_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/img_respondent"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/img_respondent"
+            android:text="Kevin Love"
+            android:textColor="@color/color_user_name"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@id/tv_respondent_describe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tv_respondent_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="@dimen/item_common_margin"
+            android:layout_toRightOf="@id/tv_respondent_name"
+            android:text="Doctor"
+            android:textColor="@color/color_user_title"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_respondent_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/img_respondent"
+            android:text="5 mins ago"
+            android:textColor="@color/color_time"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_respondent_name"
+            android:layout_marginRight="@dimen/item_common_margin"
+            android:layout_marginTop="5dp"
+            android:text="1111 heard"
+            android:textColor="@color/color_time"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <include
+        layout="@layout/divider_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"></include>
+
+
+</LinearLayout>

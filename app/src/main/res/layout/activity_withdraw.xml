@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/item_common_margin">
+
+                    <com.soloask.android.view.CircleImageView
+                        android:id="@id/img_user_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/avater_hemingke" />
+
+                    <ImageView
+                        android:id="@+id/img_user_verify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/ic_verified" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/item_common_margin"
+                    android:text="Love"
+                    android:textColor="@color/color_user_name"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_user_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="13dp"
+                    android:text="Total income $20，earned $10"
+                    android:textColor="@color/color_common_red"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_user_describe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/item_common_margin"
+                    android:layout_marginLeft="@dimen/item_common_margin"
+                    android:layout_marginRight="@dimen/item_common_margin"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/user_payment_rules"
+                    android:textColor="@color/color_user_title"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/item_common_margin"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_common_margin"
+                    android:layout_marginRight="@dimen/item_common_margin"
+                    android:layout_marginTop="@dimen/item_common_margin"
+                    android:text="@string/user_withdraw_account"
+                    android:textColor="@color/color_user_name"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_cash_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_common_margin"
+                    android:layout_marginRight="@dimen/item_common_margin"
+                    android:layout_marginTop="@dimen/item_common_margin"
+                    android:background="@null"
+                    android:drawableBottom="@drawable/selector_edittext"
+                    android:drawablePadding="4dp"
+                    android:hint="@string/hint_input_account"
+                    android:textColor="@color/color_user_name"
+                    android:textColorHint="@color/color_user_title"
+                    android:textCursorDrawable="@null"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/edit_cash_account_again"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_common_margin"
+                    android:layout_marginRight="@dimen/item_common_margin"
+                    android:layout_marginTop="20dp"
+                    android:background="@null"
+                    android:drawableBottom="@drawable/selector_edittext"
+                    android:drawablePadding="4dp"
+                    android:hint="@string/hint_input_account_again"
+                    android:textColor="@color/color_user_name"
+                    android:textColorHint="@color/color_user_title"
+                    android:textCursorDrawable="@null"
+                    android:textSize="15sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_common_margin"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/item_common_margin"
+                        android:buttonTint="@color/colorPrimary"
+                        android:checked="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remember" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/layout_progressbar"></include>
+
+</RelativeLayout>
