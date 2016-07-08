@@ -41,23 +41,17 @@ public class LauncherActivity extends BaseActivity {
 
         setContentView(R.layout.activity_launcher);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setVisibility(View.GONE);
         mTextView = (TextView) findViewById(R.id.tv_start_slogan);
-        if (getIntent().getBooleanExtra(Constant.KEY_FROM_ABOUT, false)) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            mToolbar.setTitle(R.string.title_about);
-            mTextView.setText("V1.0.0");
-        } else {
-            mToolbar.setVisibility(View.GONE);
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    Intent mainIntent = new Intent(LauncherActivity.this,
-                            MainActivity.class);
-                    startActivity(mainIntent);
-                    finish();
-                }
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                Intent mainIntent = new Intent(LauncherActivity.this,
+                        MainActivity.class);
+                startActivity(mainIntent);
+                finish();
+            }
 
-            }, 1000L);
-        }
+        }, 1000L);
 
     }
 

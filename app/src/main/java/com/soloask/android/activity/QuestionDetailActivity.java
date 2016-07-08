@@ -20,7 +20,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.soloask.android.R;
+import com.soloask.android.data.rest.ServiceGenerator;
+import com.soloask.android.data.rest.DownloadServiceApi;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.FileManager;
 import com.soloask.android.util.MediaManager;
@@ -34,6 +39,11 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Lebron on 2016/6/21.
@@ -50,7 +60,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
     private IabHelper mHelper;
     private List mSKULists;
     private boolean isIABHelperOK;
-    private boolean isPayed;
+    private boolean isPayed, isPaused;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +72,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
 
     private void initIabHelper() {
         try {
-            mHelper = new IabHelper(this, getResources().getString(R.string.base64_encoded_public_key));
+            mHelper = new IabHelper(this, Constant.BASE64_ENCODED_PUBLIC_KEY);
             mHelper.enableDebugLogging(true);
             mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
                 @Override
@@ -133,7 +143,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constant.MY_PERMISSIONS_REQUEST_RECORD_AUDIO) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                playAudio();
+                checkFileExist();
             } else {
                 Toast.makeText(QuestionDetailActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
@@ -152,8 +162,20 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                 QuestionDetailActivity.this.startActivity(intent);
                 break;
             case R.id.rl_voice_container:
-                if (isPayed) {
-                    checkNeededPermission();
+                if (!isPayed) {
+                    if (MediaManager.isPlaying()) {//播放暂停
+                        MediaManager.pause();
+                        mPriceView.setText(R.string.detail_click_to_play);
+                        mAnimationDrawable.stop();
+                        isPaused = true;
+                    } else if (isPaused) {//恢复播放
+                        MediaManager.resume();
+                        mPriceView.setText(R.string.recording_playing);
+                        mAnimationDrawable.start();
+                        isPaused = false;
+                    } else {//正常播放
+                        checkNeededPermission();
+                    }
                 } else {
                     doPurchase();
                 }
@@ -167,30 +189,109 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     Constant.MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
         } else {
-            playAudio();
+            checkFileExist();
         }
     }
 
+    private void downloadAudio(String fileUrl) {
+/*        DownloadServiceApi downloadServiceApi = ServiceGenerator.createService(DownloadServiceApi.class);
+        Call<ResponseBody> call = downloadServiceApi.getSmallSizeFile(fileUrl);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d("Lebron", "server contacted and has file");
+                    boolean writtenToDisk = FileManager.writeResponseBodyToDisk(response.body());
+                    Log.d("Lebron", "file download was a success? " + writtenToDisk);
+                    if (writtenToDisk) {
+                        playAudio();
+                    }
+                } else {
+                    mPriceView.setText(R.string.detail_click_to_play);
+                    Toast.makeText(QuestionDetailActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                mPriceView.setText(R.string.detail_click_to_play);
+                Toast.makeText(QuestionDetailActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+            }
+        });*/
+        FileDownloader.getImpl().create(fileUrl)
+                .setPath(FileManager.getFilePath("test.apk"))
+                .setListener(new FileDownloadListener() {
+                    @Override
+                    protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+
+                    }
+
+                    @Override
+                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.i("Lebron", soFarBytes + "/" + totalBytes);
+                    }
+
+                    @Override
+                    protected void completed(BaseDownloadTask task) {
+                        playAudio();
+                    }
+
+                    @Override
+                    protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+
+                    }
+
+                    @Override
+                    protected void error(BaseDownloadTask task, Throwable e) {
+                        mPriceView.setText(R.string.detail_click_to_play);
+                        Toast.makeText(QuestionDetailActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void warn(BaseDownloadTask task) {
+
+                    }
+                }).start();
+    }
+
     private void playAudio() {
-        if (!FileManager.isFileExits("answer_temp.amr")) {
-            mPriceView.setText("downloading");
-            return;
-        }
+        mPriceView.setText(R.string.recording_playing);
         mAnimationDrawable = (AnimationDrawable) mAnimImg.getDrawable();
         mAnimationDrawable.start();
-        MediaManager.playSound(FileManager.getFilePath("answer_temp.amr"), new MediaPlayer.OnCompletionListener() {
+        MediaManager.playSound(FileManager.getFilePath("answer_temp.aac"), new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 mAnimationDrawable.stop();
                 mAnimImg.setImageResource(R.drawable.anim_play_audio);
+                mPriceView.setText(R.string.detail_click_to_play);
+            }
+        }, new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                mAnimationDrawable.stop();
+                mAnimImg.setImageResource(R.drawable.anim_play_audio);
+                mPriceView.setText(R.string.detail_click_to_play);
+                Toast.makeText(QuestionDetailActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
+    }
+
+    private void checkFileExist() {
+        if (!FileManager.isFileExits("test.apk")) {
+            mPriceView.setText(R.string.detail_downloading);
+            downloadAudio("https://storage.evozi.com/apk/dl/15/02/25/com.devuni.flashlight.apk?h=HAV1MiF3krF0ryZnYyTaNA&t=1467891185");
+            return;
+        } else {
+            playAudio();
+        }
     }
 
     private void doPurchase() {
         Log.i("Lebron", (mHelper != null) + " " + isIABHelperOK + " vs " + !mHelper.isAsyncInProgress());
         if (mHelper != null && isIABHelperOK && !mHelper.isAsyncInProgress()) {
-            mHelper.launchPurchaseFlow(QuestionDetailActivity.this, "payment_for_listen", 10001, new IabHelper.OnIabPurchaseFinishedListener() {
+            mHelper.launchPurchaseFlow(QuestionDetailActivity.this, "payment_for_listen", 10003, new IabHelper.OnIabPurchaseFinishedListener() {
                 @Override
                 public void onIabPurchaseFinished(IabResult result, Purchase info) {
                     if (result.isFailure()) {
@@ -214,6 +315,8 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(QuestionDetailActivity.this, result.getMessage(), Toast.LENGTH_LONG).show();
                     return;
                 }
+                Toast.makeText(QuestionDetailActivity.this, "Now you can hear", Toast.LENGTH_LONG).show();
+                mPriceView.setText(R.string.detail_click_to_play);
                 isPayed = true;
             }
         });
@@ -253,7 +356,6 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         } else {

@@ -48,6 +48,9 @@
         <activity
             android:name="com.soloask.android.activity.UserActivity"
             android:label="@string/tab_name3"></activity>
+        <activity
+            android:name="com.soloask.android.activity.AboutActivity"
+            android:label="@string/title_about"></activity>
 
         <meta-data
             android:name="UMENG_APPKEY"

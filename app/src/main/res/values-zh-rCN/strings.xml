@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Solo Ask</string>
     <string name="tab_name1">热门</string>
     <string name="tab_name2">发现</string>
     <string name="tab_name3">我的</string>
@@ -31,7 +32,7 @@
     <string name="recording_start">点击开始录音，最多60s</string>
     <string name="recording_stop">录音中，点击停止</string>
     <string name="recording_play">录音完成，点击播放</string>
-    <string name="recording_playing">播放中...</string>
+    <string name="recording_playing">正在播放</string>
     <string name="listen_for_free">免费听</string>
     <string name="format_listerers">%1$d 听过</string>
     <string name="format_price"> 一元偷听</string>
@@ -39,9 +40,9 @@
     <string name="format_heard">听过 %1$d</string>
     <string name="format_asked">问过 %1$d</string>
     <string name="format_second">%1$d\'\'</string>
-    <string name="format_write_question">%1$d/80</string>
+    <string name="format_write_question">%1$d/50</string>
     <string name="format_write_describe">%1$d/100</string>
-    <string name="format_write_title">%1$d/20</string>
+    <string name="format_write_title">%1$d/18</string>
     <string name="login_failed">登录失败</string>
     <string name="login_cancel">登录取消</string>
     <string name="btn_login_with_facebook">Login with Facebook</string>
@@ -74,6 +75,18 @@
     <string name="launcher_slogan">语音问答，值得付费</string>
     <string name="failed_to_load_data">数据拉取失败，请重试</string>
     <string name="toast_withdraw_submited">我们已收到你的请求，会在三个工作日内处理</string>
+    <string name="about_payment_rules">收益规则</string>
+    <string name="about_ask_title">回答问题：</string>
+    <string name="about_ask_content">问题回答者可以得到悬赏的总额</string>
+    <string name="about_share_title">分享偷听：</string>
+    <string name="about_share_content">分享产生的偷听收入，回答者和提问者各获得50%</string>
+    <string name="about_free_title">限时免费：</string>
+    <string name="about_free_content">限时免费的偷听因为没有产生收益，各方均不参与分成</string>
+    <string name="about_platform_rules">平台会收取50%作为平台收益，收入进行提现操作后，您的收益平台会在3天之内打入您提供的账户</string>
+    <string name="detail_click_to_play">点击播放</string>
+    <string name="detail_downloading">正在下载</string>
+    <string name="notice_cannot_null">不能为空</string>
+    <string name="notice_donot_match">输入不一致</string>
 
     <plurals name="answer_and_earn">
         <!--此处one代表单数，other代表负数，如question和questions-->

@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Created by Lebron on 2016/6/24.
  */
-public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
     private TextView mCountView;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mRefreshLayout;
@@ -86,10 +86,11 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
                 mQuestionAdapter = new MyQuestionAdapter(this, mDatas);
                 mBaseAdapter = mQuestionAdapter;
                 mRecyclerView.setAdapter(mQuestionAdapter);*/
-                mEmptyView.setText(R.string.notice_no_question);
+               mEmptyView.setText(R.string.notice_no_question);
                 mToOtherView.setText(R.string.btn_ask_question);
                 mCountView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.GONE);
+                mRefreshLayout.setVisibility(View.GONE);
+                mToOtherView.setOnClickListener(this);
                 break;
             case Constant.KEY_FROM_MY_ANSWER:
                 this.setTitle(R.string.title_my_answer);
@@ -97,10 +98,11 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
                 mAnswerAdapter = new MyAnswerAdapter(this, mDatas);
                 mBaseAdapter = mAnswerAdapter;
                 mRecyclerView.setAdapter(mAnswerAdapter);
-               /* mEmptyView.setText(R.string.notice_no_answer);
-                mToOtherView.setText(R.string.btn_look_around);
+                /*mEmptyView.setText(R.string.notice_no_answer);
+                mToOtherView.setText(R.string.btn_ask_question);
                 mCountView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.GONE);*/
+                mRefreshLayout.setVisibility(View.GONE);
+                mToOtherView.setOnClickListener(this);*/
                 break;
             case Constant.KEY_FROM_MY_LISTEN:
                 this.setTitle(R.string.title_my_listen);
@@ -111,7 +113,8 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
                 /*mEmptyView.setText(R.string.notice_no_listen);
                 mToOtherView.setText(R.string.btn_look_around);
                 mCountView.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.GONE);*/
+                mRefreshLayout.setVisibility(View.GONE);
+                mToOtherView.setOnClickListener(this);*/
                 break;
         }
     }
@@ -121,7 +124,7 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
         int i = 0;
         while (i < 10) {
             i++;
-            mDatas.add("test" + i);
+            mDatas.add("Steven" + i);
         }
     }
 
@@ -166,5 +169,25 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_empty) {
+            switch (getIntent().getIntExtra(Constant.KEY_FROM_MINE, 0)) {
+                case Constant.KEY_FROM_MY_QUESTION:
+                    setResult(Constant.KEY_FROM_MY_QUESTION);
+                    finish();
+                    break;
+                case Constant.KEY_FROM_MY_LISTEN:
+                    setResult(Constant.KEY_FROM_MY_LISTEN);
+                    finish();
+                    break;
+                case Constant.KEY_FROM_MY_ANSWER:
+                    setResult(Constant.KEY_FROM_MY_ANSWER);
+                    finish();
+                    break;
+            }
+        }
     }
 }

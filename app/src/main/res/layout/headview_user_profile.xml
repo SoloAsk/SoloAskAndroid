@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
-            android:text="Philosophers, thinkers"
+            android:text="Philosophersthinkers1234567890123456"
             android:textColor="@color/color_user_title"
             android:textSize="14sp" />
 
@@ -64,7 +64,7 @@
                 android:background="@drawable/selector_edit_text"
                 android:gravity="start"
                 android:hint="@string/hint_ask_question"
-                android:maxLength="50"
+                android:maxLength="100"
                 android:minHeight="96.0dip"
                 android:paddingBottom="32.0dip"
                 android:paddingLeft="14dip"
@@ -82,7 +82,7 @@
                 android:layout_alignRight="@id/edit_ask_question"
                 android:layout_marginBottom="10.0dip"
                 android:layout_marginRight="9.599976dip"
-                android:text="0/80"
+                android:text="0/100"
                 android:textColor="#ffc3c3c3"
                 android:textSize="12.0sp"
                 android:visibility="visible" />

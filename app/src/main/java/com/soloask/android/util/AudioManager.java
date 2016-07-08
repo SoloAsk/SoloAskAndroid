@@ -60,9 +60,9 @@ public class AudioManager {
             // 设置音频源
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             // 设置音频格式
-            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
+            mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
             // 设置音频编码
-            mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
             mMediaRecorder.prepare();
             mMediaRecorder.start();
@@ -78,7 +78,7 @@ public class AudioManager {
     }
 
     private String generateFileName() {
-        return "answer_temp.amr";
+        return "answer_temp.aac";
     }
 
     public void stopAudio() {

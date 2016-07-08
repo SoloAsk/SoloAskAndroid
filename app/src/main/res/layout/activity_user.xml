@@ -79,9 +79,12 @@
                         android:id="@+id/tv_user_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/item_common_margin"
+                        android:layout_marginRight="@dimen/item_common_margin"
                         android:layout_marginTop="4dp"
                         android:gravity="center"
-                        android:text="Doctor"
+                        android:maxLength="36"
+                        android:text="@string/hint_user_title"
                         android:textColor="@color/color_user_title" />
 
                     <TextView
@@ -91,7 +94,8 @@
                         android:layout_marginLeft="@dimen/item_common_margin"
                         android:layout_marginRight="@dimen/item_common_margin"
                         android:layout_marginTop="10dp"
-                        android:text="something"
+                        android:maxLength="200"
+                        android:text="@string/hint_user_introduce"
                         android:textColor="@color/color_user_name" />
 
                     <LinearLayout
@@ -152,32 +156,64 @@
 
             <include layout="@layout/divider_horizontal"></include>
 
-            <TextView
-                android:id="@+id/tv_my_question"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="@dimen/item_common_margin"
-                android:background="@drawable/selector_common_layout"
-                android:drawableLeft="@drawable/ic_my_questions"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/item_common_margin"
-                android:text="@string/title_my_ask"
-                android:textColor="@color/color_user_name" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/item_common_margin">
+
+                <TextView
+                    android:id="@+id/tv_my_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/selector_common_layout"
+                    android:drawableLeft="@drawable/ic_my_questions"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/item_common_margin"
+                    android:text="@string/title_my_ask"
+                    android:textColor="@color/color_user_name" />
+
+                <TextView
+                    android:id="@+id/tv_iask_new"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/item_common_margin"
+                    android:text="NEW"
+                    android:textColor="@color/color_common_red"
+                    android:textSize="10sp" />
+            </RelativeLayout>
 
             <include layout="@layout/divider_horizontal"></include>
 
-            <TextView
-                android:id="@+id/tv_my_answer"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/selector_common_layout"
-                android:drawableLeft="@drawable/ic_my_answers"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/item_common_margin"
-                android:text="@string/title_my_answer"
-                android:textColor="@color/color_user_name" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_my_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/selector_common_layout"
+                    android:drawableLeft="@drawable/ic_my_answers"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/item_common_margin"
+                    android:text="@string/title_my_answer"
+                    android:textColor="@color/color_user_name" />
+
+                <TextView
+                    android:id="@+id/tv_ianswer_new"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/item_common_margin"
+                    android:text="NEW"
+                    android:textColor="@color/color_common_red"
+                    android:textSize="10sp" />
+            </RelativeLayout>
 
             <include layout="@layout/divider_horizontal"></include>
 

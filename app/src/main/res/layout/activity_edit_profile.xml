@@ -11,8 +11,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/toolbar"
-        >
+        android:layout_below="@id/toolbar">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -62,28 +61,44 @@
                     android:textColor="@color/color_user_name"
                     android:textSize="15.0sp" />
 
-                <EditText
-                    android:id="@+id/edit_user_title"
-                    android:layout_width="fill_parent"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/item_common_margin"
                     android:layout_marginLeft="@dimen/item_common_margin"
-                    android:layout_marginRight="@dimen/item_common_margin"
-                    android:layout_marginTop="10dp"
-                    android:background="@android:color/white"
-                    android:gravity="top"
-                    android:hint="@string/hint_user_title"
-                    android:maxLength="18"
-                    android:maxLines="1"
-                    android:textColor="@color/color_user_name"
-                    android:textColorHint="@color/color_user_title"
-                    android:textCursorDrawable="@null"
-                    android:textSize="14.0sp" />
+                    android:layout_marginRight="@dimen/item_common_margin">
+
+                    <EditText
+                        android:id="@+id/edit_user_title"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/item_common_margin"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/white"
+                        android:gravity="top"
+                        android:hint="@string/hint_user_title"
+                        android:maxLength="36"
+                        android:minHeight="46dp"
+                        android:textColor="@color/color_user_name"
+                        android:textColorHint="@color/color_user_title"
+                        android:textCursorDrawable="@null"
+                        android:textSize="14.0sp" />
+
+                    <TextView
+                        android:id="@+id/tv_edit_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/edit_user_title"
+                        android:layout_alignRight="@id/edit_user_title"
+                        android:text="0/36"
+                        android:textColor="#ffc3c3c3"
+                        android:textSize="12.0sp"
+                        android:visibility="visible" />
+                </RelativeLayout>
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="144.6dip"
+                android:layout_height="164dp"
                 android:layout_marginTop="@dimen/item_common_margin"
                 android:background="@android:color/white">
 
@@ -101,7 +116,7 @@
                 <EditText
                     android:id="@+id/edit_user_describe"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_above="@+id/text_count"
                     android:layout_below="@id/tv_introduce_yourself"
                     android:layout_marginLeft="@dimen/item_common_margin"
@@ -110,7 +125,7 @@
                     android:background="@android:color/white"
                     android:gravity="top"
                     android:hint="@string/hint_user_introduce"
-                    android:maxLength="100"
+                    android:maxLength="200"
                     android:textColor="@color/color_user_name"
                     android:textColorHint="@color/color_user_title"
                     android:textCursorDrawable="@null"
@@ -124,7 +139,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="14.399994dip"
                     android:layout_marginRight="14.399994dip"
-                    android:text="0/100"
+                    android:text="0/200"
                     android:textColor="#ffc3c3c3"
                     android:textSize="12.0dip"
                     android:visibility="visible" />

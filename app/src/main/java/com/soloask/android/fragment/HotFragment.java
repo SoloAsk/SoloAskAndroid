@@ -18,7 +18,7 @@ import com.soloask.android.R;
 import com.soloask.android.adapter.HotAdapter;
 import com.soloask.android.data.model.MoviesResponse;
 import com.soloask.android.data.model.Movie;
-import com.soloask.android.data.rest.ApiClient;
+import com.soloask.android.data.rest.ServiceGenerator;
 import com.soloask.android.data.rest.ApiInterface;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.NetworkManager;
@@ -64,7 +64,7 @@ public class HotFragment extends Fragment implements View.OnClickListener {
 
     private void initData() {
         if (mApiInterface == null) {
-            mApiInterface = ApiClient.getClient().create(ApiInterface.class);
+            mApiInterface = ServiceGenerator.createService(ApiInterface.class);
         }
         if (mCall == null) {
             mCall = mApiInterface.getTopRatedMovies("7e8f60e325cd06e164799af1e317d7a7");

@@ -97,7 +97,7 @@ public class UserProfileActivity extends BaseActivity {
     private void initIabHelper() {
         try {
             if (mHelper == null) {
-                mHelper = new IabHelper(this, getResources().getString(R.string.base64_encoded_public_key));
+                mHelper = new IabHelper(this, Constant.BASE64_ENCODED_PUBLIC_KEY);
             }
             mHelper.enableDebugLogging(true);
             mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {

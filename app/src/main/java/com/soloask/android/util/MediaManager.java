@@ -13,7 +13,7 @@ public class MediaManager {
     private static boolean isPause;
 
     public static void playSound(String filePath,
-                                 MediaPlayer.OnCompletionListener onCompletionListener) {
+                                 MediaPlayer.OnCompletionListener onCompletionListener, MediaPlayer.OnErrorListener onErrorListener) {
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -30,6 +30,7 @@ public class MediaManager {
         try {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnCompletionListener(onCompletionListener);
+            mediaPlayer.setOnErrorListener(onErrorListener);
             mediaPlayer.setDataSource(filePath);
             mediaPlayer.prepare();
             mediaPlayer.start();
@@ -47,6 +48,13 @@ public class MediaManager {
         }
     }
 
+    public static boolean isPlaying() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.isPlaying();
+        }
+        return false;
+    }
+
     public static void resume() {
         if (mediaPlayer != null && isPause) {
             mediaPlayer.start();
@@ -56,12 +64,12 @@ public class MediaManager {
 
     public static void release() {
         if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
             mediaPlayer.release();
             mediaPlayer = null;
         }
     }
 
-    public static MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
-    }
 }

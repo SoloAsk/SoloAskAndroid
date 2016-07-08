@@ -30,7 +30,7 @@ import java.util.List;
  * Created by Lebron on 2016/6/24.
  */
 public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
-    private TextView mPriceView, mTextCountView;
+    private TextView mPriceView, mTextCountView, mTitleCountView;
     private EditText mDescribeView, mTitleView;
     private RelativeLayout mSavingLayout;
     private PriceAdapter mPriceAdapter;
@@ -52,15 +52,21 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_save) {
-            mSavingLayout.setVisibility(View.VISIBLE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mSavingLayout.setVisibility(View.GONE);
-                    EditProfileActivity.this.setResult(Constant.CODE_RESULT_EDIT, null);
-                    finish();
-                }
-            }, 2000L);
+            if (TextUtils.isEmpty(mTitleView.getText())) {
+                mTitleView.setError(EditProfileActivity.this.getString(R.string.notice_cannot_null));
+            } else if (TextUtils.isEmpty(mDescribeView.getText())) {
+                mDescribeView.setError(EditProfileActivity.this.getString(R.string.notice_cannot_null));
+            } else {
+                mSavingLayout.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSavingLayout.setVisibility(View.GONE);
+                        EditProfileActivity.this.setResult(Constant.CODE_RESULT_EDIT, null);
+                        finish();
+                    }
+                }, 2000L);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -73,7 +79,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         mPriceView10 = (TextView) findViewById(R.id.tv_price_10);
         mPriceViewMore = (TextView) findViewById(R.id.tv_price_more);
         mTextCountView = (TextView) findViewById(R.id.text_count);
+        mTitleCountView = (TextView) findViewById(R.id.tv_edit_count);
         mDescribeView = (EditText) findViewById(R.id.edit_user_describe);
+        mTitleView = (EditText) findViewById(R.id.edit_user_title);
 
         addListener();
     }
@@ -92,6 +100,22 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mTextCountView.setText(String.format(getString(R.string.format_write_describe), mDescribeView.getText().length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mTitleView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mTitleCountView.setText(String.format(getString(R.string.format_write_title), mTitleView.getText().length()));
             }
 
             @Override

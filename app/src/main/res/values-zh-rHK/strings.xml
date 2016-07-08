@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_name1">熱門</string>
+    <string name="tab_name2">發現</string>
+    <string name="tab_name3">我的</string>
+    <string name="title_question_detail">問題詳情</string>
+    <string name="title_ask_question">提問</string>
+    <string name="title_my_ask">我問</string>
+    <string name="title_my_answer">我答</string>
+    <string name="title_my_listen">我聽</string>
+    <string name="title_login">登錄</string>
+    <string name="title_answer_question">回答</string>
+    <string name="title_edit_profile">編輯</string>
+    <string name="title_withdraw">提現</string>
+    <string name="title_about">關於</string>
+    <string name="btn_send">發送</string>
+    <string name="btn_finish">完成</string>
+    <string name="btn_save">保存</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_rerecord">重錄</string>
+    <string name="btn_refuse">拒絕</string>
+    <string name="btn_sure">確定</string>
+    <string name="btn_ask_question">提問</string>
+    <string name="btn_submit">提交</string>
+    <string name="btn_retry">重試</string>
+    <string name="btn_more">更多</string>
+    <string name="logout">註銷登錄</string>
+    <string name="btn_login">登錄</string>
+    <string name="menu_title_share">分享</string>
+    <string name="menu_title_save">保存</string>
+    <string name="recording_start">點擊開始錄音，最多60s</string>
+    <string name="recording_stop">錄音中，點擊停止</string>
+    <string name="recording_play">錄音中，點擊停止</string>
+    <string name="recording_playing">播放中...</string>
+    <string name="listen_for_free">免費聽</string>
+    <string name="format_listerers">%1$d 聽過</string>
+    <string name="format_price"> %1$s偷聽</string>
+    <string name="format_answered">回答 %1$d</string>
+    <string name="format_heard">聽過 %1$d</string>
+    <string name="format_asked">問過 %1$d</string>
+    <string name="format_second">%1$d\'\'</string>
+    <string name="format_write_question">%1$d/80</string>
+    <string name="format_write_describe">%1$d/100</string>
+    <string name="format_write_title">%1$d/20</string>
+    <string name="login_failed">登錄失敗</string>
+    <string name="login_cancel">登錄取消</string>
+    <string name="btn_login_with_facebook">Login with Facebook</string>
+    <string name="user_payment_for_asking">向我提問需要支付</string>
+    <string name="user_earned">總收入</string>
+    <string name="user_payment_rules">收入的50%屬於你</string>
+    <string name="user_title">你的頭銜</string>
+    <string name="user_introduce">介紹一下你自己</string>
+    <string name="user_withdraw_account">PayPle帳戶</string>
+    <string name="remember">記住</string>
+    <string name="status_unanswered">待回答</string>
+    <string name="status_answered">已回答</string>
+    <string name="status_refunded">已退款</string>
+    <string name="status_timeout">已過期</string>
+    <string name="notice_no_question">你還沒問過</string>
+    <string name="notice_no_answer">發現熱門問題</string>
+    <string name="notice_no_listen">你還沒偷聽過</string>
+    <string name="notice_back_to_exit">再次點擊退出</string>
+    <string name="sure_to_log_out">確定要註銷登錄麼？</string>
+    <string name="rerecording_title">重錄會丟失本次錄音</string>
+    <string name="rerecording_message">確定刪除並重錄麼？</string>
+    <string name="google_pay_is_unavailable">GooglePlay初始化失敗,當前無法進行支付，請確定您所在地區支持Google Play支付或重啟應用再試！</string>
+    <string name="hint_input_account">PayPal帳戶(郵箱)</string>
+    <string name="hint_input_account_again">再次輸入</string>
+    <string name="hint_ask_question">超過48小時未回答，將退款至app帳戶中</string>
+    <string name="hint_user_title">運營經理；電臺DJ；Google早期員工；周遊列國的青年；心理諮詢師</string>
+    <string name="hint_user_introduce">關於這些，盡情問我；投資理財，贏取白富美；如何優雅參加前任婚禮...或者給你唱個晚安小夜曲</string>
+    <string name="check_ask_question">公開提問回答，答案每被偷聽一次，你賺$0.5</string>
+    <string name="login_privacy">我已閱讀並同意用戶協議</string>
+    <string name="launcher_slogan">語音問答，值得付費</string>
+    <string name="failed_to_load_data">數據拉取失敗，請重試</string>
+    <string name="toast_withdraw_submited">我們已收到你的請求，會在三個工作日內處理</string>
+
+    <plurals name="answer_and_earn">
+        <!--此处one代表单数，other代表负数，如question和questions-->
+        <item quantity="one">答過%1$d個問題, 賺了$0.99</item>
+        <item quantity="other">答過%1$d個問題, 賺了$0.99</item>
+    </plurals>
+    <plurals name="dealed_time_hour">
+        <item quantity="one">%1$d 小時前</item>
+        <item quantity="other">%1$d 小時前</item>
+    </plurals>
+</resources>

@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:text="Overhear with $0.99"
+                android:text="Overhear with $1.00"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
         </LinearLayout>

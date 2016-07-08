@@ -166,6 +166,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mTimeProgress.setText(String.format(getResources().getString(R.string.format_second), mTotalSeconds));
                 stopTimer();
             }
+        }, new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                return false;
+            }
         });
     }
 
@@ -194,6 +199,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopTimer();
         MediaManager.release();
         AudioManager.getInstance().stopAudio();
     }
@@ -259,6 +265,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();

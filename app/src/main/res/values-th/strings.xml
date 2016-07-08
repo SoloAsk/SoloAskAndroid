@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Solo Ask</string>
     <string name="tab_name1">ยอดนิยม</string>
     <string name="tab_name2">ค้นพบ</string>
     <string name="tab_name3">ของฉัน</string>
@@ -33,7 +34,7 @@
     <string name="recording_playing">ำลังเล่นอย...</string>
     <string name="listen_for_free">จำกัดฟังฟรี</string>
     <string name="format_listerers">%1$d ฟังแล้ว</string>
-    <string name="format_price"> แอบฟังหนึ่งดอลล่าร์</string>
+    <string name="format_price"> แอบฟังห้าบาท</string>
     <string name="format_answered">ตอบ %1$d</string>
     <string name="format_heard">ฟังแล้ว %1$d</string>
     <string name="format_asked">เคยถาม %1$d</string>
@@ -73,6 +74,14 @@
     <string name="launcher_slogan">ถามและตอบโดยเสียงที่คุ้มค่าจ่ายเงิน</string>
     <string name="failed_to_load_data">ับข้อมูลล้มเหลวโปรดลองอีกครั้ง</string>
     <string name="toast_withdraw_submited">เราได้รับคำขอของคุณ จะจัดการคำขอภายในสามวันทำการ</string>
+    <string name="about_payment_rules">กฎระเบียบรายได้</string>
+    <string name="about_ask_title">ตอบคำถาม:</string>
+    <string name="about_ask_content">คนที่ตอบคำถามจะได้รับรางวัล ทั้งหมด</string>
+    <string name="about_share_title">แชร์ให้แอบฟัง:</string>
+    <string name="about_share_content">ผู้ถามและผู้ตอบแบ่งรายได้แอบฟังฝ่ายละ50%</string>
+    <string name="about_free_title">จำกัดฟังฟรี:</string>
+    <string name="about_free_content">เนื่องจากจำกัดฟังฟรีไม่มีรายได้ ทุกฝ่ายก็ไม่แบ่งรายได้</string>
+    <string name="about_platform_rules">แพลตฟอร์มจะเรียกเก็บ 50 % ของรายได้เป็นรายได้แพลตฟอร์ม,เมื่อคุณถอนรายได้ รายได้ของคุณแพลตฟอร์มจะโอนเงินในบัญชีที่คุณให้ไว้ ภายใน 3 วัน</string>
 
     <plurals name="answer_and_earn">
         <!--此处one代表单数，other代表负数，如question和questions-->

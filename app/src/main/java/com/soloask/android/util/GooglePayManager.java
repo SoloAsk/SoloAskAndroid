@@ -22,7 +22,7 @@ public class GooglePayManager {
     }
 
     public GooglePayManager(final Context context) {
-        mHelper = new IabHelper(context, context.getResources().getString(R.string.base64_encoded_public_key));
+        mHelper = new IabHelper(context, Constant.BASE64_ENCODED_PUBLIC_KEY);
         mHelper.enableDebugLogging(false);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             @Override

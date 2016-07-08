@@ -32,15 +32,13 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout mUserInfoView;
     private TextView mLogoutView;
     private TextView mUserNameView;
-    private TextView mMyAnswerView, mMyQuestionView, mMyListenView;
+    private TextView mMyAnswerView, mMyQuestionView, mMyListenView, mAskNewView, mAnswerNewView;
     private TextView mUserPriceView, mUserIncomeView;
     private TextView mWithDrawView;
     private TextView mAboutView;
     private TextView mEditView;
     private CircleImageView mUserIcon;
     private Intent mIntent;
-
-    URL url;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +55,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         mUserInfoView = (LinearLayout) findViewById(R.id.ll_user_info);
         mMyAnswerView = (TextView) findViewById(R.id.tv_my_answer);
         mMyQuestionView = (TextView) findViewById(R.id.tv_my_question);
+        mAskNewView = (TextView) findViewById(R.id.tv_iask_new);
+        mAnswerNewView = (TextView) findViewById(R.id.tv_ianswer_new);
         mMyListenView = (TextView) findViewById(R.id.tv_my_listen);
         mEditView = (TextView) findViewById(R.id.tv_edit_profile);
         mWithDrawView = (TextView) findViewById(R.id.tv_withdraw);
@@ -112,6 +112,12 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
 
         } else if (resultCode == Constant.CODE_RESULT_EDIT) {
             mUserPriceView.setText("$9.99");
+        } else if (resultCode == Constant.KEY_FROM_MY_QUESTION) {
+            finish();
+        } else if (resultCode == Constant.KEY_FROM_MY_ANSWER) {
+            finish();
+        } else if (resultCode == Constant.KEY_FROM_MY_LISTEN) {
+            finish();
         } else {
             Log.i("Lebron", "  do nothing");
         }
@@ -154,7 +160,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 if (SharedPreferencesHelper.getPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false)) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_ANSWER);
-                    startActivity(mIntent);
+                    startActivityForResult(mIntent, Constant.CODE_REQUEST);
                 } else {
                     mIntent.setClass(UserActivity.this, LoginActivity.class);
                     UserActivity.this.startActivityForResult(mIntent, Constant.CODE_REQUEST);
@@ -164,7 +170,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 if (SharedPreferencesHelper.getPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false)) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_QUESTION);
-                    startActivity(mIntent);
+                    startActivityForResult(mIntent, Constant.CODE_REQUEST);
                 } else {
                     mIntent.setClass(UserActivity.this, LoginActivity.class);
                     UserActivity.this.startActivityForResult(mIntent, Constant.CODE_REQUEST);
@@ -174,7 +180,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 if (SharedPreferencesHelper.getPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false)) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_LISTEN);
-                    startActivity(mIntent);
+                    startActivityForResult(mIntent, Constant.CODE_REQUEST);
                 } else {
                     mIntent.setClass(UserActivity.this, LoginActivity.class);
                     UserActivity.this.startActivityForResult(mIntent, Constant.CODE_REQUEST);
@@ -185,8 +191,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 startActivityForResult(mIntent, Constant.CODE_REQUEST);
                 break;
             case R.id.tv_about:
-                mIntent.setClass(UserActivity.this, LauncherActivity.class);
-                mIntent.putExtra(Constant.KEY_FROM_ABOUT, true);
+                mIntent.setClass(UserActivity.this, AboutActivity.class);
                 startActivity(mIntent);
                 break;
             case R.id.tv_withdraw:

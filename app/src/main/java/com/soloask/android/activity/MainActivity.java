@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mViewPager = (ViewPager) findViewById(R.id.viewpager_main);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mCircleIcon = (BoundImageView) findViewById(R.id.img_user_icon);
-        //mCircleIcon.showMark(true);
+        mCircleIcon.showMention(true);
         String[] tabs = new String[]{getResources().getString(R.string.tab_name1), getResources().getString(R.string.tab_name2)};
         mMainAdapter = new MainAdapter(getSupportFragmentManager(), tabs);
         mViewPager.setAdapter(mMainAdapter);
@@ -58,7 +58,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.CODE_RESULT_LOGIN) {
             SharedPreferencesHelper.setPreferenceBoolean(MainActivity.this, Constant.KEY_IS_LOGINED, true);
-            //https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xft1/v/t1.0-1/p720x720/11703164_1432811433714866_750303433030121790_n.jpg?oh=f9aa1e1d275210264a6efe9c4610a43e&oe=57FA6E1E&__gda__=1475159383_29c1bff1cd0a7cea3cc22126082aca73
             Log.i("Lebron", data.getStringExtra("user_icon_url"));
             Glide.with(MainActivity.this)
                     .load(data.getStringExtra("user_icon_url"))

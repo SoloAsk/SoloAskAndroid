@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +58,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ((ItemViewHolder) holder).timeView.setText(mContext.getResources().getQuantityString(R.plurals.dealed_time_hour, 1, 2));
             ((ItemViewHolder) holder).listenersView.setText(String.format(mContext.getResources().getString(R.string.format_listerers), 123));
             ((ItemViewHolder) holder).voiceView.setText(String.format(mContext.getResources().getString(R.string.format_price), 2.99));
-        } else if(holder instanceof HeadViewHolder){
+        } else if (holder instanceof HeadViewHolder) {
             ((HeadViewHolder) holder).mSummaryView.setText(mContext.getResources().getQuantityString(R.plurals.answer_and_earn, 1, 43));
         }
     }
@@ -134,7 +135,11 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             mFinishView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    doPurchase();
+                    if (TextUtils.isEmpty(mQuestionView.getText())) {
+                        mQuestionView.setError(mContext.getString(R.string.notice_cannot_null));
+                    } else {
+                        doPurchase();
+                    }
                 }
             });
         }
