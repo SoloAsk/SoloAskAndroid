@@ -86,7 +86,7 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
                 mQuestionAdapter = new MyQuestionAdapter(this, mDatas);
                 mBaseAdapter = mQuestionAdapter;
                 mRecyclerView.setAdapter(mQuestionAdapter);*/
-               mEmptyView.setText(R.string.notice_no_question);
+                mEmptyView.setText(R.string.notice_no_question);
                 mToOtherView.setText(R.string.btn_ask_question);
                 mCountView.setVisibility(View.GONE);
                 mRefreshLayout.setVisibility(View.GONE);

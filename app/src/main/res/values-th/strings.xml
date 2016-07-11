@@ -75,12 +75,9 @@
     <string name="failed_to_load_data">ับข้อมูลล้มเหลวโปรดลองอีกครั้ง</string>
     <string name="toast_withdraw_submited">เราได้รับคำขอของคุณ จะจัดการคำขอภายในสามวันทำการ</string>
     <string name="about_payment_rules">กฎระเบียบรายได้</string>
-    <string name="about_ask_title">ตอบคำถาม:</string>
-    <string name="about_ask_content">คนที่ตอบคำถามจะได้รับรางวัล ทั้งหมด</string>
-    <string name="about_share_title">แชร์ให้แอบฟัง:</string>
-    <string name="about_share_content">ผู้ถามและผู้ตอบแบ่งรายได้แอบฟังฝ่ายละ50%</string>
-    <string name="about_free_title">จำกัดฟังฟรี:</string>
-    <string name="about_free_content">เนื่องจากจำกัดฟังฟรีไม่มีรายได้ ทุกฝ่ายก็ไม่แบ่งรายได้</string>
+    <string name="about_ask_title">ตอบคำถาม: คนที่ตอบคำถามจะได้รับรางวัล ทั้งหมด</string>
+    <string name="about_share_title">แชร์ให้แอบฟัง: ผู้ถามและผู้ตอบแบ่งรายได้แอบฟังฝ่ายละ50%</string>
+    <string name="about_free_title">จำกัดฟังฟรี: เนื่องจากจำกัดฟังฟรีไม่มีรายได้ ทุกฝ่ายก็ไม่แบ่งรายได้</string>
     <string name="about_platform_rules">แพลตฟอร์มจะเรียกเก็บ 50 % ของรายได้เป็นรายได้แพลตฟอร์ม,เมื่อคุณถอนรายได้ รายได้ของคุณแพลตฟอร์มจะโอนเงินในบัญชีที่คุณให้ไว้ ภายใน 3 วัน</string>
 
     <plurals name="answer_and_earn">

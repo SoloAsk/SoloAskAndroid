@@ -76,12 +76,9 @@
     <string name="failed_to_load_data">数据拉取失败，请重试</string>
     <string name="toast_withdraw_submited">我们已收到你的请求，会在三个工作日内处理</string>
     <string name="about_payment_rules">收益规则</string>
-    <string name="about_ask_title">回答问题：</string>
-    <string name="about_ask_content">问题回答者可以得到悬赏的总额</string>
-    <string name="about_share_title">分享偷听：</string>
-    <string name="about_share_content">分享产生的偷听收入，回答者和提问者各获得50%</string>
-    <string name="about_free_title">限时免费：</string>
-    <string name="about_free_content">限时免费的偷听因为没有产生收益，各方均不参与分成</string>
+    <string name="about_ask_title">回答问题：问题回答者可以得到悬赏的总额</string>
+    <string name="about_share_title">分享偷听：分享产生的偷听收入，回答者和提问者各获得50%</string>
+    <string name="about_free_title">限时免费：限时免费的偷听因为没有产生收益，各方均不参与分成</string>
     <string name="about_platform_rules">平台会收取50%作为平台收益，收入进行提现操作后，您的收益平台会在3天之内打入您提供的账户</string>
     <string name="detail_click_to_play">点击播放</string>
     <string name="detail_downloading">正在下载</string>

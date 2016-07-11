@@ -162,7 +162,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                 QuestionDetailActivity.this.startActivity(intent);
                 break;
             case R.id.rl_voice_container:
-                if (!isPayed) {
+                if (isPayed) {
                     if (MediaManager.isPlaying()) {//播放暂停
                         MediaManager.pause();
                         mPriceView.setText(R.string.detail_click_to_play);

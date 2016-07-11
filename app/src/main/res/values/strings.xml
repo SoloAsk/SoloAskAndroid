@@ -77,12 +77,9 @@
     <string name="failed_to_load_data">Failed to load data, please try again later.</string>
     <string name="toast_withdraw_submited">We\'ve received your request, and it will be processed within 3 working days</string>
     <string name="about_payment_rules">Rule of income</string>
-    <string name="about_ask_title">Answer questions: </string>
-    <string name="about_ask_content">the respondent will get the total reward</string>
-    <string name="about_share_title">Share eavesdropping：</string>
-    <string name="about_share_content">The income from sharing will be bisected by respondent and questioner</string>
-    <string name="about_free_title">Limited time of free listen: </string>
-    <string name="about_free_content">Because there\'s no income from free eavesdropping, no part will be benefited</string>
+    <string name="about_ask_title">Answer questions: the respondent will get the total reward</string>
+    <string name="about_share_title">Share eavesdropping：The income from sharing will be bisected by respondent and questioner</string>
+    <string name="about_free_title">Limited time of free listen: Because there\'s no income from free eavesdropping, no part will be benefited</string>
     <string name="about_platform_rules">The platform will charge 50% as its income, After the withdraw operation,your platform will transfer it to your account in 3 days</string>
     <string name="detail_click_to_play">click to play</string>
     <string name="detail_downloading">downloading</string>
