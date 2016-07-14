@@ -18,6 +18,9 @@ public class User extends BmobObject implements Serializable {
     private Double earning;
     private Double income;
     private String paypalAccount;
+    private Integer answerQuesNum;
+    private Integer askQuesNum;
+    private Integer heardQuesNum;
 
     public String getUserId() {
         return userId;
@@ -89,5 +92,38 @@ public class User extends BmobObject implements Serializable {
 
     public void setPaypalAccount(String paypalAccount) {
         this.paypalAccount = paypalAccount;
+    }
+
+    public Integer getHeardQuesNum() {
+        return heardQuesNum;
+    }
+
+    public void setHeardQuesNum(Integer heardQuesNum) {
+        this.heardQuesNum = heardQuesNum;
+    }
+
+    public Integer getAnswerQuesNum() {
+        return answerQuesNum;
+    }
+
+    public void setAnswerQuesNum(Integer answerQuesNum) {
+        this.answerQuesNum = answerQuesNum;
+    }
+
+    public Integer getAskQuesNum() {
+        return askQuesNum;
+    }
+
+    public void setAskQuesNum(Integer askQuesNum) {
+        this.askQuesNum = askQuesNum;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof User) {
+            User u = (User) o;
+            return this.userId.equals(u.userId);
+        }
+        return super.equals(o);
     }
 }

@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.soloask.android.R;
 import com.soloask.android.util.Constant;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
+
+import cn.bmob.v3.Bmob;
 
 /**
  * Created by Lebron on 2016/6/29.
@@ -24,7 +24,7 @@ public class LauncherActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //enable UmengPush
-        PushAgent mPushAgent = PushAgent.getInstance(this);
+        /*PushAgent mPushAgent = PushAgent.getInstance(this);
         mPushAgent.enable(new IUmengRegisterCallback() {
 
             @Override
@@ -37,7 +37,10 @@ public class LauncherActivity extends BaseActivity {
                     }
                 });
             }
-        });
+        });*/
+
+        //enable Bmob
+        Bmob.initialize(this, "8307cbf7bc30650a6a30ffb25be78b81");
 
         setContentView(R.layout.activity_launcher);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

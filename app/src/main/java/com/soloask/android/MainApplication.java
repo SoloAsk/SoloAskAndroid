@@ -4,11 +4,9 @@ import android.app.Application;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.liulishuo.filedownloader.FileDownloader;
-import com.liulishuo.filedownloader.util.FileDownloadHelper;
-import com.umeng.analytics.MobclickAgent;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.umeng.analytics.MobclickAgent;
 
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +35,7 @@ public class MainApplication extends Application {
         //Umeng
         MobclickAgent.setScenarioType(getApplicationContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
         //FileDownloader
-        FileDownloader.init(getApplicationContext(),
+        /*FileDownloader.init(getApplicationContext(),
                 new FileDownloadHelper.OkHttpClientCustomMaker() { // is not necessary
                     @Override
                     public OkHttpClient customMake() {
@@ -50,6 +48,6 @@ public class MainApplication extends Application {
                         // etc.
                         return builder.build();
                     }
-                });
+                });*/
     }
 }

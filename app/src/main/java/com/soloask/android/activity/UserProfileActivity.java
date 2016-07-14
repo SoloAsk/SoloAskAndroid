@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +15,12 @@ import android.widget.Toast;
 
 import com.soloask.android.R;
 import com.soloask.android.adapter.HistoryQuestionAdapter;
+import com.soloask.android.data.bmob.AskManager;
+import com.soloask.android.data.bmob.UserManager;
+import com.soloask.android.data.model.Question;
+import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
+import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.util.billing.IabHelper;
 import com.soloask.android.util.billing.IabResult;
 import com.soloask.android.view.ShareDialog;
@@ -28,18 +34,25 @@ import java.util.List;
  */
 public class UserProfileActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mRefreshLayout;
     private HistoryQuestionAdapter mAdapter;
     private IabHelper mHelper;
     private List mDatas;
-    private int mLastVisibleItem;
+    private int mLastVisibleItem, mSkipNum;
     private LinearLayoutManager mLayoutManager;
+    private User mRespondent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-        initData();
+        mRespondent = (User) getIntent().getSerializableExtra("user");
+        mDatas = new ArrayList();
+        mDatas.add(null);
+        mAdapter = new HistoryQuestionAdapter(this, mRespondent, mDatas);
+        initData(Constant.MSG_REFRESH_DATA);
         initView();
+        getCurrentUser();
         initIabHelper();
     }
 
@@ -58,17 +71,49 @@ public class UserProfileActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initData() {
-        mDatas = new ArrayList();
-        int i = 0;
-        while (i < 10) {
-            i++;
-            mDatas.add("Young brother , the Warriors lost the finals miserable how to do ?" + i);
+    private void initData(int actionType) {
+        AskManager askManager = new AskManager();
+        askManager.setOnRespondentQuestionListener(new AskManager.OnRespondentQuestionListener() {
+            @Override
+            public void onSuccess(List<Question> list) {
+                mSkipNum += list.size();
+                mDatas.addAll(list);
+                mRefreshLayout.setRefreshing(false);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailed() {
+                mRefreshLayout.setRefreshing(false);
+            }
+        });
+        if (actionType == Constant.MSG_REFRESH_DATA) {
+            mSkipNum = 0;
+            askManager.getHistoryQuestions(mSkipNum, mRespondent);
+        } else {
+            askManager.getHistoryQuestions(mSkipNum, mRespondent);
         }
     }
 
+    private void getCurrentUser() {
+        UserManager userManager = new UserManager();
+        userManager.setUserInfoListener(new UserManager.UserInfoListener() {
+            @Override
+            public void onSuccess(User user) {
+                mAdapter.setQuestioner(user);
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
+        userManager.getUserInfo(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null));
+    }
+
     private void initView() {
-        mAdapter = new HistoryQuestionAdapter(this, mDatas);
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout_user);
+        mRefreshLayout.setRefreshing(true);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_user_view);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -77,11 +122,18 @@ public class UserProfileActivity extends BaseActivity {
     }
 
     private void addListener() {
+        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                handler.sendEmptyMessageDelayed(Constant.MSG_REFRESH_DATA, 2000L);
+            }
+        });
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItem + 1 == mAdapter.getItemCount()) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mAdapter.getItemCount() >= 10 && mLastVisibleItem + 1 == mAdapter.getItemCount()) {
                     handler.sendEmptyMessageDelayed(Constant.MSG_LOAD_MORE_DATA, 2000L);
                 }
             }
@@ -123,12 +175,13 @@ public class UserProfileActivity extends BaseActivity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case Constant.MSG_LOAD_MORE_DATA:
-                    List<String> lists = new ArrayList<>();
-                    for (int i = 0; i < 2; i++) {
-                        lists.add("Added item" + i);
-                    }
-                    mDatas.addAll(lists);
+                    initData(Constant.MSG_LOAD_MORE_DATA);
+                    break;
+                case Constant.MSG_REFRESH_DATA:
+                    mDatas.clear();
+                    mDatas.add(null);
                     mAdapter.notifyDataSetChanged();
+                    initData(Constant.MSG_REFRESH_DATA);
                     break;
             }
         }

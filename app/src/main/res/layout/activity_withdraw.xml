@@ -30,7 +30,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/item_common_margin"
-                    android:background="@drawable/avater_hemingke" />
+                    android:background="@drawable/ic_me_default" />
 
 
                 <TextView
@@ -125,11 +125,12 @@
                     android:visibility="visible">
 
                     <CheckBox
+                        android:id="@+id/box_remember"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/item_common_margin"
                         android:buttonTint="@color/colorPrimary"
-                        android:checked="true" />
+                        android:checked="false" />
 
                     <TextView
                         android:layout_width="wrap_content"

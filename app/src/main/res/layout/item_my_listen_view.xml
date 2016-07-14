@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@id/tv_quetion"
+        android:id="@id/tv_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/item_common_margin"
@@ -31,7 +31,7 @@
             android:layout_height="36dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/item_common_margin"
-            android:background="@drawable/avater_hemingke" />
+            android:background="@drawable/ic_me_default" />
 
         <TextView
             android:id="@id/tv_respondent_name"

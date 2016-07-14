@@ -71,7 +71,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="Love"
                         android:textColor="@color/color_user_name"
                         android:textSize="18sp" />
 
@@ -84,7 +83,6 @@
                         android:layout_marginTop="4dp"
                         android:gravity="center"
                         android:maxLength="36"
-                        android:text="@string/hint_user_title"
                         android:textColor="@color/color_user_title" />
 
                     <TextView
@@ -95,7 +93,6 @@
                         android:layout_marginRight="@dimen/item_common_margin"
                         android:layout_marginTop="10dp"
                         android:maxLength="200"
-                        android:text="@string/hint_user_introduce"
                         android:textColor="@color/color_user_name" />
 
                     <LinearLayout
@@ -116,7 +113,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:text="$3.14"
+                            android:text="$0"
                             android:textColor="@color/color_common_red" />
                     </LinearLayout>
 

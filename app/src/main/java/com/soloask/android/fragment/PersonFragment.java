@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,8 @@ import android.widget.TextView;
 
 import com.soloask.android.R;
 import com.soloask.android.adapter.PersonAdapter;
-import com.soloask.android.data.model.Movie;
-import com.soloask.android.data.model.MoviesResponse;
-import com.soloask.android.data.rest.ServiceGenerator;
-import com.soloask.android.data.rest.ApiInterface;
+import com.soloask.android.data.bmob.DiscoverManager;
+import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.NetworkManager;
 import com.soloask.android.view.MaterialProgressBar;
@@ -27,9 +26,6 @@ import com.soloask.android.view.MaterialProgressBar;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Lebron on 2016/6/22.
@@ -43,10 +39,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout mNetworkLayout;
     private MaterialProgressBar mProgressBar;
     private TextView mRetryView;
-    private int mLastVisibleItem;
-    private ApiInterface mApiInterface;
-    private Call<MoviesResponse> mCall;
-    private List<Movie> mDatas = new ArrayList<>();
+    private int mLastVisibleItem, mSkipNum = 0;
+    private List<User> mDatas = new ArrayList<>();
 
     @Nullable
     @Override
@@ -59,7 +53,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        initData();
+        initData(Constant.MSG_REFRESH_DATA);
     }
 
     private void initView() {
@@ -91,7 +85,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItem + 1 == mPersonAdapter.getItemCount()) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mPersonAdapter.getItemCount() >= 10 && mLastVisibleItem + 1 == mPersonAdapter.getItemCount()) {
                     handler.sendEmptyMessageDelayed(Constant.MSG_LOAD_MORE_DATA, 500L);
                 }
             }
@@ -111,28 +105,33 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void initData() {
-        if (mApiInterface == null) {
-            mApiInterface = ServiceGenerator.createService(ApiInterface.class);
-        }
-        if (mCall == null) {
-            mCall = mApiInterface.getTopRatedMovies("7e8f60e325cd06e164799af1e317d7a7");
-        }
-        mCall.clone().enqueue(new Callback<MoviesResponse>() {
+    private void initData(final int actionType) {
+        DiscoverManager discoverManager = new DiscoverManager();
+        discoverManager.setOnGetDiscoverListener(new DiscoverManager.OnGetDiscoverListener() {
             @Override
-            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
-                mDatas.addAll(response.body().getResults());
+            public void onSuccess(List<User> list) {
+                mSkipNum += list.size();
+                mDatas.addAll(list);
                 mProgressBar.setVisibility(View.GONE);
                 mRefreshLayout.setRefreshing(false);
                 mPersonAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+            public void onFailed() {
                 mProgressBar.setVisibility(View.GONE);
                 mNetworkLayout.setVisibility(View.VISIBLE);
+                mRefreshLayout.setRefreshing(false);
             }
         });
+        if (actionType == Constant.MSG_REFRESH_DATA) {
+            mSkipNum = 0;
+            discoverManager.getUserList(mSkipNum);
+        } else {
+            Log.i("Lebron", mSkipNum + "");
+            discoverManager.getUserList(mSkipNum);
+        }
+
     }
 
     private Handler handler = new Handler() {
@@ -141,12 +140,12 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             super.handleMessage(msg);
             switch (msg.what) {
                 case Constant.MSG_LOAD_MORE_DATA:
-                    initData();
+                    initData(Constant.MSG_LOAD_MORE_DATA);
                     break;
                 case Constant.MSG_REFRESH_DATA:
                     mDatas.clear();
                     mPersonAdapter.notifyDataSetChanged();
-                    initData();
+                    initData(Constant.MSG_REFRESH_DATA);
                     break;
             }
         }
@@ -157,7 +156,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         if (v.getId() == R.id.tv_retry) {
             mNetworkLayout.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.VISIBLE);
-            initData();
+            mDatas.clear();
+            mPersonAdapter.notifyDataSetChanged();
+            initData(Constant.MSG_REFRESH_DATA);
         }
     }
 }

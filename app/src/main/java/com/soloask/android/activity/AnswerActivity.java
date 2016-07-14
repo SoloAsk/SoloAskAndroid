@@ -12,16 +12,23 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.R;
+import com.soloask.android.data.bmob.AnswerManager;
+import com.soloask.android.data.model.Question;
 import com.soloask.android.util.AudioManager;
 import com.soloask.android.util.Constant;
+import com.soloask.android.util.FileManager;
 import com.soloask.android.util.MediaManager;
+import com.soloask.android.util.RelativeDateFormat;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.Timer;
@@ -32,7 +39,8 @@ import java.util.TimerTask;
  */
 public class AnswerActivity extends BaseActivity implements View.OnClickListener {
     private static final int MAX_RECORDING_LENGTH = 60;
-    private ImageView mRecordingView;
+    private ImageView mRecordingView, mQuestionerIcon;
+    private TextView mQuestionerName, mQuestionPrice, mQuestionView;
     private TextView mSendView, mRefuseView;
     private TextView mRestartView;
     private TextView mStatusView;
@@ -45,15 +53,21 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private int mCurrentSecond = 0;
     private int mTotalSeconds = 0;
     private int mPlayProgress = 0;
+    private Question question;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
         initView();
+        initData();
     }
 
     private void initView() {
+        mQuestionerIcon = (ImageView) findViewById(R.id.img_questioner);
+        mQuestionerName = (TextView) findViewById(R.id.tv_questioner_name);
+        mQuestionPrice = (TextView) findViewById(R.id.tv_cost);
+        mQuestionView = (TextView) findViewById(R.id.tv_question);
         mStatusView = (TextView) findViewById(R.id.tv_recording_status);
         mSendView = (TextView) findViewById(R.id.tv_answer_send);
         mRefuseView = (TextView) findViewById(R.id.btn_refuse_answer);
@@ -62,11 +76,23 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
         mDealedTime = (TextView) findViewById(R.id.tv_answered_time);
         mRecordingView = (ImageView) findViewById(R.id.img_recording_voice);
         mSendingLayout = (RelativeLayout) findViewById(R.id.rl_progressbar);
-        mDealedTime.setText(getResources().getQuantityString(R.plurals.dealed_time_hour, 2, 2));
+
         mRecordingView.setOnClickListener(this);
         mSendView.setOnClickListener(this);
         mRestartView.setOnClickListener(this);
         mRefuseView.setOnClickListener(this);
+    }
+
+    private void initData() {
+        question = (Question) getIntent().getSerializableExtra("question");
+        Glide.with(this)
+                .load(question.getAskUser().getUserIcon())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mQuestionerIcon);
+        mQuestionerName.setText(question.getAskUser().getUserName());
+        mQuestionPrice.setText("$" + question.getQuesPrice().toString());
+        mQuestionView.setText(question.getQuesContent());
+        mDealedTime.setText(RelativeDateFormat.format(question.getAskTime()));
     }
 
     final Handler handler = new Handler() {
@@ -254,16 +280,34 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 builder.create().show();
                 break;
             case R.id.tv_answer_send:
-                mSendingLayout.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSendingLayout.setVisibility(View.GONE);
-                        finish();
-                    }
-                }, 2000L);
+                if (FileManager.isFileExits("answer_temp.aac")) {
+                    mSendingLayout.setVisibility(View.VISIBLE);
+                    upLoadAnswer();
+                } else {
+                    Toast.makeText(AnswerActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
+    }
+
+    private void upLoadAnswer() {
+        AnswerManager answerManager = new AnswerManager();
+        answerManager.setOnUpLoadAnswerListener(new AnswerManager.OnUpLoadAnswerListener() {
+            @Override
+            public void onSuccess() {
+                mSendingLayout.setVisibility(View.GONE);
+                Toast.makeText(AnswerActivity.this, R.string.notice_success, Toast.LENGTH_SHORT).show();
+                setResult(Constant.KEY_FROM_ANSWER);
+                finish();
+            }
+
+            @Override
+            public void onFailed() {
+                mSendingLayout.setVisibility(View.GONE);
+                Toast.makeText(AnswerActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+            }
+        });
+        answerManager.upLoadAnswer(question, FileManager.getFilePath("answer_temp.aac"), mTotalSeconds);
     }
 
     @Override

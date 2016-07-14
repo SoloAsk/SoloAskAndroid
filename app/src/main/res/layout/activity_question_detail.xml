@@ -1,115 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/common_background"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <include layout="@layout/toolbar"></include>
 
     <LinearLayout
+        android:id="@+id/ll_question_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:background="@color/common_background"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <include layout="@layout/top_quetioner_common_view"></include>
-
-        <TextView
-            android:id="@+id/tv_quetion"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/item_common_margin"
-            android:layout_marginRight="@dimen/item_common_margin"
-            android:layout_marginTop="10dp"
-            android:text="Why did you choose as the star points A platform ? You have to check-in fee it ? How high ? On what charge ?"
-            android:textColor="@color/color_user_name"
-            android:textSize="15sp" />
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <include layout="@layout/top_quetioner_common_view"></include>
+
+            <TextView
+                android:id="@+id/tv_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/item_common_margin"
+                android:layout_marginRight="@dimen/item_common_margin"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/color_user_name"
+                android:textSize="15sp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_answer_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone">
+
+                <include layout="@layout/layout_voice_answer"></include>
+
+                <FrameLayout
+                    android:id="@+id/fl_vote_negative"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/item_common_margin"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/img_vote_negative"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_nagetive_vote" />
+                </FrameLayout>
+
+            </RelativeLayout>
+
+            <include layout="@layout/bottom_question_common_view"></include>
+
+        </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_answer_container"
+            android:id="@+id/rl_user_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="@dimen/item_common_margin"
+            android:background="@drawable/selector_common_layout"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
-            <include layout="@layout/layout_voice_answer"></include>
+            <com.soloask.android.view.BoundImageView
+                android:id="@+id/img_respondent2"
+                android:layout_width="@dimen/user_icon_size"
+                android:layout_height="@dimen/user_icon_size"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_common_margin"
+                android:background="@drawable/ic_me_default" />
 
-            <FrameLayout
-                android:id="@+id/fl_vote_negative"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+            <ImageView
+                android:id="@+id/img_goto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/item_common_margin">
+                android:layout_marginRight="@dimen/item_common_margin"
+                android:src="@drawable/ic_goto" />
 
-                <ImageView
-                    android:id="@+id/img_vote_negative"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_nagetive_vote" />
-            </FrameLayout>
+            <TextView
+                android:id="@+id/tv_respondent_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/img_respondent2"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@id/img_goto"
+                android:layout_toRightOf="@id/img_respondent2"
+                android:singleLine="true"
+                android:textColor="@color/color_user_name"
+                android:textSize="15sp" />
 
+            <TextView
+                android:id="@+id/tv_respondent_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_respondent_name"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@id/img_goto"
+                android:layout_toRightOf="@id/img_respondent2"
+                android:singleLine="true"
+                android:textColor="@color/color_user_title"
+                android:textSize="13sp" />
         </RelativeLayout>
-
-        <include layout="@layout/bottom_question_common_view"></include>
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_user_profile"
+    <include
+        layout="@layout/layout_network_invalid"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/item_common_margin"
-        android:background="@drawable/selector_common_layout"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
-
-        <com.soloask.android.view.BoundImageView
-            android:id="@+id/img_respondent2"
-            android:layout_width="@dimen/user_icon_size"
-            android:layout_height="@dimen/user_icon_size"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/item_common_margin"
-            android:background="@drawable/avater_hemingke" />
-
-        <ImageView
-            android:id="@+id/img_goto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/item_common_margin"
-            android:src="@drawable/ic_goto" />
-
-        <TextView
-            android:id="@+id/tv_respondent_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/img_respondent2"
-            android:layout_marginLeft="10dp"
-            android:layout_toLeftOf="@id/img_goto"
-            android:layout_toRightOf="@id/img_respondent2"
-            android:singleLine="true"
-            android:text="Steven Curry"
-            android:textColor="@color/color_user_name"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/tv_respondent_describe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_respondent_name"
-            android:layout_marginLeft="10dp"
-            android:layout_toLeftOf="@id/img_goto"
-            android:layout_toRightOf="@id/img_respondent2"
-            android:singleLine="true"
-            android:text="Beijing Normal University , Professor, Ph.D."
-            android:textColor="@color/color_user_title"
-            android:textSize="13sp" />
-
-
-    </RelativeLayout>
-
-
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"></include>
+</RelativeLayout>

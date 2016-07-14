@@ -85,13 +85,12 @@
     <string name="detail_downloading">downloading</string>
     <string name="notice_cannot_null">cannot be empty</string>
     <string name="notice_donot_match">didn\'t match</string>
+    <string name="notice_success">Successfully Done!</string>
+    <string name="format_earned">Earned %1$.2f</string>
+    <string name="notice_ask_yourself">Asking yourself is forbidden</string>
 
     <plurals name="answer_and_earn">
         <item quantity="one">answered %1$d question, earned $0.99</item>
         <item quantity="other">answered %1$d questions, earned $0.99</item>
-    </plurals>
-    <plurals name="dealed_time_hour">
-        <item quantity="one">%1$d hour ago</item>
-        <item quantity="other">%1$d hours ago</item>
     </plurals>
 </resources>

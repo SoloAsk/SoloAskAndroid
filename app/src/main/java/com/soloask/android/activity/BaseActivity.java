@@ -10,7 +10,6 @@ import android.transition.Explode;
 import android.view.MenuItem;
 
 import com.soloask.android.R;
-import com.umeng.message.PushAgent;
 
 /**
  * Created by Lebron on 2016/6/21.
@@ -21,7 +20,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PushAgent.getInstance(this).onAppStart();
+        //PushAgent.getInstance(this).onAppStart();
     }
 
     @Override

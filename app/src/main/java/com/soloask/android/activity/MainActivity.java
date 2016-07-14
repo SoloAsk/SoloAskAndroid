@@ -35,7 +35,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         this.setDisplayHomeAsUpEnabled(false);
         initView();
-        //SharedPreferencesHelper.setPreferenceBoolean(MainActivity.this, Constant.KEY_IS_LOGINED, true);
     }
 
     private void initView() {
@@ -43,6 +42,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mCircleIcon = (BoundImageView) findViewById(R.id.img_user_icon);
         mCircleIcon.showMention(true);
+        Glide.with(MainActivity.this)
+                .load(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_ICON_URL, null))
+                //.placeholder(R.drawable.ic_me_default)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mCircleIcon);
         String[] tabs = new String[]{getResources().getString(R.string.tab_name1), getResources().getString(R.string.tab_name2)};
         mMainAdapter = new MainAdapter(getSupportFragmentManager(), tabs);
         mViewPager.setAdapter(mMainAdapter);
@@ -57,22 +61,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.CODE_RESULT_LOGIN) {
-            SharedPreferencesHelper.setPreferenceBoolean(MainActivity.this, Constant.KEY_IS_LOGINED, true);
-            Log.i("Lebron", data.getStringExtra("user_icon_url"));
+            SharedPreferencesHelper.setPreferenceString(MainActivity.this, Constant.KEY_LOGINED_OBJECT_ID, data.getStringExtra("user_object_id"));
+            SharedPreferencesHelper.setPreferenceString(MainActivity.this, Constant.KEY_LOGINED_ICON_URL, data.getStringExtra("user_icon_url"));
             Glide.with(MainActivity.this)
                     .load(data.getStringExtra("user_icon_url"))
                     //.placeholder(R.drawable.ic_me_default)
+                    .error(R.drawable.ic_me_default)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mCircleIcon);
         } else {
-            Log.i("Lebron", "  do nothing");
+            Log.i("MainActivity", "  do nothing");
         }
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.img_user_icon) {
-            if (SharedPreferencesHelper.getPreferenceBoolean(MainActivity.this, Constant.KEY_IS_LOGINED, false)) {
+            if (SharedPreferencesHelper.getPreferenceString(MainActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
                 Intent intent = new Intent(MainActivity.this, UserActivity.class);
                 startActivity(intent);
             } else {

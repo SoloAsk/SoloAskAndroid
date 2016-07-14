@@ -27,7 +27,7 @@
                 <include layout="@layout/top_quetioner_common_view"></include>
 
                 <TextView
-                    android:id="@+id/tv_quetion"
+                    android:id="@+id/tv_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/item_common_margin"
@@ -38,13 +38,14 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/item_common_margin">
+                    android:paddingBottom="@dimen/item_common_margin"
+                    android:paddingTop="@dimen/item_common_margin">
 
                     <TextView
                         android:id="@+id/tv_answered_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
+                        android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/item_common_margin"
                         android:text="1 hour ago" />
 
@@ -59,7 +60,8 @@
                         android:paddingRight="10dp"
                         android:paddingTop="8dp"
                         android:text="@string/btn_refuse"
-                        android:textColor="@color/price_normal" />
+                        android:textColor="@color/price_normal"
+                        android:visibility="gone" />
                 </RelativeLayout>
 
             </LinearLayout>

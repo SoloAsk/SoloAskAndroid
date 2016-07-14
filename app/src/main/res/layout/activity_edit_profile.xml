@@ -30,7 +30,7 @@
                     android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="30dp"
-                    android:background="@drawable/avater_hemingke" />
+                    android:background="@drawable/ic_me_default" />
 
                 <TextView
                     android:id="@+id/tv_user_name"
@@ -172,7 +172,7 @@
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="$5"
+                    android:text="$1"
                     android:textColor="@color/color_common_red" />
 
             </LinearLayout>

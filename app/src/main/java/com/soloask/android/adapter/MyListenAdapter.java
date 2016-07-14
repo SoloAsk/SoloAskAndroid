@@ -9,9 +9,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.R;
 import com.soloask.android.activity.QuestionDetailActivity;
+import com.soloask.android.data.model.Question;
 import com.soloask.android.util.Constant;
+import com.soloask.android.util.RelativeDateFormat;
 
 import java.util.List;
 
@@ -36,9 +40,25 @@ public class MyListenAdapter extends BaseAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
-            ((ItemViewHolder) holder).nameView.setText(mDatas.get(position).toString());
-            ((ItemViewHolder) holder).timeView.setText(mContext.getResources().getQuantityString(R.plurals.dealed_time_hour, 1, 2));
-            ((ItemViewHolder) holder).listenersView.setText(String.format(mContext.getResources().getString(R.string.format_listerers), 123));
+            final Question question = mDatas.get(position);
+            Glide.with(mContext)
+                    .load(question.getAnswerUser().getUserIcon())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(((ItemViewHolder) holder).imageView);
+            ((ItemViewHolder) holder).nameView.setText(question.getAnswerUser().getUserName());
+            ((ItemViewHolder) holder).titleView.setText(question.getAnswerUser().getUserTitle());
+            ((ItemViewHolder) holder).timeView.setText(RelativeDateFormat.format(question.getAskTime()));
+            ((ItemViewHolder) holder).questionView.setText(question.getQuesContent());
+            ((ItemViewHolder) holder).listenersView.setText(String.format(mContext.getResources().getString(R.string.format_listerers), question.getListenerNum()));
+            ((ItemViewHolder) holder).mContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, QuestionDetailActivity.class);
+                    intent.putExtra(Constant.KEY_QUESTION_ID, question.getObjectId());
+                    mContext.startActivity(intent);
+                }
+            });
+
         }
     }
 
@@ -62,15 +82,6 @@ public class MyListenAdapter extends BaseAdapter {
             timeView = (TextView) itemView.findViewById(R.id.tv_time);
             listenersView = (TextView) itemView.findViewById(R.id.tv_count);
             mContainer = (LinearLayout) itemView.findViewById(R.id.ll_my_listen_item);
-
-            mContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, QuestionDetailActivity.class);
-                    context.startActivity(intent);
-                }
-            });
-
 
         }
     }

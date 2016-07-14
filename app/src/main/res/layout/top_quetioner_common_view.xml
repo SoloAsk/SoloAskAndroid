@@ -10,7 +10,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginLeft="@dimen/item_common_margin"
-        android:background="@drawable/avater_yaodi" />
+        android:background="@drawable/ic_me_default" />
 
     <TextView
         android:id="@+id/tv_questioner_name"
@@ -20,7 +20,6 @@
         android:layout_marginLeft="11dp"
         android:layout_toRightOf="@id/img_questioner"
         android:gravity="center"
-        android:text="Steven Curry"
         android:textColor="@color/color_user_name"
         android:textSize="15sp" />
 
@@ -31,7 +30,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/item_common_margin"
-        android:text="$8"
+        android:text="$1"
         android:textColor="@color/color_common_red"
         android:textSize="14sp" />
 
