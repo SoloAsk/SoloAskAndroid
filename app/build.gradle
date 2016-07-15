@@ -10,8 +10,8 @@ android {
         applicationId "com.soloask.android"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 3
+        versionName "1.0.2"
     }
     buildTypes {
         release {
@@ -40,5 +40,5 @@ dependencies {
     //umeng
     compile 'com.umeng.analytics:analytics:latest.integration'
 
-    compile'cn.bmob.android:bmob-sdk:3.5.0'
+    compile 'cn.bmob.android:bmob-sdk:3.5.0'
 }

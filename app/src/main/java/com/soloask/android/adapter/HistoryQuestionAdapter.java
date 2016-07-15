@@ -325,8 +325,6 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             e.printStackTrace();
                         }
                     }
-                    Log.i("Lebron", hasPurchase + " " + inv.getSkuDetails("payment_for_listen").toString());
-                    //String priceResult = inv.getSkuDetails("payment_for_listen").getPrice();
 
                 }
             });
