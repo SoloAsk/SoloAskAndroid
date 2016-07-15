@@ -29,9 +29,11 @@ import com.soloask.android.util.Constant;
 import com.soloask.android.util.RelativeDateFormat;
 import com.soloask.android.util.billing.IabHelper;
 import com.soloask.android.util.billing.IabResult;
+import com.soloask.android.util.billing.Inventory;
 import com.soloask.android.util.billing.Purchase;
 import com.soloask.android.view.BoundImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,12 +50,14 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private boolean isPub = true;
     private double mPrice;
     private HeadViewHolder headerViewHolder;
+    private String mPaymentId;
 
     public HistoryQuestionAdapter(Activity context, User respondent, List list) {
         this.mContext = context;
         mRespondent = respondent;
         mLayoutInflater = LayoutInflater.from(context);
         mDatas = list;
+        mPaymentId = "payment_" + mRespondent.getUserPrice();
     }
 
     public void setQuestioner(User questioner) {
@@ -73,6 +77,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void updateHeaderView(User user) {
         mRespondent = user;
+        mPaymentId = "payment_" + mRespondent.getUserPrice();
         notifyItemChanged(0);
     }
 
@@ -224,26 +229,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     } else if (mQuestioner.getObjectId().equals(mRespondent.getObjectId())) {
                         Toast.makeText(mContext, R.string.notice_ask_yourself, Toast.LENGTH_SHORT).show();
                     } else {
-                        //doPurchase(mQuestionView);
-                        AskManager askManager = new AskManager();
-                        askManager.setOnAskQuestionListener(new AskManager.OnAskQuestionListener() {
-                            @Override
-                            public void onSuccess(String objectId) {
-                                Intent intent = new Intent(mContext, QuestionDetailActivity.class);
-                                intent.putExtra(Constant.KEY_QUESTION_ID, objectId);
-                                mContext.startActivity(intent);
-                                mQuestionView.setText("");
-                                Toast.makeText(mContext, "Asked successfully", Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void onFailed() {
-                                Toast.makeText(mContext, "something wrong", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        if (mRespondent != null && mQuestioner != null) {
-                            askManager.askQuestion(mRespondent, mQuestioner, mContent, isPub, mPrice);
-                        }
+                        doPurchase(mQuestionView);
                     }
                 }
             });
@@ -258,15 +244,15 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private void doPurchase(final View view) {
         if (mHelper != null && !mHelper.isAsyncInProgress()) {
-            mHelper.launchPurchaseFlow(mContext, "payment_for_listen", 10002, new IabHelper.OnIabPurchaseFinishedListener() {
+            mHelper.launchPurchaseFlow(mContext, mPaymentId, 10002, new IabHelper.OnIabPurchaseFinishedListener() {
                 @Override
                 public void onIabPurchaseFinished(IabResult result, Purchase info) {
                     if (result.isFailure()) {
                         Toast.makeText(mContext, result.getMessage(), Toast.LENGTH_LONG).show();
                         return;
                     } else {
-                        if (info.getSku().equals("payment_for_listen")) {
-                            doConsume(info, view);
+                        if (info.getSku().equals(mPaymentId)) {
+                            doConsume(info, view, false);
                         }
                     }
                 }
@@ -276,7 +262,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    private void doConsume(Purchase purchase, final View view) {
+    private void doConsume(Purchase purchase, final View view, final boolean fromQuery) {
         mHelper.consumeAsync(purchase, new IabHelper.OnConsumeFinishedListener() {
             @Override
             public void onConsumeFinished(Purchase purchase, IabResult result) {
@@ -284,30 +270,71 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     Toast.makeText(mContext, result.getMessage(), Toast.LENGTH_LONG).show();
                     return;
                 }
-                AskManager askManager = new AskManager();
-                askManager.setOnAskQuestionListener(new AskManager.OnAskQuestionListener() {
-                    @Override
-                    public void onSuccess(String objectId) {
-                        Intent intent = new Intent(mContext, QuestionDetailActivity.class);
-                        intent.putExtra(Constant.KEY_QUESTION_ID, objectId);
-                        mContext.startActivity(intent);
-                        ((EditText) view).setText("");
-                        Toast.makeText(mContext, "Asked successfully", Toast.LENGTH_LONG).show();
-                    }
+                if (!fromQuery) {
+                    AskManager askManager = new AskManager();
+                    askManager.setOnAskQuestionListener(new AskManager.OnAskQuestionListener() {
+                        @Override
+                        public void onSuccess(String objectId) {
+                            Intent intent = new Intent(mContext, QuestionDetailActivity.class);
+                            intent.putExtra(Constant.KEY_QUESTION_ID, objectId);
+                            mContext.startActivity(intent);
+                            if (view != null) {
+                                ((EditText) view).setText("");
+                            }
+                            Toast.makeText(mContext, R.string.notice_success, Toast.LENGTH_LONG).show();
+                        }
 
-                    @Override
-                    public void onFailed() {
-                        Toast.makeText(mContext, "something wrong", Toast.LENGTH_LONG).show();
+                        @Override
+                        public void onFailed() {
+                            Toast.makeText(mContext, "Something wrong", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    if (mRespondent != null && mQuestioner != null) {
+                        askManager.askQuestion(mRespondent, mQuestioner, mContent, isPub, mPrice);
                     }
-                });
-                if (mRespondent != null && mQuestioner != null) {
-                    askManager.askQuestion(mRespondent, mQuestioner, mContent, isPub, mPrice);
+                } else {
+                    Log.i("Lebron", "consume successfully");
                 }
+
             }
         });
     }
 
+    private void doQuery() {
+        List mSKULists = new ArrayList();
+        if (mPaymentId == null) {
+            mPaymentId = Constant.OVERHEAR_PRICE_ID;
+        }
+        mSKULists.add(mPaymentId);
+        if (mHelper != null) {
+            mHelper.queryInventoryAsync(true, mSKULists, new IabHelper.QueryInventoryFinishedListener() {
+
+                @Override
+                public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+                    if (result.isFailure()) {
+                        Toast.makeText(mContext, result.getMessage(), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    boolean hasPurchase = inv.hasPurchase(mPaymentId);
+                    if (hasPurchase) {
+                        try {
+                            doConsume(inv.getPurchase(mPaymentId), null, true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Log.i("Lebron", hasPurchase + " " + inv.getSkuDetails("payment_for_listen").toString());
+                    //String priceResult = inv.getSkuDetails("payment_for_listen").getPrice();
+
+                }
+            });
+        } else {
+            Toast.makeText(mContext, R.string.google_pay_is_unavailable, Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void setIABHelper(IabHelper iabHelper) {
         mHelper = iabHelper;
+        doQuery();
     }
 }

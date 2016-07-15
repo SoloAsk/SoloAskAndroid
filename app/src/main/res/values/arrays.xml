@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_price">
+        <item>0.99</item>
+        <item>1.99</item>
+        <item>2.99</item>
+        <item>4.99</item>
+        <item>6.99</item>
+        <item>11.99</item>
+        <item>15.00</item>
+        <item>28.00</item>
+        <item>49.00</item>
+        <item>69.00</item>
+        <item>89.00</item>
+        <item>128.00</item>
+        <item>148.00</item>
+        <item>198.00</item>
+        <item>399.00</item>
+    </string-array>
+</resources>
