@@ -38,8 +38,11 @@ public class QuestionDetailManager {
             @Override
             public void done(Question question, BmobException e) {
                 if (e == null) {
+                    Log.i("QuestionDetail", " get detail successfully");
                     listener.onSuccess(question);
                 } else {
+                    e.printStackTrace();
+                    Log.i("QuestionDetail", " get detail failed");
                     listener.onFailed();
                 }
             }
@@ -114,6 +117,7 @@ public class QuestionDetailManager {
         User questioner = question.getAskUser();
         User respondent = question.getAnswerUser();
         questioner.increment("earning", 0.5);
+        questioner.increment("income", 0.5);
         questioner.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -123,6 +127,7 @@ public class QuestionDetailManager {
             }
         });
         respondent.increment("earning", 0.5);
+        respondent.increment("income", 0.5);
         respondent.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {

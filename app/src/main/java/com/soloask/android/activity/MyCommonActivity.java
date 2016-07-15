@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.soloask.android.data.bmob.MineManager;
 import com.soloask.android.data.model.Question;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
+import com.soloask.android.view.MaterialProgressBar;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
     private RelativeLayout mEmptyLayout;
     private TextView mEmptyView;
     private TextView mToOtherView;
+    private MaterialProgressBar mProgressBar;
     private MyQuestionAdapter mQuestionAdapter;
     private MyAnswerAdapter mAnswerAdapter;
     private MyListenAdapter mListenAdapter;
@@ -55,25 +59,35 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
             return;
         }
         mFrom = getIntent().getIntExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_QUESTION);
-        initData(Constant.MSG_REFRESH_DATA, mFrom);
         initView();
+        initData(Constant.MSG_REFRESH_DATA, mFrom);
     }
 
     private void initView() {
         mEmptyLayout = (RelativeLayout) findViewById(R.id.rl_empty);
         mEmptyView = (TextView) findViewById(R.id.tv_hint_empty);
         mToOtherView = (TextView) findViewById(R.id.btn_empty);
+        mProgressBar = (MaterialProgressBar) findViewById(R.id.progressbar_loading);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_common_view);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout_mine);
         mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mRefreshLayout.setRefreshing(true);
         mRefreshLayout.setOnRefreshListener(this);
         mToOtherView.setOnClickListener(this);
+        ((Toolbar) findViewById(R.id.toolbar)).setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mFrom == Constant.KEY_FROM_MY_ANSWER) {
+                    setResult(Constant.KEY_FROM_MY_ANSWER);
+                }
+                finish();
+            }
+        });
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItem + 1 == mBaseAdapter.getItemCount()) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mBaseAdapter.getItemCount() >= 10 && mLastVisibleItem + 1 == mBaseAdapter.getItemCount()) {
                     handler.sendEmptyMessageDelayed(Constant.MSG_LOAD_MORE_DATA, 2000L);
                 }
             }
@@ -116,7 +130,7 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
         }
     }
 
-    private void initData(int actionType, int from) {
+    private void initData(int actionType, final int from) {
         MineManager mineManager = new MineManager(mUser);
         mineManager.setOnGetQuestionListener(new MineManager.OnGetQuestionListener() {
             @Override
@@ -124,10 +138,16 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
                 //如果是首次并且没有数据
                 if (isFirst && list.size() == 0) {
                     mRefreshLayout.setVisibility(View.GONE);
+                    mProgressBar.setVisibility(View.GONE);
                     mEmptyLayout.setVisibility(View.VISIBLE);
-                    mToOtherView.setText(R.string.btn_ask_question);
+                    if (from == Constant.KEY_FROM_MY_LISTEN) {
+                        mToOtherView.setText(R.string.btn_listen_question);
+                    } else {
+                        mToOtherView.setText(R.string.btn_ask_question);
+                    }
                 } else {
                     isFirst = false;
+                    mProgressBar.setVisibility(View.GONE);
                     mRefreshLayout.setVisibility(View.VISIBLE);
                     mEmptyLayout.setVisibility(View.GONE);
                     mSkipNum += list.size();
@@ -140,6 +160,7 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
             @Override
             public void onFailed() {
                 if (mDatas.size() == 0) {
+                    mProgressBar.setVisibility(View.GONE);
                     mEmptyView.setText(R.string.failed_to_load_data);
                     mToOtherView.setText(R.string.btn_retry);
                     mRefreshLayout.setVisibility(View.GONE);
@@ -194,11 +215,19 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constant.KEY_FROM_ANSWER) {
+        if (resultCode == Constant.KEY_FROM_MY_ANSWER) {
             mDatas.clear();
             mBaseAdapter.notifyDataSetChanged();
             initData(Constant.MSG_REFRESH_DATA, mFrom);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mFrom == Constant.KEY_FROM_MY_ANSWER) {
+            setResult(Constant.KEY_FROM_MY_ANSWER);
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -207,7 +236,12 @@ public class MyCommonActivity extends BaseActivity implements SwipeRefreshLayout
             if (mToOtherView.getText().equals(getString(R.string.btn_ask_question))) {
                 setResult(Constant.KEY_FROM_MY_QUESTION);
                 finish();
+            } else if (mToOtherView.getText().equals(getString(R.string.btn_listen_question))) {
+                setResult(Constant.KEY_FROM_MY_LISTEN);
+                finish();
             } else {
+                mEmptyLayout.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
                 initData(Constant.MSG_REFRESH_DATA, mFrom);
             }
 

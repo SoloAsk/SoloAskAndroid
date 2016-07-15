@@ -24,6 +24,8 @@ public class AudioManager {
 
     public interface AudioStateChangeListener {
         void wellPrepared();
+
+        void Preparedfailed();
     }
 
     public AudioStateChangeListener mAudioStateChangeListener;
@@ -55,14 +57,14 @@ public class AudioManager {
 
             mCurrentFilePath = file.getAbsolutePath();
             mMediaRecorder = new MediaRecorder();
-            // 设置输出文件
-            mMediaRecorder.setOutputFile(file.getAbsolutePath());
             // 设置音频源
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             // 设置音频格式
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
             // 设置音频编码
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            // 设置输出文件
+            mMediaRecorder.setOutputFile(file.getAbsolutePath());
 
             mMediaRecorder.prepare();
             mMediaRecorder.start();
@@ -74,11 +76,14 @@ public class AudioManager {
         } catch (IllegalStateException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            if (mAudioStateChangeListener != null) {
+                mAudioStateChangeListener.Preparedfailed();
+            }
         }
     }
 
     private String generateFileName() {
-        return "answer_temp.aac";
+        return Constant.FILE_NAME_VOICE;
     }
 
     public void stopAudio() {

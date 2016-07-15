@@ -60,7 +60,7 @@ public class WithDrawActivity extends BaseActivity {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mUserIcon);
         mNameView.setText(mUser.getUserName());
-        mIncomeView.setText(String.format(getString(R.string.format_earned), mUser.getUserEarned()));
+        mIncomeView.setText(String.format(getString(R.string.format_current_income), mUser.getUserEarned()));
     }
 
     private void initView() {

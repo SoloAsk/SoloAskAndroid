@@ -29,8 +29,8 @@ public class AnswerManager {
         bmobFile.uploadblock(new UploadFileListener() {
             @Override
             public void done(BmobException e) {
-                if (e == null) {
-                    Log.i("Lebron", bmobFile.getFileUrl());
+                if (e == null && bmobFile.getFileUrl() != null) {
+                    Log.i("AnswerManager", bmobFile.getFileUrl() + voiceLength);
                     updateQuestion(question, bmobFile.getFileUrl(), voiceLength);
                 } else {
                     mListener.onFailed();
@@ -48,7 +48,6 @@ public class AnswerManager {
             public void done(BmobException e) {
                 if (e == null) {
                     updateUserAnswerNum(question);
-                    updateUserEarning(question);
                     mListener.onSuccess();
                 } else {
                     mListener.onFailed();
@@ -60,26 +59,15 @@ public class AnswerManager {
     private void updateUserAnswerNum(Question question) {
         User user = question.getAnswerUser();
         user.increment("answerQuesNum");
+        user.increment("earning", question.getQuesPrice());
+        user.increment("income", question.getQuesPrice());
         user.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Log.i("Lebron", "I answered ++");
+                    Log.i("AnswerManager", "I answered ++ and You have earned some money");
                 } else {
                     e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void updateUserEarning(Question question) {
-        User user = question.getAnswerUser();
-        user.increment("earning", question.getQuesPrice());
-        user.update(new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    Log.i("AnswerManager", "You have earned some money");
                 }
             }
         });

@@ -99,8 +99,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                     mUserNameView.setText(user.getUserName());
                     mTitleView.setText(user.getUserTitle());
                     mIntroduceView.setText(user.getUserIntroduce());
-                    mUserPriceView.setText("$" + user.getUserPrice().toString());
-                    mUserIncomeView.setText("$" + user.getUserEarned().toString());
+                    mUserPriceView.setText(String.format(getString(R.string.format_dollar), user.getUserPrice()));
+                    mUserIncomeView.setText(String.format(getString(R.string.format_dollar), user.getUserIncome()));
                 }
 
             }
@@ -142,7 +142,13 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         } else if (resultCode == Constant.CODE_RESULT_EDIT) {
             initData();
         } else if (resultCode == Constant.KEY_FROM_MY_QUESTION) {
+            setResult(Constant.KEY_FROM_MY_QUESTION);
             finish();
+        } else if (resultCode == Constant.KEY_FROM_MY_LISTEN) {
+            setResult(Constant.KEY_FROM_MY_LISTEN);
+            finish();
+        } else if (resultCode == Constant.KEY_FROM_MY_ANSWER) {
+            initData();
         } else {
             Log.i("Lebron", "  do nothing");
         }
@@ -164,6 +170,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                         try {
                             LoginManager.getInstance().logOut();
                             SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null);
+                            SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_ICON_URL, null);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -183,7 +190,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 builder.create().show();
                 break;
             case R.id.tv_my_answer:
-                if (SharedPreferencesHelper.getPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
+                if (mUser != null) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_ANSWER);
                     Bundle bundle = new Bundle();
@@ -196,7 +203,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_my_question:
-                if (SharedPreferencesHelper.getPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
+                if (mUser != null) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_QUESTION);
                     Bundle bundle = new Bundle();
@@ -209,7 +216,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_my_listen:
-                if (SharedPreferencesHelper.getPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
+                if (mUser != null) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_LISTEN);
                     Bundle bundle = new Bundle();
@@ -222,18 +229,23 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_edit_profile:
-                mIntent.setClass(UserActivity.this, EditProfileActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("user", mUser);
-                mIntent.putExtras(bundle);
-                startActivityForResult(mIntent, Constant.CODE_REQUEST);
+                if (mUser != null) {
+                    mIntent.setClass(UserActivity.this, EditProfileActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("user", mUser);
+                    mIntent.putExtras(bundle);
+                    startActivityForResult(mIntent, Constant.CODE_REQUEST);
+                } else {
+                    mIntent.setClass(UserActivity.this, LoginActivity.class);
+                    UserActivity.this.startActivityForResult(mIntent, Constant.CODE_REQUEST);
+                }
                 break;
             case R.id.tv_about:
                 mIntent.setClass(UserActivity.this, AboutActivity.class);
                 startActivity(mIntent);
                 break;
             case R.id.tv_withdraw:
-                if (SharedPreferencesHelper.getPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
+                if (mUser != null) {
                     mIntent.setClass(UserActivity.this, WithDrawActivity.class);
                     Bundle bundle1 = new Bundle();
                     bundle1.putSerializable("user", mUser);

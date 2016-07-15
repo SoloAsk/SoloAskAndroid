@@ -12,9 +12,8 @@ public class Constant {
     public static final String KEY_LOGINED_ICON_URL = "key_logined_icon_url";
     public static final String KEY_REMEMBER_PAYPAL = "key_remember_paypal";
     public static final String KEY_PAYPAL_ACCOUNT = "key_paypal_account";
-    public static final String KEY_FROM_ABOUT = "key_from_about";
-    public static final String KEY_FROM_MYASK = "key_from_myask";
     public static final String KEY_QUESTION_ID = "key_question_id";
+    public static final String FILE_NAME_VOICE = "answer_temp.aac";
     public static final int[] ARRAY_STATUS = new int[]{R.string.status_unanswered, R.string.status_answered, R.string.status_refunded, R.string.status_timeout};
 
     public static final int CODE_RESULT_LOGIN = 100;
@@ -32,7 +31,6 @@ public class Constant {
     public static final int KEY_FROM_MY_QUESTION = 10;
     public static final int KEY_FROM_MY_ANSWER = 20;
     public static final int KEY_FROM_MY_LISTEN = 30;
-    public static final int KEY_FROM_ANSWER = 40;
     public static final int STATUS_UNANSWERED = 0;//待回答
     public static final int STATUS_ANSWERED = 1;//已回答
     public static final int STATUS_REFUND = 2;//已退款

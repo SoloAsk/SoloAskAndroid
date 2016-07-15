@@ -1,5 +1,7 @@
 package com.soloask.android.data.bmob;
 
+import android.util.Log;
+
 import com.soloask.android.data.model.Question;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
@@ -9,6 +11,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Lebron on 2016/7/12.
@@ -19,6 +22,9 @@ public class MineManager {
 
     public MineManager(User user) {
         mUser = user;
+    }
+
+    public MineManager() {
     }
 
     public void setOnGetQuestionListener(OnGetQuestionListener listener) {
@@ -55,6 +61,28 @@ public class MineManager {
             }
         });
 
+    }
+
+    public void dealTimeOut(final Question question, final int status) {
+        question.getAskUser().increment("earning", question.getQuesPrice());
+        question.getAskUser().increment("income", question.getQuesPrice());
+        question.getAskUser().update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Log.i("MineManager", " money back successfully");
+                    question.setState(status);
+                    question.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                Log.i("MineManager", " update status successfully");
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public interface OnGetQuestionListener {

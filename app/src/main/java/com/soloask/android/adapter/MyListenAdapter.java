@@ -47,7 +47,7 @@ public class MyListenAdapter extends BaseAdapter {
                     .into(((ItemViewHolder) holder).imageView);
             ((ItemViewHolder) holder).nameView.setText(question.getAnswerUser().getUserName());
             ((ItemViewHolder) holder).titleView.setText(question.getAnswerUser().getUserTitle());
-            ((ItemViewHolder) holder).timeView.setText(RelativeDateFormat.format(question.getAskTime()));
+            ((ItemViewHolder) holder).timeView.setText(RelativeDateFormat.format(question.getAskTime(),mContext));
             ((ItemViewHolder) holder).questionView.setText(question.getQuesContent());
             ((ItemViewHolder) holder).listenersView.setText(String.format(mContext.getResources().getString(R.string.format_listerers), question.getListenerNum()));
             ((ItemViewHolder) holder).mContainer.setOnClickListener(new View.OnClickListener() {

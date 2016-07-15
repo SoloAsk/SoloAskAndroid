@@ -34,9 +34,9 @@ public class UserManager {
         user.setUserId(id);
         user.setUserName(name);
         user.setUserIcon(icon);
-        user.setUserPrice(1.0);
-        user.setUserIntroduce("something");
-        user.setUserTitle("something");
+        user.setUserPrice(0.99);
+        user.setUserIntroduce("Something");
+        user.setUserTitle("Something");
         user.setUserIncome(0.0);
         user.setUserEarned(0.0);
         user.setAnswerQuesNum(0);
@@ -61,11 +61,15 @@ public class UserManager {
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
-                if (list.size() > 0) {
-                    mListener.onSuccess(list.get(0).getObjectId());
+                if (e == null) {
+                    if (list.size() > 0) {
+                        mListener.onSuccess(list.get(0).getObjectId());
+                    } else {
+                        Log.i("UserManager", " signin");
+                        sign(id, name, icon);
+                    }
                 } else {
-                    Log.i("Lebron", " signin");
-                    sign(id, name, icon);
+                    mListener.onFailed();
                 }
             }
         });

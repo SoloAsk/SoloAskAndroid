@@ -36,6 +36,7 @@ import com.soloask.android.util.billing.IabHelper;
 import com.soloask.android.util.billing.IabResult;
 import com.soloask.android.util.billing.Inventory;
 import com.soloask.android.util.billing.Purchase;
+import com.soloask.android.view.MaterialProgressBar;
 import com.soloask.android.view.ShareDialog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -61,6 +62,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
     private TextView mTimeLengthView, mQuestionerName, mPriceView, mContent, mQuestionPriceView;
     private TextView mTimeView, mListenersView;
     private TextView mRespondentView, mTitleView;
+    private MaterialProgressBar mProgressBar;
     private AnimationDrawable mAnimationDrawable;
     private IabHelper mHelper;
     private List mSKULists;
@@ -73,9 +75,8 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_detail);
-        getCurrentUser();
         initView();
-        initData();
+        getCurrentUser();
         initIabHelper();
     }
 
@@ -88,7 +89,6 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                 if (question != null) {
                     mQuestion = question;
                     //是否有回答
-                    mNetworkLayout.setVisibility(View.GONE);
                     if (question.getQuesVoiceURL() != null) {
                         mVoiceContainer.setVisibility(View.VISIBLE);
                         mListenersView.setVisibility(View.VISIBLE);
@@ -118,12 +118,13 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(mRespondentImg2);
                     mQuestionerName.setText(question.getAskUser().getUserName());
-                    mQuestionPriceView.setText("$" + question.getQuesPrice().toString());
-                    mTimeView.setText(RelativeDateFormat.format(question.getAskTime()));
+                    mQuestionPriceView.setText(String.format(getString(R.string.format_dollar), question.getQuesPrice()));
+                    mTimeView.setText(RelativeDateFormat.format(question.getAskTime(),QuestionDetailActivity.this));
                     mContent.setText(question.getQuesContent());
                     mRespondentView.setText(question.getAnswerUser().getUserName());
                     mTitleView.setText(question.getAnswerUser().getUserIntroduce());
                     mTimeLengthView.setText(String.format(getString(R.string.format_second), question.getVoiceTime()));
+                    mProgressBar.setVisibility(View.GONE);
                     mDetailLayout.setVisibility(View.VISIBLE);
                 }
             }
@@ -131,6 +132,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
             @Override
             public void onFailed() {
                 mNetworkLayout.setVisibility(View.VISIBLE);
+                mProgressBar.setVisibility(View.GONE);
                 mDetailLayout.setVisibility(View.GONE);
                 findViewById(R.id.tv_retry).setOnClickListener(QuestionDetailActivity.this);
                 Toast.makeText(QuestionDetailActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
@@ -180,6 +182,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
         mListenersView = (TextView) findViewById(R.id.tv_listeners_info);
         mRespondentView = (TextView) findViewById(R.id.tv_respondent_name);
         mTitleView = (TextView) findViewById(R.id.tv_respondent_describe);
+        mProgressBar = (MaterialProgressBar) findViewById(R.id.progressbar_loading);
         mAnimImg.setVisibility(View.VISIBLE);
         mPlayImg.setVisibility(View.GONE);
 
@@ -196,6 +199,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
             @Override
             public void onSuccess(User user) {
                 mCurrentUser = user;
+                initData();
                 Log.i("QuestionDetailActivity", "getCurrentUser successfully" + mCurrentUser.getUserId());
             }
 
@@ -294,7 +298,8 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                 }
                 break;
             case R.id.tv_retry:
-                Log.i("QuestionDetailActivity", "click");
+                mProgressBar.setVisibility(View.VISIBLE);
+                mNetworkLayout.setVisibility(View.GONE);
                 initData();
                 break;
         }
@@ -311,6 +316,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
     }
 
     private void downloadAudio(String fileUrl) {
+        Log.i("QuestionDetail", fileUrl);
         BmobFile bmobFile = new BmobFile(mQuestion.getObjectId() + ".aac", "", fileUrl);
         File saveFile = new File(FileManager.getFilePath(mQuestion.getObjectId() + ".aac"));
         bmobFile.download(saveFile, new DownloadFileListener() {
@@ -324,6 +330,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                 if (e == null) {
                     playAudio();
                 } else {
+                    e.printStackTrace();
                     mPriceView.setText(R.string.detail_click_to_play);
                     Toast.makeText(QuestionDetailActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
                 }
@@ -363,11 +370,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
     private void checkFileExist() {
         if (!FileManager.isFileExits(mQuestion.getObjectId() + ".aac")) {
             mPriceView.setText(R.string.detail_downloading);
-            if (FileManager.deleteFolder(FileManager.getFilePath(""))) {
-                downloadAudio(mQuestion.getQuesVoiceURL());
-            } else {
-                Toast.makeText(this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
-            }
+            downloadAudio(mQuestion.getQuesVoiceURL());
         } else {
             playAudio();
         }
@@ -432,7 +435,6 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                     Log.i("Lebron", "test" + hasPurchase);*/
                     Log.i("Lebron", inv.getSkuDetails("payment_for_listen").toString());
                     String priceResult = inv.getSkuDetails("payment_for_listen").getPrice();
-                    //String price = priceResult.substring(priceResult.indexOf("$"), priceResult.length());
                     if (isPayed) {
                         mPriceView.setText(R.string.detail_click_to_play);
                     } else {
@@ -463,6 +465,10 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
             } catch (Exception e) {
             }
             mHelper = null;
+        }
+        try {
+            FileManager.deleteFolder(FileManager.getFilePath(""));
+        } catch (Exception e) {
         }
         MediaManager.release();
     }

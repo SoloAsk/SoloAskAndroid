@@ -1,5 +1,10 @@
 package com.soloask.android.util;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.soloask.android.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,23 +18,30 @@ public class RelativeDateFormat {
     private static final long ONE_DAY = 86400000L;
     private static final long ONE_WEEK = 604800000L;
 
-    private static final String ONE_SECOND_AGO = "秒前";
-    private static final String ONE_MINUTE_AGO = "分钟前";
-    private static final String ONE_HOUR_AGO = "小时前";
-    private static final String ONE_DAY_AGO = "天前";
-    private static final String ONE_MONTH_AGO = "月前";
-    private static final String ONE_YEAR_AGO = "年前";
-
     public static String getCurrentTime() {
-        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = sDateFormat.format(new java.util.Date());
         return date;
     }
 
-    public static String format(String time) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static boolean isTimeOut(String askTime) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = format.parse(askTime);
+            long delta = new Date().getTime() - date.getTime();
+            if (delta >= 48L * ONE_HOUR) {
+                return true;
+            }
+        } catch (ParseException e) {
+            return false;
+        }
+        return false;
+    }
+
+    public static String format(String time, Context context) {
         Date date = null;
         try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             date = format.parse(time);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -40,29 +52,35 @@ public class RelativeDateFormat {
         long delta = new Date().getTime() - date.getTime();
         if (delta < 1L * ONE_MINUTE) {
             long seconds = toSeconds(delta);
-            return (seconds <= 0 ? 1 : seconds) + ONE_SECOND_AGO;
+            long displayTime = seconds <= 0 ? 1 : seconds;
+            return context.getResources().getQuantityString(R.plurals.dealed_time_second, (int) displayTime, (int) displayTime);
         }
         if (delta < 45L * ONE_MINUTE) {
             long minutes = toMinutes(delta);
-            return (minutes <= 0 ? 1 : minutes) + ONE_MINUTE_AGO;
+            long displayTime = minutes <= 0 ? 1 : minutes;
+            return context.getResources().getQuantityString(R.plurals.dealed_time_minute, (int) displayTime, (int) displayTime);
         }
         if (delta < 24L * ONE_HOUR) {
             long hours = toHours(delta);
-            return (hours <= 0 ? 1 : hours) + ONE_HOUR_AGO;
+            long displayTime = hours <= 0 ? 1 : hours;
+            return context.getResources().getQuantityString(R.plurals.dealed_time_hour, (int) displayTime, (int) displayTime);
         }
         if (delta < 48L * ONE_HOUR) {
-            return "昨天";
+            return "yesterday";
         }
         if (delta < 30L * ONE_DAY) {
             long days = toDays(delta);
-            return (days <= 0 ? 1 : days) + ONE_DAY_AGO;
+            long displayTime = days <= 0 ? 1 : days;
+            return context.getResources().getQuantityString(R.plurals.dealed_time_day, (int) displayTime, (int) displayTime);
         }
         if (delta < 12L * 4L * ONE_WEEK) {
             long months = toMonths(delta);
-            return (months <= 0 ? 1 : months) + ONE_MONTH_AGO;
+            long displayTime = months <= 0 ? 1 : months;
+            return context.getResources().getQuantityString(R.plurals.dealed_time_month, (int) displayTime, (int) displayTime);
         } else {
             long years = toYears(delta);
-            return (years <= 0 ? 1 : years) + ONE_YEAR_AGO;
+            long displayTime = years <= 0 ? 1 : years;
+            return context.getResources().getQuantityString(R.plurals.dealed_time_year, (int) displayTime, (int) displayTime);
         }
     }
 

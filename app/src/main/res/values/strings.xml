@@ -86,11 +86,39 @@
     <string name="notice_cannot_null">cannot be empty</string>
     <string name="notice_donot_match">didn\'t match</string>
     <string name="notice_success">Successfully Done!</string>
-    <string name="format_earned">Earned %1$.2f</string>
+    <string name="format_earned">Total income $%1$.2f</string>
+    <string name="format_current_income">Current income $%1$.2f</string>
     <string name="notice_ask_yourself">Asking yourself is forbidden</string>
+    <string name="notice_permission_denied">Permission Denied</string>
+    <string name="btn_listen_question">Listen</string>
+    <string name="share_content">A hot voice Q&amp;A app</string>
+    <string name="format_dollar">$%1$.2f</string>
+    <string name="notice_question_expired">The question is expired</string>
+    <string name="overhear_price">Overhear with $0.99</string>
+    <string name="notice_cannot_record">Unable to properly record</string>
 
-    <plurals name="answer_and_earn">
-        <item quantity="one">answered %1$d question, earned $0.99</item>
-        <item quantity="other">answered %1$d questions, earned $0.99</item>
+    <plurals name="dealed_time_second">
+        <item quantity="one">%1$d second ago</item>
+        <item quantity="other">%1$d seconds ago</item>
+    </plurals>
+    <plurals name="dealed_time_minute">
+        <item quantity="one">%1$d minute ago</item>
+        <item quantity="other">%1$d minutes ago</item>
+    </plurals>
+    <plurals name="dealed_time_hour">
+        <item quantity="one">%1$d hour ago</item>
+        <item quantity="other">%1$d hours ago</item>
+    </plurals>
+    <plurals name="dealed_time_day">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <plurals name="dealed_time_month">
+        <item quantity="one">%1$d month ago</item>
+        <item quantity="other">%1$d months ago</item>
+    </plurals>
+    <plurals name="dealed_time_year">
+        <item quantity="one">%1$d year ago</item>
+        <item quantity="other">%1$d years ago</item>
     </plurals>
 </resources>

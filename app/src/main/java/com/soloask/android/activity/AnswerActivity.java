@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.R;
 import com.soloask.android.data.bmob.AnswerManager;
+import com.soloask.android.data.bmob.QuestionDetailManager;
 import com.soloask.android.data.model.Question;
 import com.soloask.android.util.AudioManager;
 import com.soloask.android.util.Constant;
@@ -84,15 +85,28 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initData() {
-        question = (Question) getIntent().getSerializableExtra("question");
-        Glide.with(this)
-                .load(question.getAskUser().getUserIcon())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mQuestionerIcon);
-        mQuestionerName.setText(question.getAskUser().getUserName());
-        mQuestionPrice.setText("$" + question.getQuesPrice().toString());
-        mQuestionView.setText(question.getQuesContent());
-        mDealedTime.setText(RelativeDateFormat.format(question.getAskTime()));
+        String questionId = getIntent().getStringExtra(Constant.KEY_QUESTION_ID);
+        QuestionDetailManager questionDetailManager = new QuestionDetailManager();
+        questionDetailManager.setOnQuestionDetailListener(new QuestionDetailManager.OnQuestionDetailListener() {
+            @Override
+            public void onSuccess(Question question) {
+                AnswerActivity.this.question = question;
+                Glide.with(AnswerActivity.this)
+                        .load(question.getAskUser().getUserIcon())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(mQuestionerIcon);
+                mQuestionerName.setText(question.getAskUser().getUserName());
+                mQuestionPrice.setText(String.format(getString(R.string.format_dollar), question.getQuesPrice()));
+                mQuestionView.setText(question.getQuesContent());
+                mDealedTime.setText(RelativeDateFormat.format(question.getAskTime(), AnswerActivity.this));
+            }
+
+            @Override
+            public void onFailed() {
+                Toast.makeText(AnswerActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+            }
+        });
+        questionDetailManager.getQuestionDetail(questionId);
     }
 
     final Handler handler = new Handler() {
@@ -176,6 +190,11 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 mRecordingView.setBackgroundResource(R.drawable.ic_answer_stop);
                 startTimer();
             }
+
+            @Override
+            public void Preparedfailed() {
+                Toast.makeText(AnswerActivity.this, R.string.notice_cannot_record, Toast.LENGTH_SHORT).show();
+            }
         });
         AudioManager.getInstance().prepareAudio();
     }
@@ -225,9 +244,14 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopTimer();
-        MediaManager.release();
-        AudioManager.getInstance().stopAudio();
+        try {
+            stopTimer();
+            MediaManager.release();
+            AudioManager.getInstance().stopAudio();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -237,7 +261,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 doRecordingBtnMethod();
             } else {
-                Toast.makeText(AnswerActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AnswerActivity.this, R.string.notice_permission_denied, Toast.LENGTH_SHORT).show();
             }
             return;
         }
@@ -247,7 +271,12 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_recording_voice:
-                checkNeededPermission();
+                if (question.getState() == Constant.STATUS_UNANSWERED) {
+                    checkNeededPermission();
+                } else {
+                    Toast.makeText(AnswerActivity.this, R.string.notice_question_expired, Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.tv_answer_restart:
                 AlertDialog.Builder builder = new AlertDialog.Builder(AnswerActivity.this);
@@ -280,7 +309,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 builder.create().show();
                 break;
             case R.id.tv_answer_send:
-                if (FileManager.isFileExits("answer_temp.aac")) {
+                if (FileManager.isFileExits(Constant.FILE_NAME_VOICE)) {
                     mSendingLayout.setVisibility(View.VISIBLE);
                     upLoadAnswer();
                 } else {
@@ -297,7 +326,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             public void onSuccess() {
                 mSendingLayout.setVisibility(View.GONE);
                 Toast.makeText(AnswerActivity.this, R.string.notice_success, Toast.LENGTH_SHORT).show();
-                setResult(Constant.KEY_FROM_ANSWER);
+                setResult(Constant.KEY_FROM_MY_ANSWER);
                 finish();
             }
 
@@ -307,7 +336,7 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
                 Toast.makeText(AnswerActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
             }
         });
-        answerManager.upLoadAnswer(question, FileManager.getFilePath("answer_temp.aac"), mTotalSeconds);
+        answerManager.upLoadAnswer(question, FileManager.getFilePath(Constant.FILE_NAME_VOICE), --mTotalSeconds);
     }
 
     @Override

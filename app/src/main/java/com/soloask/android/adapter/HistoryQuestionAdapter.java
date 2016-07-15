@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private String mContent;
     private boolean isPub = true;
     private double mPrice;
+    private HeadViewHolder headerViewHolder;
 
     public HistoryQuestionAdapter(Activity context, User respondent, List list) {
         this.mContext = context;
@@ -69,6 +71,27 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
+    public void updateHeaderView(User user) {
+        mRespondent = user;
+        notifyItemChanged(0);
+    }
+
+    private void setRespondentInfo() {
+        String summary = String.format(mContext.getResources().getString(R.string.format_answered), mRespondent.getAnswerQuesNum())
+                + " , " + String.format(mContext.getResources().getString(R.string.format_earned), mRespondent.getUserIncome());
+        headerViewHolder.mSummaryView.setText(summary);
+        headerViewHolder.mNameView.setText(mRespondent.getUserName());
+        headerViewHolder.mTitleView.setText(mRespondent.getUserTitle());
+        headerViewHolder.mIntroduceView.setText(mRespondent.getUserIntroduce());
+        headerViewHolder.mPriceView.setText(String.format(mContext.getString(R.string.format_dollar), mRespondent.getUserPrice()));
+        mPrice = mRespondent.getUserPrice();
+        Glide.with(mContext)
+                .load(mRespondent.getUserIcon())
+                //.placeholder(R.drawable.ic_me_default)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(headerViewHolder.mIconView);
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
@@ -84,11 +107,11 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(((ItemViewHolder) holder).respondentIcon);
             ((ItemViewHolder) holder).questionView.setText(question.getQuesContent());
-            ((ItemViewHolder) holder).timeView.setText(RelativeDateFormat.format(question.getAskTime()));
+            ((ItemViewHolder) holder).timeView.setText(RelativeDateFormat.format(question.getAskTime(), mContext));
             ((ItemViewHolder) holder).timeLengthView.setText(String.format(mContext.getString(R.string.format_second), question.getVoiceTime()));
             ((ItemViewHolder) holder).listenersView.setVisibility(View.VISIBLE);
             ((ItemViewHolder) holder).listenersView.setText(String.format(mContext.getString(R.string.format_listerers), question.getListenerNum()));
-            ((ItemViewHolder) holder).priceView.setText("$" + question.getQuesPrice());
+            ((ItemViewHolder) holder).priceView.setText(String.format(mContext.getString(R.string.format_dollar), question.getQuesPrice()));
             ((ItemViewHolder) holder).listenersView.setText(String.format(mContext.getResources().getString(R.string.format_listerers), question.getListenerNum()));
             //((ItemViewHolder) holder).voiceView.setText(String.format(mContext.getResources().getString(R.string.format_price), 2.99));
             ((ItemViewHolder) holder).historyLayout.setOnClickListener(new View.OnClickListener() {
@@ -100,19 +123,8 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }
             });
         } else if (holder instanceof HeadViewHolder) {
-            String summary = String.format(mContext.getResources().getString(R.string.format_answered), mRespondent.getAnswerQuesNum())
-                    + " , " + String.format(mContext.getResources().getString(R.string.format_earned), mRespondent.getUserEarned());
-            ((HeadViewHolder) holder).mSummaryView.setText(summary);
-            ((HeadViewHolder) holder).mNameView.setText(mRespondent.getUserName());
-            ((HeadViewHolder) holder).mTitleView.setText(mRespondent.getUserTitle());
-            ((HeadViewHolder) holder).mIntroduceView.setText(mRespondent.getUserIntroduce());
-            ((HeadViewHolder) holder).mPriceView.setText("$" + mRespondent.getUserPrice().toString());
-            mPrice = mRespondent.getUserPrice();
-            Glide.with(mContext)
-                    .load(mRespondent.getUserIcon())
-                    //.placeholder(R.drawable.ic_me_default)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(((HeadViewHolder) holder).mIconView);
+            headerViewHolder = (HeadViewHolder) holder;
+            setRespondentInfo();
         }
     }
 
@@ -212,7 +224,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     } else if (mQuestioner.getObjectId().equals(mRespondent.getObjectId())) {
                         Toast.makeText(mContext, R.string.notice_ask_yourself, Toast.LENGTH_SHORT).show();
                     } else {
-                        //doPurchase();
+                        //doPurchase(mQuestionView);
                         AskManager askManager = new AskManager();
                         askManager.setOnAskQuestionListener(new AskManager.OnAskQuestionListener() {
                             @Override
@@ -220,6 +232,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                                 Intent intent = new Intent(mContext, QuestionDetailActivity.class);
                                 intent.putExtra(Constant.KEY_QUESTION_ID, objectId);
                                 mContext.startActivity(intent);
+                                mQuestionView.setText("");
                                 Toast.makeText(mContext, "Asked successfully", Toast.LENGTH_LONG).show();
                             }
 
@@ -243,7 +256,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    private void doPurchase() {
+    private void doPurchase(final View view) {
         if (mHelper != null && !mHelper.isAsyncInProgress()) {
             mHelper.launchPurchaseFlow(mContext, "payment_for_listen", 10002, new IabHelper.OnIabPurchaseFinishedListener() {
                 @Override
@@ -253,7 +266,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         return;
                     } else {
                         if (info.getSku().equals("payment_for_listen")) {
-                            doConsume(info);
+                            doConsume(info, view);
                         }
                     }
                 }
@@ -263,7 +276,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    private void doConsume(Purchase purchase) {
+    private void doConsume(Purchase purchase, final View view) {
         mHelper.consumeAsync(purchase, new IabHelper.OnConsumeFinishedListener() {
             @Override
             public void onConsumeFinished(Purchase purchase, IabResult result) {
@@ -278,6 +291,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         Intent intent = new Intent(mContext, QuestionDetailActivity.class);
                         intent.putExtra(Constant.KEY_QUESTION_ID, objectId);
                         mContext.startActivity(intent);
+                        ((EditText) view).setText("");
                         Toast.makeText(mContext, "Asked successfully", Toast.LENGTH_LONG).show();
                     }
 

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.R;
 import com.soloask.android.activity.QuestionDetailActivity;
+import com.soloask.android.data.bmob.MineManager;
 import com.soloask.android.data.model.Question;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.RelativeDateFormat;
@@ -24,6 +25,7 @@ import java.util.List;
  * Created by Lebron on 2016/6/24.
  */
 public class MyQuestionAdapter extends BaseAdapter {
+    private int status;
 
     public MyQuestionAdapter(Context context, List list) {
         super(context, list);
@@ -47,13 +49,23 @@ public class MyQuestionAdapter extends BaseAdapter {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(((ItemViewHolder) holder).imageView);
             ((ItemViewHolder) holder).nameView.setText(question.getAnswerUser().getUserName());
-            ((ItemViewHolder) holder).timeView.setText(RelativeDateFormat.format(question.getAskTime()));
-            ((ItemViewHolder) holder).statusView.setText(Constant.ARRAY_STATUS[question.getState().intValue()]);
-            ((ItemViewHolder) holder).priceView.setText("$" + question.getQuesPrice().toString());
+            ((ItemViewHolder) holder).timeView.setText(RelativeDateFormat.format(question.getAskTime(), mContext));
+            ((ItemViewHolder) holder).priceView.setText(String.format(mContext.getString(R.string.format_dollar), question.getQuesPrice()));
             ((ItemViewHolder) holder).questionView.setText(question.getQuesContent());
-            if (question.getState().intValue() == Constant.STATUS_ANSWERED) {
+            status = question.getState().intValue();
+            if (status != Constant.STATUS_REFUND && RelativeDateFormat.isTimeOut(question.getAskTime())) {
+                Log.i("MyQuestion", " time out");
+                MineManager mineManager = new MineManager();
+                mineManager.dealTimeOut(question, Constant.STATUS_REFUND);
+                status = Constant.STATUS_REFUND;
+            }
+            ((ItemViewHolder) holder).statusView.setText(Constant.ARRAY_STATUS[status]);
+
+            if (status == Constant.STATUS_ANSWERED) {
                 ((ItemViewHolder) holder).listenersView.setVisibility(View.VISIBLE);
                 ((ItemViewHolder) holder).listenersView.setText(String.format(mContext.getString(R.string.format_listerers), question.getListenerNum()));
+            } else {
+                ((ItemViewHolder) holder).listenersView.setVisibility(View.GONE);
             }
             ((ItemViewHolder) holder).mContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,7 +100,6 @@ public class MyQuestionAdapter extends BaseAdapter {
             listenersView = (TextView) itemView.findViewById(R.id.tv_listeners_info);
             mContainer = (LinearLayout) itemView.findViewById(R.id.ll_my_question_item);
             statusView.setVisibility(View.VISIBLE);
-
         }
     }
 }

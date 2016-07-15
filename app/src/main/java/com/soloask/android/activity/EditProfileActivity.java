@@ -27,6 +27,7 @@ import com.soloask.android.util.Constant;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -81,7 +82,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         mTitleView.setText(mUser.getUserTitle());
         mDescribeView.setText(mUser.getUserIntroduce());
         mAskPrice = mUser.getUserPrice();
-        mPriceView.setText(mUser.getUserPrice().toString());
+        mPriceView.setText(String.format(getString(R.string.format_dollar), mUser.getUserPrice()));
     }
 
     private void updateUserInfo() {
@@ -161,16 +162,16 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_price_1:
-                mPriceView.setText("$1");
-                mAskPrice = 1;
+                mPriceView.setText("$0.99");
+                mAskPrice = 0.99;
                 break;
             case R.id.tv_price_5:
-                mPriceView.setText("$5");
-                mAskPrice = 5;
+                mPriceView.setText("$4.99");
+                mAskPrice = 4.99;
                 break;
             case R.id.tv_price_10:
-                mPriceView.setText("$10");
-                mAskPrice = 10;
+                mPriceView.setText("$11.99");
+                mAskPrice = 11.99;
                 break;
             case R.id.tv_price_more:
                 showChoosePriceDialog();
@@ -182,10 +183,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         View view = getLayoutInflater().inflate(R.layout.dialog_price_table, null);
         TextView okView = (TextView) view.findViewById(R.id.tv_choose_price_ok);
         final RecyclerView priceView = (RecyclerView) view.findViewById(R.id.grid_price_view);
-        List list = new ArrayList();
-        for (int i = 0; i < 20; i++) {
-            list.add(i);
-        }
+        String[] priceArray = getResources().getStringArray(R.array.array_price);
+        List list = Arrays.asList(priceArray);
         priceView.setLayoutManager(new GridLayoutManager(this, 5));
         mPriceAdapter = new PriceAdapter(this, list);
         priceView.setAdapter(mPriceAdapter);
@@ -202,7 +201,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             public void onClick(View v) {
                 if (mPriceAdapter.getChoosedPrice() != 0) {
                     mAskPrice = mPriceAdapter.getChoosedPrice();
-                    mPriceView.setText("$" + mPriceAdapter.getChoosedPrice());
+                    mPriceView.setText(String.format(getString(R.string.format_dollar), mPriceAdapter.getChoosedPrice()));
                 }
                 mBottomSheetDialog.dismiss();
             }

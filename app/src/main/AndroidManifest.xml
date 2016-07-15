@@ -42,6 +42,7 @@
             android:label="@string/title_answer_question"></activity>
         <activity android:name="com.soloask.android.activity.MyCommonActivity"></activity>
         <activity
+            android:windowSoftInputMode="stateHidden"
             android:name="com.soloask.android.activity.EditProfileActivity"
             android:label="@string/title_edit_profile"></activity>
         <activity

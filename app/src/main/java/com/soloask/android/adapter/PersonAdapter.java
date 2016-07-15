@@ -105,7 +105,6 @@ public class PersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             nameView = (TextView) itemView.findViewById(R.id.tv_respondent_name);
             describeView = (TextView) itemView.findViewById(R.id.tv_respondent_describe);
             followerView = (TextView) itemView.findViewById(R.id.tv_respondent_followers);
-            followerView.setText(context.getResources().getQuantityString(R.plurals.answer_and_earn, 1, 30));
             mContainer = (RelativeLayout) itemView.findViewById(R.id.rl_person_item);
         }
     }

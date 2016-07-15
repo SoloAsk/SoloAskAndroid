@@ -5,6 +5,8 @@
 
     <include layout="@layout/toolbar"></include>
 
+    <include layout="@layout/progressbar"></include>
+
     <LinearLayout
         android:id="@+id/ll_question_detail"
         android:layout_width="match_parent"

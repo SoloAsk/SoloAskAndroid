@@ -69,6 +69,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     .error(R.drawable.ic_me_default)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mCircleIcon);
+        } else if (resultCode == Constant.KEY_FROM_MY_QUESTION) {
+            mViewPager.setCurrentItem(1);
         } else {
             Log.i("MainActivity", "  do nothing");
         }

@@ -50,8 +50,8 @@ public class UserProfileActivity extends BaseActivity {
         mDatas = new ArrayList();
         mDatas.add(null);
         mAdapter = new HistoryQuestionAdapter(this, mRespondent, mDatas);
-        initData(Constant.MSG_REFRESH_DATA);
         initView();
+        initData(Constant.MSG_REFRESH_DATA);
         getCurrentUser();
         initIabHelper();
     }
@@ -88,11 +88,29 @@ public class UserProfileActivity extends BaseActivity {
             }
         });
         if (actionType == Constant.MSG_REFRESH_DATA) {
+            refreshUserInfo(mRespondent.getObjectId());
             mSkipNum = 0;
             askManager.getHistoryQuestions(mSkipNum, mRespondent);
         } else {
             askManager.getHistoryQuestions(mSkipNum, mRespondent);
         }
+    }
+
+    private void refreshUserInfo(String userId) {
+        UserManager userManager = new UserManager();
+        userManager.setUserInfoListener(new UserManager.UserInfoListener() {
+            @Override
+            public void onSuccess(User user) {
+                mRespondent = user;
+                mAdapter.updateHeaderView(mRespondent);
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
+        userManager.getUserInfo(userId);
     }
 
     private void getCurrentUser() {

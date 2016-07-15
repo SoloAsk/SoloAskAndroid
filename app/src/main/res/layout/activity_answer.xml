@@ -33,7 +33,7 @@
                     android:layout_marginLeft="@dimen/item_common_margin"
                     android:layout_marginRight="@dimen/item_common_margin"
                     android:layout_marginTop="10dp"
-                    android:text="Why did you choose as the star points A platform ? You have to check-in fee it ? How high ? On what charge ?" />
+                    android:text="waitting for question..." />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -47,7 +47,9 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/item_common_margin"
-                        android:text="1 hour ago" />
+                        android:text=""
+                        android:textColor="@color/color_time"
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/btn_refuse_answer"

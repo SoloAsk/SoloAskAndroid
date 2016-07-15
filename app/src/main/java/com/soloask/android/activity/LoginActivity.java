@@ -38,6 +38,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().logOut();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -104,6 +105,7 @@ public class LoginActivity extends BaseActivity {
 
                         @Override
                         public void onFailed() {
+                            LoginManager.getInstance().logOut();
                             Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
                         }
                     });
