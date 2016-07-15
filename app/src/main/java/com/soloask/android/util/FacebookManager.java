@@ -18,7 +18,7 @@ public class FacebookManager {
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()
                         .setContentTitle("SoloAsk")
                         .setContentDescription(activity.getString(R.string.share_content))
-                        .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=home.solo.launcher.free&hl=zh-CN"))
+                        .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.soloask.android"))
                         .build();
                 mShareDialog.show(linkContent);
             }

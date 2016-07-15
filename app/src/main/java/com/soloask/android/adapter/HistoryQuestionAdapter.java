@@ -57,7 +57,8 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mRespondent = respondent;
         mLayoutInflater = LayoutInflater.from(context);
         mDatas = list;
-        mPaymentId = "payment_" + mRespondent.getUserPrice();
+        mPaymentId = "payment_" + String.format("%.2f", mRespondent.getUserPrice());
+        Log.i("Lebron", mPaymentId);
     }
 
     public void setQuestioner(User questioner) {
@@ -77,7 +78,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void updateHeaderView(User user) {
         mRespondent = user;
-        mPaymentId = "payment_" + mRespondent.getUserPrice();
+        mPaymentId = "payment_" + String.format("%.2f", mRespondent.getUserPrice());
         notifyItemChanged(0);
     }
 
@@ -305,6 +306,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (mPaymentId == null) {
             mPaymentId = Constant.OVERHEAR_PRICE_ID;
         }
+        Log.i("Lebron", mPaymentId);
         mSKULists.add(mPaymentId);
         if (mHelper != null) {
             mHelper.queryInventoryAsync(true, mSKULists, new IabHelper.QueryInventoryFinishedListener() {
