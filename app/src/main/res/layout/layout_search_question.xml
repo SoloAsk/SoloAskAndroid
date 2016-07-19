@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_search_questions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="@dimen/item_common_margin"
+        android:paddingTop="10dp"
+        android:text="@string/search_title_questions" />
+
+    <include layout="@layout/divider_horizontal"></include>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_search_question_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_questions_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_common_layout"
+        android:gravity="right"
+        android:paddingBottom="@dimen/item_common_margin"
+        android:paddingRight="@dimen/item_common_margin"
+        android:paddingTop="@dimen/item_common_margin"
+        android:text="SEE MORE" />
+
+    <include layout="@layout/divider_horizontal"></include>
+
+</LinearLayout>

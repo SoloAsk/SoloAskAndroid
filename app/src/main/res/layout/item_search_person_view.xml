@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_user_profile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_common_layout"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <com.soloask.android.view.BoundImageView
+            android:id="@+id/img_user"
+            android:layout_width="@dimen/user_icon_size"
+            android:layout_height="@dimen/user_icon_size"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/item_common_margin"
+            android:background="@drawable/ic_me_default" />
+
+        <ImageView
+            android:id="@+id/img_goto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/item_common_margin"
+            android:src="@drawable/ic_goto" />
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/img_user"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/img_goto"
+            android:layout_toRightOf="@id/img_user"
+            android:singleLine="true"
+            android:text="LeBron James"
+            android:textColor="@color/color_user_name"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_user_describe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_user_name"
+            android:layout_below="@id/tv_user_name"
+            android:layout_toLeftOf="@id/img_goto"
+            android:singleLine="true"
+            android:text="LeBron James"
+            android:textColor="@color/color_user_title"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <include layout="@layout/divider_horizontal"></include>
+</LinearLayout>

@@ -77,6 +77,10 @@ public class UserManager {
 
     public void getUserInfo(String id) {
         BmobQuery<User> query = new BmobQuery<>();
+        if (id == null) {
+            mInfoListener.onFailed();
+            return;
+        }
         query.getObject(id, new QueryListener<User>() {
             @Override
             public void done(User user, BmobException e) {
