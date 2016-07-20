@@ -3,6 +3,7 @@ package com.soloask.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +40,13 @@ public class SearchQuestionAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Question question = mDatas.get(position);
         ((ItemViewHolder) holder).questionView.setText(question.getQuesContent());
-        ((ItemViewHolder) holder).repondentInfo.setText(question.getQuesPrice() + "");
+        ((ItemViewHolder) holder).repondentInfo.setText(String.format(mContext.getString(R.string.format_respondent), question.getAnswerUser().getUserName()));
         ((ItemViewHolder) holder).mQuestionContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, QuestionDetailActivity.class);
                 intent.putExtra(Constant.KEY_QUESTION_ID, question.getObjectId());
+                Log.i("Lebron", question.getObjectId());
                 mContext.startActivity(intent);
             }
         });

@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/item_common_margin"
+            android:layout_marginRight="@dimen/item_common_margin"
             android:singleLine="true"
             android:text="LeBron James"
             android:textColor="@color/color_user_name"

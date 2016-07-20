@@ -25,10 +25,10 @@ public class SearchManager {
         mQuestionsListener = listener;
     }
 
-    public void getSearchUsers(String text) {
+    public void getSearchUsers(String text,int limit) {
         BmobQuery<User> query = new BmobQuery<>();
         query.addWhereContains("userName", text);
-        query.setLimit(3);
+        query.setLimit(limit);
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
@@ -41,10 +41,11 @@ public class SearchManager {
         });
     }
 
-    public void getSearchQuestions(String text) {
+    public void getSearchQuestions(String text,int limit) {
         BmobQuery<Question> query = new BmobQuery<>();
         query.addWhereContains("quesContent", text);
-        query.setLimit(3);
+        query.include("answerUser");
+        query.setLimit(limit);
         query.findObjects(new FindListener<Question>() {
             @Override
             public void done(List<Question> list, BmobException e) {

@@ -47,7 +47,7 @@ public class SearchPersonAdapter extends RecyclerView.Adapter {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(((ItemViewHolder) holder).mUserIcon);
         ((ItemViewHolder) holder).mUserNameView.setText(user.getUserName());
-        ((ItemViewHolder) holder).mUserInfoView.setText(user.getAnswerQuesNum() + "");
+        ((ItemViewHolder) holder).mUserInfoView.setText(user.getUserTitle());
         ((ItemViewHolder) holder).mUserContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

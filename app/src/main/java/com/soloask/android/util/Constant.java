@@ -8,6 +8,8 @@ import com.soloask.android.R;
 public class Constant {
     public static final String BASE64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjrE9YpIyhj3xbKuawz/6nqyKhOrAjSr/rXfiFIFb2nWtwpCdoIpYM9HGEjEDSE6iwwNZbHxRlezbjpdMxoxkkkQE8y1T2Lz2xsyPp+OJ7xhNaf28Mcj9gZ7J1Lr1zL6jKTw+RDk8HgMM0dmZXzAwCGq4iPH+KaZc94kr3xcTfg6FdV3N1cxq6UcWezusyUoqwhnE52KEgwPzRduwsKjr4xcZGro4ClQ9XocIuTNiVMoDXOaTCrAynhYp5bzlEKcnmByDntqF8rGxShIIGJ/NCySBehnEWhA0wstXAIKJt3fCunhSKTLuR/lgUXxvJMpBnLeaoTpky8/Ua7PHj3qZKwIDAQAB";
     public static final String KEY_FROM_MINE = "key_from_mine";
+    public static final String KEY_FROM_SEARCH = "key_from_search";
+    public static final String KEY_SEARCH_CONTENT = "key_search_content";
     public static final String KEY_LOGINED_OBJECT_ID = "key_is_logined";
     public static final String KEY_LOGINED_ICON_URL = "key_logined_icon_url";
     public static final String KEY_REMEMBER_PAYPAL = "key_remember_paypal";

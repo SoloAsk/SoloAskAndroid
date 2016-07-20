@@ -101,6 +101,7 @@
     <string name="search_title_persons">PERSONS</string>
     <string name="search_title_questions">QUESTIONS</string>
     <string name="notice_no_search_result">No results</string>
+    <string name="format_respondent">Answered by %1$s</string>
 
     <plurals name="dealed_time_second">
         <item quantity="one">%1$d second ago</item>

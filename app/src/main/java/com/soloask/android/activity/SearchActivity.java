@@ -1,7 +1,9 @@
 package com.soloask.android.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -21,6 +23,7 @@ import com.soloask.android.adapter.SearchQuestionAdapter;
 import com.soloask.android.data.bmob.SearchManager;
 import com.soloask.android.data.model.Question;
 import com.soloask.android.data.model.User;
+import com.soloask.android.util.Constant;
 import com.soloask.android.view.MaterialProgressBar;
 
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     private List<User> mUsers = new ArrayList<>();
     private List<Question> mQuestions = new ArrayList<>();
     private boolean isUserOK, isQuestionOK;
+    private String mSearchContent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,7 +110,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    private void initData(String text) {
+    private void initData(final String text) {
         mLoadingBar.setVisibility(View.VISIBLE);
         mQuestions.clear();
         mUsers.clear();
@@ -138,7 +142,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         });
-        searchManager.getSearchUsers(text);
+        searchManager.getSearchUsers(text, 3);
 
         searchManager.setOnSearchQuestionListener(new SearchManager.OnSearchQuestionListener() {
             @Override
@@ -167,7 +171,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         });
-        searchManager.getSearchQuestions(text);
+        searchManager.getSearchQuestions(text, 3);
     }
 
     @Override
@@ -184,13 +188,24 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         if (v.getId() == R.id.btn_clear) {
             mSearchEdit.setText("");
+        } else if (v.getId() == R.id.tv_persons_more) {
+            Intent intent = new Intent(SearchActivity.this, SearchMoreActivity.class);
+            intent.putExtra(Constant.KEY_SEARCH_CONTENT, mSearchContent);
+            intent.putExtra(Constant.KEY_FROM_SEARCH, true);
+            SearchActivity.this.startActivity(intent);
+        } else if (v.getId() == R.id.tv_questions_more) {
+            Intent intent = new Intent(SearchActivity.this, SearchMoreActivity.class);
+            intent.putExtra(Constant.KEY_SEARCH_CONTENT, mSearchContent);
+            intent.putExtra(Constant.KEY_FROM_SEARCH, false);
+            SearchActivity.this.startActivity(intent);
         }
     }
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            initData(mSearchEdit.getText().toString());
+            mSearchContent = mSearchEdit.getText().toString();
+            initData(mSearchContent);
         }
         return true;
     }

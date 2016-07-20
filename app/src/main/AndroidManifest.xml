@@ -70,6 +70,9 @@
         <activity
             android:name="com.soloask.android.activity.SearchActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.soloask.android.activity.SearchMoreActivity"
+            android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="UMENG_APPKEY"
