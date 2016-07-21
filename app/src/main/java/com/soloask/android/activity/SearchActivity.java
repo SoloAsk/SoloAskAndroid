@@ -142,7 +142,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         });
-        searchManager.getSearchUsers(text, 3);
+        searchManager.getSearchUsers(text, 3, 0);
 
         searchManager.setOnSearchQuestionListener(new SearchManager.OnSearchQuestionListener() {
             @Override
@@ -171,7 +171,7 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         });
-        searchManager.getSearchQuestions(text, 3);
+        searchManager.getSearchQuestions(text, 3, 0);
     }
 
     @Override

@@ -23,6 +23,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|left"
                 android:hint="@string/hint_search"
+                android:background="@null"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
                 android:textColor="@color/white"
