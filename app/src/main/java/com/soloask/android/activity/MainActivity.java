@@ -48,7 +48,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_search) {
-            startActivity(new Intent(MainActivity.this, SearchActivity.class));
+            if (SharedPreferencesHelper.getPreferenceString(MainActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
+            } else {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(intent, Constant.CODE_REQUEST);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
