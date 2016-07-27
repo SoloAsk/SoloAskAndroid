@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.soloask.android.R;
 import com.soloask.android.util.FacebookManager;
-import com.soloask.android.util.TwitterManager;
 
 /**
  * Created by Lebron on 2016/7/2.
@@ -40,7 +39,7 @@ public class ShareDialog extends AlertDialog implements View.OnClickListener {
                 FacebookManager.facebookShare((Activity) mContext);
                 break;
             case R.id.img_share_twitter:
-                TwitterManager.twitterShare(mContext);
+                //TwitterManager.twitterShare(mContext);
                 break;
         }
     }

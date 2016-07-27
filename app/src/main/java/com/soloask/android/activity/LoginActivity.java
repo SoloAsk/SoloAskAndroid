@@ -17,6 +17,8 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.soloask.android.R;
+import com.soloask.android.data.bmob.UserManager;
+import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.umeng.analytics.MobclickAgent;
 
@@ -36,6 +38,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().logOut();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -81,18 +84,32 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
                 if (object != null) {
-                    String name = object.optString("name");  //比如：Zhang San
+                    String id = object.optString("id");
+                    final String name = object.optString("name");
                     //获取用户头像
                     JSONObject object_pic = object.optJSONObject("picture");
                     JSONObject object_data = object_pic.optJSONObject("data");
-                    String photo = object_data.optString("url");
+                    final String photo = object_data.optString("url");
 
-                    Intent intent = new Intent();
-                    intent.putExtra("user_name", name);
-                    intent.putExtra("user_icon_url", photo);
-                    Log.i("Lebron", photo);
-                    LoginActivity.this.setResult(Constant.CODE_RESULT_LOGIN, intent);
-                    LoginActivity.this.finish();
+                    UserManager userManager = new UserManager();
+                    userManager.setUserLoginListener(new UserManager.UserLoginListener() {
+                        @Override
+                        public void onSuccess(String objectId) {
+                            Intent intent = new Intent();
+                            intent.putExtra("user_name", name);
+                            intent.putExtra("user_icon_url", photo);
+                            intent.putExtra("user_object_id", objectId);
+                            LoginActivity.this.setResult(Constant.CODE_RESULT_LOGIN, intent);
+                            LoginActivity.this.finish();
+                        }
+
+                        @Override
+                        public void onFailed() {
+                            LoginManager.getInstance().logOut();
+                            Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    userManager.signOrLogin(id, name, photo);
                 }
             }
         });

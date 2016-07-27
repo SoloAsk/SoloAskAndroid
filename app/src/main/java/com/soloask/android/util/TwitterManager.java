@@ -1,3 +1,4 @@
+/*
 package com.soloask.android.util;
 
 import android.content.Context;
@@ -7,9 +8,11 @@ import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+*/
 /**
  * Created by Lebron on 2016/7/1.
- */
+ *//*
+
 public class TwitterManager {
     private static URL url;
 
@@ -25,3 +28,4 @@ public class TwitterManager {
 
     }
 }
+*/

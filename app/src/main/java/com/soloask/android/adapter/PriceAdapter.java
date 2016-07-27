@@ -20,7 +20,7 @@ public class PriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context mContext;
     private List mDatas;
     private TextView mTempView;
-    private String mChoosedPrice;
+    private double mChoosedPrice;
 
     public PriceAdapter(Context context, List list) {
         mContext = context;
@@ -45,7 +45,7 @@ public class PriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
                 ((ItemViewHolder) holder).priceView.setBackgroundResource(R.drawable.bg_btn_price_choosed);
                 ((ItemViewHolder) holder).priceView.setTextColor(mContext.getResources().getColor(android.R.color.white));
-                mChoosedPrice = mDatas.get(position).toString();
+                mChoosedPrice = Double.valueOf(mDatas.get(position).toString());
                 mTempView = ((ItemViewHolder) holder).priceView;
             }
         });
@@ -65,7 +65,7 @@ public class PriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public String getChoosedPrice() {
+    public double getChoosedPrice() {
         return mChoosedPrice;
     }
 
@@ -75,10 +75,6 @@ public class PriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public ItemViewHolder(View itemView, int viewType) {
             super(itemView);
             priceView = (TextView) itemView.findViewById(R.id.tv_price);
-            if (viewType == Constant.TYPE_HEADER) {
-                //priceView.setBackgroundResource(R.drawable.bg_btn_price_choosed);
-                //mTempView = priceView;
-            }
         }
     }
 }

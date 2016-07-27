@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.soloask.android.R;
-import com.soloask.android.util.Constant;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
+
+import cn.bmob.v3.Bmob;
 
 /**
  * Created by Lebron on 2016/6/29.
@@ -23,21 +21,9 @@ public class LauncherActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //enable UmengPush
-        PushAgent mPushAgent = PushAgent.getInstance(this);
-        mPushAgent.enable(new IUmengRegisterCallback() {
 
-            @Override
-            public void onRegistered(final String registrationId) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //onRegistered方法的参数registrationId即是device_token
-                        Log.d("Lebron", registrationId);
-                    }
-                });
-            }
-        });
+        //enable Bmob
+        Bmob.initialize(this, "26cc3d0d29e618b194be911c994efd11");
 
         setContentView(R.layout.activity_launcher);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

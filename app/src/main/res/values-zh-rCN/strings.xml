@@ -34,15 +34,15 @@
     <string name="recording_play">录音完成，点击播放</string>
     <string name="recording_playing">正在播放</string>
     <string name="listen_for_free">免费听</string>
-    <string name="format_listerers">%1$d 听过</string>
-    <string name="format_price"> 一元偷听</string>
+    <string name="format_listerers">%1$d听过</string>
+    <string name="format_price"> %1$s偷听</string>
     <string name="format_answered">回答 %1$d</string>
     <string name="format_heard">听过 %1$d</string>
     <string name="format_asked">问过 %1$d</string>
     <string name="format_second">%1$d\'\'</string>
-    <string name="format_write_question">%1$d/50</string>
-    <string name="format_write_describe">%1$d/100</string>
-    <string name="format_write_title">%1$d/18</string>
+    <string name="format_write_question">%1$d/100</string>
+    <string name="format_write_describe">%1$d/200</string>
+    <string name="format_write_title">%1$d/36</string>
     <string name="login_failed">登录失败</string>
     <string name="login_cancel">登录取消</string>
     <string name="btn_login_with_facebook">Login with Facebook</string>
@@ -84,14 +84,40 @@
     <string name="detail_downloading">正在下载</string>
     <string name="notice_cannot_null">不能为空</string>
     <string name="notice_donot_match">输入不一致</string>
+    <string name="notice_success">发送成功</string>
+    <string name="format_earned">总收入$%1$.2f</string>
+    <string name="format_current_income">当前收入$%1$.2f</string>
+    <string name="notice_ask_yourself">无法向自己提问</string>
+    <string name="notice_permission_denied">权限被禁止</string>
+    <string name="btn_listen_question">去听</string>
+    <string name="share_content">A hot voice Q&amp;A app</string>
+    <string name="format_dollar">$%1$.2f</string>
+    <string name="notice_question_expired">该问题已过期</string>
+    <string name="overhear_price">一元偷听</string>
+    <string name="notice_cannot_record">无法正常录音</string>
 
-    <plurals name="answer_and_earn">
-        <!--此处one代表单数，other代表负数，如question和questions-->
-        <item quantity="one">答过%1$d个问题, 赚了$0.99</item>
-        <item quantity="other">答过%1$d个问题, 赚了$0.99</item>
+    <plurals name="dealed_time_second">
+        <item quantity="one">%1$d秒前</item>
+        <item quantity="other">%1$d秒前</item>
+    </plurals>
+    <plurals name="dealed_time_minute">
+        <item quantity="one">%1$d分钟前</item>
+        <item quantity="other">%1$d分钟前</item>
     </plurals>
     <plurals name="dealed_time_hour">
-        <item quantity="one">%1$d 小时前</item>
-        <item quantity="other">%1$d 小时前</item>
+        <item quantity="one">%1$d小时前</item>
+        <item quantity="other">%1$d小时前</item>
+    </plurals>
+    <plurals name="dealed_time_day">
+        <item quantity="one">%1$d天前</item>
+        <item quantity="other">%1$d天前</item>
+    </plurals>
+    <plurals name="dealed_time_month">
+        <item quantity="one">%1$d月前</item>
+        <item quantity="other">%1$d月前</item>
+    </plurals>
+    <plurals name="dealed_time_year">
+        <item quantity="one">%1$d年前</item>
+        <item quantity="other">%1$d年前</item>
     </plurals>
 </resources>

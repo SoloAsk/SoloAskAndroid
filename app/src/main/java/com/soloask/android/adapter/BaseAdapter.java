@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.soloask.android.data.model.Question;
 import com.soloask.android.util.Constant;
 
 import java.util.List;
@@ -15,9 +16,9 @@ import java.util.List;
 public abstract class BaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     protected LayoutInflater mLayoutInflater;
     protected Context mContext;
-    protected List mDatas;
+    protected List<Question> mDatas;
 
-    public BaseAdapter(Context context, List list) {
+    public BaseAdapter(Context context, List<Question> list) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;
         mDatas = list;
@@ -25,7 +26,7 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if (position + 1 == getItemCount()) {
+        if (position == getItemCount() && getItemCount() >= 10) {
             return Constant.TYPE_FOOTER;
         } else {
             return Constant.TYPE_ITEM;

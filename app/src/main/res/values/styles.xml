@@ -38,7 +38,7 @@
         <item name="android:windowBackground">@color/common_background</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
 
     <style name="VoiceBgStyle">

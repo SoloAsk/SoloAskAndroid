@@ -11,18 +11,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.login.LoginManager;
 import com.soloask.android.R;
+import com.soloask.android.data.bmob.UserManager;
+import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.view.CircleImageView;
 import com.soloask.android.view.ShareDialog;
 import com.umeng.analytics.MobclickAgent;
-
-import java.net.URL;
 
 /**
  * Created by Lebron on 2016/6/29.
@@ -31,7 +32,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     private TextView mLoginView;
     private LinearLayout mUserInfoView;
     private TextView mLogoutView;
-    private TextView mUserNameView;
+    private TextView mUserNameView, mTitleView, mIntroduceView;
     private TextView mMyAnswerView, mMyQuestionView, mMyListenView, mAskNewView, mAnswerNewView;
     private TextView mUserPriceView, mUserIncomeView;
     private TextView mWithDrawView;
@@ -39,12 +40,14 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     private TextView mEditView;
     private CircleImageView mUserIcon;
     private Intent mIntent;
+    private User mUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         initView();
+        initData();
     }
 
     private void initView() {
@@ -52,6 +55,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         mLoginView = (TextView) findViewById(R.id.tv_user_login);
         mLogoutView = (TextView) findViewById(R.id.tv_logout);
         mUserNameView = (TextView) findViewById(R.id.tv_user_name);
+        mTitleView = (TextView) findViewById(R.id.tv_user_title);
+        mIntroduceView = (TextView) findViewById(R.id.tv_user_describe);
         mUserInfoView = (LinearLayout) findViewById(R.id.ll_user_info);
         mMyAnswerView = (TextView) findViewById(R.id.tv_my_answer);
         mMyQuestionView = (TextView) findViewById(R.id.tv_my_question);
@@ -72,12 +77,40 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         mEditView.setOnClickListener(this);
         mWithDrawView.setOnClickListener(this);
         mAboutView.setOnClickListener(this);
-        if (SharedPreferencesHelper.getPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false)) {
+        if (SharedPreferencesHelper.getPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
             mUserInfoView.setVisibility(View.VISIBLE);
             mEditView.setVisibility(View.VISIBLE);
             mLoginView.setVisibility(View.GONE);
             mLogoutView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void initData() {
+        UserManager userManager = new UserManager();
+        userManager.setUserInfoListener(new UserManager.UserInfoListener() {
+            @Override
+            public void onSuccess(User user) {
+                if (user != null) {
+                    mUser = user;
+                    Glide.with(UserActivity.this)
+                            .load(user.getUserIcon())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(mUserIcon);
+                    mUserNameView.setText(user.getUserName());
+                    mTitleView.setText(user.getUserTitle());
+                    mIntroduceView.setText(user.getUserIntroduce());
+                    mUserPriceView.setText(String.format(getString(R.string.format_dollar), user.getUserPrice()));
+                    mUserIncomeView.setText(String.format(getString(R.string.format_dollar), user.getUserIncome()));
+                }
+
+            }
+
+            @Override
+            public void onFailed() {
+                Toast.makeText(UserActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+            }
+        });
+        userManager.getUserInfo(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null));
     }
 
     @Override
@@ -99,25 +132,23 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.CODE_RESULT_LOGIN) {
-            SharedPreferencesHelper.setPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, true);
+            SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, data.getStringExtra("user_object_id"));
+            SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_ICON_URL, data.getStringExtra("user_icon_url"));
             mUserInfoView.setVisibility(View.VISIBLE);
             mEditView.setVisibility(View.VISIBLE);
             mLoginView.setVisibility(View.GONE);
             mLogoutView.setVisibility(View.VISIBLE);
-            mUserNameView.setText(data.getStringExtra("user_name"));
-            Glide.with(UserActivity.this)
-                    .load(data.getStringExtra("user_icon_url"))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(mUserIcon);
-
+            initData();
         } else if (resultCode == Constant.CODE_RESULT_EDIT) {
-            mUserPriceView.setText("$9.99");
+            initData();
         } else if (resultCode == Constant.KEY_FROM_MY_QUESTION) {
-            finish();
-        } else if (resultCode == Constant.KEY_FROM_MY_ANSWER) {
+            setResult(Constant.KEY_FROM_MY_QUESTION);
             finish();
         } else if (resultCode == Constant.KEY_FROM_MY_LISTEN) {
+            setResult(Constant.KEY_FROM_MY_LISTEN);
             finish();
+        } else if (resultCode == Constant.KEY_FROM_MY_ANSWER) {
+            initData();
         } else {
             Log.i("Lebron", "  do nothing");
         }
@@ -138,12 +169,14 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             LoginManager.getInstance().logOut();
-                            SharedPreferencesHelper.setPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false);
+                            SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null);
+                            SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_ICON_URL, null);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         mUserInfoView.setVisibility(View.GONE);
                         mEditView.setVisibility(View.GONE);
+                        mUserIcon.setImageResource(R.drawable.ic_me_default);
                         mLoginView.setVisibility(View.VISIBLE);
                         mLogoutView.setVisibility(View.GONE);
                     }
@@ -157,9 +190,12 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 builder.create().show();
                 break;
             case R.id.tv_my_answer:
-                if (SharedPreferencesHelper.getPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false)) {
+                if (mUser != null) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_ANSWER);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("user", mUser);
+                    mIntent.putExtras(bundle);
                     startActivityForResult(mIntent, Constant.CODE_REQUEST);
                 } else {
                     mIntent.setClass(UserActivity.this, LoginActivity.class);
@@ -167,9 +203,12 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_my_question:
-                if (SharedPreferencesHelper.getPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false)) {
+                if (mUser != null) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_QUESTION);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("user", mUser);
+                    mIntent.putExtras(bundle);
                     startActivityForResult(mIntent, Constant.CODE_REQUEST);
                 } else {
                     mIntent.setClass(UserActivity.this, LoginActivity.class);
@@ -177,9 +216,12 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_my_listen:
-                if (SharedPreferencesHelper.getPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false)) {
+                if (mUser != null) {
                     mIntent.setClass(UserActivity.this, MyCommonActivity.class);
                     mIntent.putExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_LISTEN);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("user", mUser);
+                    mIntent.putExtras(bundle);
                     startActivityForResult(mIntent, Constant.CODE_REQUEST);
                 } else {
                     mIntent.setClass(UserActivity.this, LoginActivity.class);
@@ -187,16 +229,27 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.tv_edit_profile:
-                mIntent.setClass(UserActivity.this, EditProfileActivity.class);
-                startActivityForResult(mIntent, Constant.CODE_REQUEST);
+                if (mUser != null) {
+                    mIntent.setClass(UserActivity.this, EditProfileActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("user", mUser);
+                    mIntent.putExtras(bundle);
+                    startActivityForResult(mIntent, Constant.CODE_REQUEST);
+                } else {
+                    mIntent.setClass(UserActivity.this, LoginActivity.class);
+                    UserActivity.this.startActivityForResult(mIntent, Constant.CODE_REQUEST);
+                }
                 break;
             case R.id.tv_about:
                 mIntent.setClass(UserActivity.this, AboutActivity.class);
                 startActivity(mIntent);
                 break;
             case R.id.tv_withdraw:
-                if (SharedPreferencesHelper.getPreferenceBoolean(UserActivity.this, Constant.KEY_IS_LOGINED, false)) {
+                if (mUser != null) {
                     mIntent.setClass(UserActivity.this, WithDrawActivity.class);
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putSerializable("user", mUser);
+                    mIntent.putExtras(bundle1);
                     startActivity(mIntent);
                 } else {
                     mIntent.setClass(UserActivity.this, LoginActivity.class);

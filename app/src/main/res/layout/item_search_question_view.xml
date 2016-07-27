@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_search_question"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_common_layout"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/tv_search_question_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/item_common_margin"
+            android:layout_marginRight="@dimen/item_common_margin"
+            android:singleLine="true"
+            android:text="LeBron James"
+            android:textColor="@color/color_user_name"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_search_question_user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_search_question_content"
+            android:layout_below="@id/tv_search_question_content"
+            android:singleLine="true"
+            android:text="LeBron James"
+            android:textColor="@color/color_user_title"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <include layout="@layout/divider_horizontal"></include>
+</LinearLayout>

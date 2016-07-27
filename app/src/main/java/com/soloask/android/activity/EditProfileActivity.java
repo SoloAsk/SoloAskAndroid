@@ -17,13 +17,17 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.soloask.android.R;
 import com.soloask.android.adapter.PriceAdapter;
+import com.soloask.android.data.bmob.UserManager;
+import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,12 +39,16 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     private RelativeLayout mSavingLayout;
     private PriceAdapter mPriceAdapter;
     private TextView mPriceView1, mPriceView5, mPriceView10, mPriceViewMore;
+    private User mUser;
+    private String mTitle, mIntroduce;
+    private double mAskPrice;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         initView();
+        initData();
     }
 
     @Override
@@ -52,23 +60,48 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_save) {
-            if (TextUtils.isEmpty(mTitleView.getText())) {
+            mTitle = mTitleView.getText().toString();
+            mIntroduce = mDescribeView.getText().toString();
+            if (TextUtils.isEmpty(mTitle)) {
                 mTitleView.setError(EditProfileActivity.this.getString(R.string.notice_cannot_null));
-            } else if (TextUtils.isEmpty(mDescribeView.getText())) {
+            } else if (TextUtils.isEmpty(mIntroduce)) {
                 mDescribeView.setError(EditProfileActivity.this.getString(R.string.notice_cannot_null));
             } else {
                 mSavingLayout.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSavingLayout.setVisibility(View.GONE);
-                        EditProfileActivity.this.setResult(Constant.CODE_RESULT_EDIT, null);
-                        finish();
-                    }
-                }, 2000L);
+                updateUserInfo();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initData() {
+        mUser = (User) getIntent().getSerializableExtra("user");
+        if (mUser == null) {
+            return;
+        }
+        mTitleView.setText(mUser.getUserTitle());
+        mDescribeView.setText(mUser.getUserIntroduce());
+        mAskPrice = mUser.getUserPrice();
+        mPriceView.setText(String.format(getString(R.string.format_dollar), mUser.getUserPrice()));
+    }
+
+    private void updateUserInfo() {
+        UserManager userManager = new UserManager();
+        userManager.setUserInfoListener(new UserManager.UserInfoListener() {
+            @Override
+            public void onSuccess(User user) {
+                mSavingLayout.setVisibility(View.GONE);
+                EditProfileActivity.this.setResult(Constant.CODE_RESULT_EDIT, null);
+                finish();
+            }
+
+            @Override
+            public void onFailed() {
+                mSavingLayout.setVisibility(View.GONE);
+                Toast.makeText(EditProfileActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+            }
+        });
+        userManager.updateUserInfo(mUser, mTitle, mIntroduce, mAskPrice);
     }
 
     private void initView() {
@@ -129,13 +162,16 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_price_1:
-                mPriceView.setText("$1");
+                mPriceView.setText("$0.99");
+                mAskPrice = 0.99;
                 break;
             case R.id.tv_price_5:
-                mPriceView.setText("$5");
+                mPriceView.setText("$4.99");
+                mAskPrice = 4.99;
                 break;
             case R.id.tv_price_10:
-                mPriceView.setText("$10");
+                mPriceView.setText("$11.99");
+                mAskPrice = 11.99;
                 break;
             case R.id.tv_price_more:
                 showChoosePriceDialog();
@@ -147,10 +183,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         View view = getLayoutInflater().inflate(R.layout.dialog_price_table, null);
         TextView okView = (TextView) view.findViewById(R.id.tv_choose_price_ok);
         final RecyclerView priceView = (RecyclerView) view.findViewById(R.id.grid_price_view);
-        List list = new ArrayList();
-        for (int i = 0; i < 20; i++) {
-            list.add("$" + i);
-        }
+        String[] priceArray = getResources().getStringArray(R.array.array_price);
+        List list = Arrays.asList(priceArray);
         priceView.setLayoutManager(new GridLayoutManager(this, 5));
         mPriceAdapter = new PriceAdapter(this, list);
         priceView.setAdapter(mPriceAdapter);
@@ -165,8 +199,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         okView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!TextUtils.isEmpty(mPriceAdapter.getChoosedPrice())) {
-                    mPriceView.setText(mPriceAdapter.getChoosedPrice());
+                if (mPriceAdapter.getChoosedPrice() != 0) {
+                    mAskPrice = mPriceAdapter.getChoosedPrice();
+                    mPriceView.setText(String.format(getString(R.string.format_dollar), mPriceAdapter.getChoosedPrice()));
                 }
                 mBottomSheetDialog.dismiss();
             }

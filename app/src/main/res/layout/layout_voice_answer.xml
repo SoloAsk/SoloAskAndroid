@@ -9,7 +9,7 @@
         android:layout_width="@dimen/user_icon_size"
         android:layout_height="@dimen/user_icon_size"
         android:layout_marginLeft="@dimen/item_common_margin"
-        android:background="@drawable/avater_hemingke" />
+        android:background="@drawable/ic_me_default" />
 
     <RelativeLayout
         android:id="@+id/rl_voice_container"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="5dp"
-                android:text="Overhear with $1.00"
+                android:text="@string/overhear_price"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
         </LinearLayout>

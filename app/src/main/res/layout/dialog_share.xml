@@ -20,6 +20,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="@dimen/item_common_margin"
+        android:visibility="gone"
         android:src="@drawable/selector_twitter_share_btn" />
 
 </LinearLayout>

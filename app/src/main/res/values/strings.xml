@@ -65,7 +65,7 @@
     <string name="sure_to_log_out">Sure to log out?</string>
     <string name="rerecording_title">Re-record will delete this record</string>
     <string name="rerecording_message">Sure to delete and rerecord?</string>
-    <string name="google_pay_is_unavailable">GooglePlay初始化失败,当前无法进行支付，请确定您所在地区支持Google Play支付或重启应用再试！</string>
+    <string name="google_pay_is_unavailable">Google Play initialization failed, can not currently pay, make sure your region supports Google Play paid or restart the application and try again!</string>
     <string name="hint_input_account">PayPal account(email)</string>
     <string name="hint_input_account_again">Enter again</string>
     <string name="hint_ask_question">It will refund to app\'s account if there are no answer for more than 48 hours.</string>
@@ -85,13 +85,46 @@
     <string name="detail_downloading">downloading</string>
     <string name="notice_cannot_null">cannot be empty</string>
     <string name="notice_donot_match">didn\'t match</string>
+    <string name="notice_success">Successfully Done!</string>
+    <string name="format_earned">Total income $%1$.2f</string>
+    <string name="format_current_income">Current income $%1$.2f</string>
+    <string name="notice_ask_yourself">Asking yourself is forbidden</string>
+    <string name="notice_permission_denied">Permission Denied</string>
+    <string name="btn_listen_question">Listen</string>
+    <string name="share_content">A hot voice Q&amp;A app</string>
+    <string name="format_dollar">$%1$.2f</string>
+    <string name="notice_question_expired">The question is expired</string>
+    <string name="overhear_price">Overhear with $1.00</string>
+    <string name="notice_cannot_record">Unable to properly record</string>
+    <string name="menu_title_search">search</string>
+    <string name="hint_search">Search</string>
+    <string name="search_title_persons">PERSONS</string>
+    <string name="search_title_questions">QUESTIONS</string>
+    <string name="notice_no_search_result">No results</string>
+    <string name="format_respondent">Answered by %1$s</string>
 
-    <plurals name="answer_and_earn">
-        <item quantity="one">answered %1$d question, earned $0.99</item>
-        <item quantity="other">answered %1$d questions, earned $0.99</item>
+    <plurals name="dealed_time_second">
+        <item quantity="one">%1$d second ago</item>
+        <item quantity="other">%1$d seconds ago</item>
+    </plurals>
+    <plurals name="dealed_time_minute">
+        <item quantity="one">%1$d minute ago</item>
+        <item quantity="other">%1$d minutes ago</item>
     </plurals>
     <plurals name="dealed_time_hour">
         <item quantity="one">%1$d hour ago</item>
         <item quantity="other">%1$d hours ago</item>
+    </plurals>
+    <plurals name="dealed_time_day">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <plurals name="dealed_time_month">
+        <item quantity="one">%1$d month ago</item>
+        <item quantity="other">%1$d months ago</item>
+    </plurals>
+    <plurals name="dealed_time_year">
+        <item quantity="one">%1$d year ago</item>
+        <item quantity="other">%1$d years ago</item>
     </plurals>
 </resources>

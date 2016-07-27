@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_bottom_common_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/item_common_margin"
@@ -10,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/item_common_margin"
-        android:text="1 hour ago"
+        android:text="just now"
         android:textColor="@color/color_time"
         android:textSize="12sp" />
 
@@ -22,5 +23,6 @@
         android:layout_marginRight="@dimen/item_common_margin"
         android:text="123 heard，0 disliked"
         android:textColor="@color/color_time"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:visibility="gone" />
 </RelativeLayout>
