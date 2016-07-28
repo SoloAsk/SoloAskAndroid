@@ -53,7 +53,7 @@ public class MyQuestionAdapter extends BaseAdapter {
             ((ItemViewHolder) holder).priceView.setText(String.format(mContext.getString(R.string.format_dollar), question.getQuesPrice()));
             ((ItemViewHolder) holder).questionView.setText(question.getQuesContent());
             status = question.getState().intValue();
-            if (status != Constant.STATUS_REFUND && RelativeDateFormat.isTimeOut(question.getAskTime())) {
+            if (status != Constant.STATUS_REFUND && status != Constant.STATUS_ANSWERED && RelativeDateFormat.isTimeOut(question.getAskTime())) {
                 Log.i("MyQuestion", " time out");
                 MineManager mineManager = new MineManager();
                 mineManager.dealTimeOut(question, Constant.STATUS_REFUND);
