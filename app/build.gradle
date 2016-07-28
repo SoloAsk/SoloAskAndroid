@@ -26,19 +26,16 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
-
     //facebook
     compile 'com.facebook.android:facebook-android-sdk:4.+'
-
     //glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
     //umeng
     compile 'com.umeng.analytics:analytics:latest.integration'
-
     compile 'cn.bmob.android:bmob-sdk:3.5.0'
+    compile files('libs/open_sdk_r5756_lite.jar')
 }

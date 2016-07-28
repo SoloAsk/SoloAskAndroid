@@ -12,17 +12,37 @@
         android:layout_height="70dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"
-        android:background="@drawable/ic_facebook" />
+        android:background="@mipmap/ic_rewardstalk" />
 
     <TextView
-        android:id="@+id/tv_facebook_login"
-        style="@style/CommonButtonStyle"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_qq_login"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/img_facebook"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
-        android:text="@string/btn_login_with_facebook" />
+        android:background="@drawable/selector_common_btn"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/btn_login_with_qq"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_facebook_login"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_qq_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/item_common_margin"
+        android:background="@drawable/selector_common_btn"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/btn_login_with_facebook"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -47,6 +47,7 @@
     <string name="login_failed">Login failed</string>
     <string name="login_cancel">Login canceled</string>
     <string name="btn_login_with_facebook">Login with Facebook</string>
+    <string name="btn_login_with_qq">Login with QQ</string>
     <string name="user_payment_for_asking">Ask me a question with</string>
     <string name="user_earned">Total income</string>
     <string name="user_payment_rules">50% from income belongs to you</string>

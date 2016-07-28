@@ -1,5 +1,6 @@
 package com.soloask.android.data.bmob;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.soloask.android.data.model.User;
@@ -57,6 +58,10 @@ public class UserManager {
 
     public void signOrLogin(final String id, final String name, final String icon) {
         BmobQuery<User> query = new BmobQuery<>();
+        if (TextUtils.isEmpty(id) || TextUtils.isEmpty(name) || TextUtils.isEmpty(icon)) {
+            mListener.onFailed();
+            return;
+        }
         query.addWhereEqualTo("userId", id);
         query.findObjects(new FindListener<User>() {
             @Override
