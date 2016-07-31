@@ -28,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import cn.bmob.v3.BmobInstallation;
+
 /**
  * Created by Lebron on 2016/6/22.
  */
@@ -36,6 +38,24 @@ public class LoginActivity extends BaseActivity {
     private Tencent mTencent;
     private TextView mFBLoginView;
     private TextView mQQLoginView;
+    private String mDeviceToken;
+    private IUiListener mBaseUiListener = new IUiListener() {
+        @Override
+        public void onComplete(Object o) {
+            JSONObject jsonObject = (JSONObject) o;
+            getUserQQLoginInfo(jsonObject);
+        }
+
+        @Override
+        public void onError(UiError uiError) {
+            Toast.makeText(LoginActivity.this, uiError.errorMessage, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel() {
+
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +100,7 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-
+        mDeviceToken = BmobInstallation.getInstallationId(this);
     }
 
     @Override
@@ -136,7 +156,7 @@ public class LoginActivity extends BaseActivity {
                 Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
             }
         });
-        userManager.signOrLogin(id, name, photo);
+        userManager.signOrLogin(id, name, photo, mDeviceToken);
     }
 
     private void getUserQQLoginInfo(final JSONObject jsonObject) {
@@ -176,22 +196,4 @@ public class LoginActivity extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
-
-    private IUiListener mBaseUiListener = new IUiListener() {
-        @Override
-        public void onComplete(Object o) {
-            JSONObject jsonObject = (JSONObject) o;
-            getUserQQLoginInfo(jsonObject);
-        }
-
-        @Override
-        public void onError(UiError uiError) {
-            Toast.makeText(LoginActivity.this, uiError.errorMessage, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel() {
-
-        }
-    };
 }

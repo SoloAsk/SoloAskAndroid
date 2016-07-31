@@ -30,7 +30,7 @@ public class UserManager {
         mInfoListener = listener;
     }
 
-    private void sign(String id, String name, String icon) {
+    private void sign(String id, String name, String icon, String deviceToken) {
         User user = new User();
         user.setUserId(id);
         user.setUserName(name);
@@ -43,6 +43,7 @@ public class UserManager {
         user.setAnswerQuesNum(0);
         user.setAskQuesNum(0);
         user.setHeardQuesNum(0);
+        user.setDeviceToken(deviceToken);
         user.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
@@ -56,7 +57,7 @@ public class UserManager {
         });
     }
 
-    public void signOrLogin(final String id, final String name, final String icon) {
+    public void signOrLogin(final String id, final String name, final String icon, final String deviceToken) {
         BmobQuery<User> query = new BmobQuery<>();
         if (TextUtils.isEmpty(id) || TextUtils.isEmpty(name) || TextUtils.isEmpty(icon)) {
             mListener.onFailed();
@@ -71,7 +72,7 @@ public class UserManager {
                         mListener.onSuccess(list.get(0).getObjectId());
                     } else {
                         Log.i("UserManager", " signin");
-                        sign(id, name, icon);
+                        sign(id, name, icon, deviceToken);
                     }
                 } else {
                     mListener.onFailed();

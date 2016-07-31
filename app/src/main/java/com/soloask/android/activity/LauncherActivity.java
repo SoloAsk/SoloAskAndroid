@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.soloask.android.R;
 
+import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobInstallation;
 
 /**
  * Created by Lebron on 2016/6/29.
@@ -23,7 +25,13 @@ public class LauncherActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         //enable Bmob
-        Bmob.initialize(this, "26cc3d0d29e618b194be911c994efd11");
+        //8307cbf7bc30650a6a30ffb25be78b81
+        //26cc3d0d29e618b194be911c994efd11
+        Bmob.initialize(this, "8307cbf7bc30650a6a30ffb25be78b81");
+        // 使用推送服务时的初始化操作
+        BmobInstallation.getCurrentInstallation().save();
+        // 启动推送服务
+        BmobPush.startWork(this);
 
         setContentView(R.layout.activity_launcher);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

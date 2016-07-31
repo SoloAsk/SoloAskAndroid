@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "24"
+    buildToolsVersion "23.0.2"
     //**兼容Android6.0系统所需，如果这句话报错，可在dependencies标签下使用compile 'cn.bmob.android:http-legacy:1.0'**
     useLibrary 'org.apache.http.legacy'
 
@@ -38,4 +38,5 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'cn.bmob.android:bmob-sdk:3.5.0'
     compile files('libs/open_sdk_r5756_lite.jar')
+    compile files('libs/Bmob_Push_V1.0.0beta_20160627.jar')
 }
