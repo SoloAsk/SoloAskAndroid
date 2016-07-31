@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,23 +18,18 @@ import com.soloask.android.activity.QuestionDetailActivity;
 import com.soloask.android.data.model.Question;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
+import com.soloask.android.view.MaterialProgressBar;
 
 import java.util.List;
 
 /**
  * Created by Lebron on 2016/6/21.
  */
-public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private LayoutInflater mLayoutInflater;
-    private Context context;
-    private List<Question> list;
+public class HotAdapter extends BaseRecyclerAdapter<Question> {
 
     public HotAdapter(Context context, List datas) {
-        this.context = context;
-        mLayoutInflater = LayoutInflater.from(context);
-        list = datas;
+        super(context, datas);
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -49,11 +43,11 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
-            final Question question = list.get(position);
-            ((ItemViewHolder) holder).listenersView.setText(String.format(context.getResources().getString(R.string.format_listerers), question.getListenerNum()));
+            final Question question = mData.get(position);
+            ((ItemViewHolder) holder).listenersView.setText(String.format(mContext.getResources().getString(R.string.format_listerers), question.getListenerNum()));
             ((ItemViewHolder) holder).questionView.setText(question.getQuesContent());
             ((ItemViewHolder) holder).respondentView.setText(question.getAnswerUser().getUserName() + " | " + question.getAnswerUser().getUserTitle());
-            Glide.with(context)
+            Glide.with(mContext)
                     .load(question.getAnswerUser().getUserIcon())
                     //.placeholder(R.drawable.ic_me_default)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -61,30 +55,25 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ((ItemViewHolder) holder).container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SharedPreferencesHelper.getPreferenceString(context, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
-                        Intent intent = new Intent(context, QuestionDetailActivity.class);
+                    if (SharedPreferencesHelper.getPreferenceString(mContext, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
+                        Intent intent = new Intent(mContext, QuestionDetailActivity.class);
                         intent.putExtra(Constant.KEY_QUESTION_ID, question.getObjectId());
-                        context.startActivity(intent);
+                        mContext.startActivity(intent);
                     } else {
-                        Intent intent = new Intent(context, LoginActivity.class);
-                        ((Activity) context).startActivityForResult(intent, Constant.CODE_REQUEST);
+                        Intent intent = new Intent(mContext, LoginActivity.class);
+                        ((Activity) mContext).startActivityForResult(intent, Constant.CODE_REQUEST);
                     }
                 }
             });
+        } else {
+            ((FooterViewHolder) holder).progressBar.setVisibility(noMore ? View.GONE : View.VISIBLE);
         }
 
     }
 
     @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return Constant.TYPE_HEADER;
-        } else if (position  == getItemCount() && getItemCount() >= 10) {
+        if (position + 1 == getItemCount()) {
             return Constant.TYPE_FOOTER;
         } else {
             return Constant.TYPE_ITEM;
@@ -116,8 +105,11 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder {
+        MaterialProgressBar progressBar;
+
         public FooterViewHolder(View itemView) {
             super(itemView);
+            progressBar = (MaterialProgressBar) itemView.findViewById(R.id.pgb_footer_more);
         }
     }
 }

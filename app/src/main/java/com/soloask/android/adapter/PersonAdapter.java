@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,75 +19,67 @@ import com.soloask.android.activity.UserProfileActivity;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
+import com.soloask.android.view.MaterialProgressBar;
 
 import java.util.List;
 
 /**
  * Created by Lebron on 2016/6/22.
  */
-public class PersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private LayoutInflater mLayoutInflater;
-    private Context context;
-    private List<User> mDatas;
+public class PersonAdapter extends BaseRecyclerAdapter<User> {
 
     public PersonAdapter(Context context, List<User> datas) {
-        this.context = context;
-        mLayoutInflater = LayoutInflater.from(context);
-        mDatas = datas;
+        super(context, datas);
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == Constant.TYPE_FOOTER) {
             return new FooterViewHolder(mLayoutInflater.inflate(R.layout.layout_footer, parent, false));
         } else {
-            return new ItemViewHolder(mLayoutInflater.inflate(R.layout.item_person_view, parent, false), context);
+            return new ItemViewHolder(mLayoutInflater.inflate(R.layout.item_person_view, parent, false), mContext);
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
-            Glide.with(context)
-                    .load(mDatas.get(position).getUserIcon())
+            Glide.with(mContext)
+                    .load(mData.get(position).getUserIcon())
                     //.placeholder(R.drawable.ic_me_default)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(((ItemViewHolder) holder).imageView);
-            ((ItemViewHolder) holder).describeView.setText(mDatas.get(position).getUserIntroduce());
-            ((ItemViewHolder) holder).nameView.setText(mDatas.get(position).getUserName());
-            ((ItemViewHolder) holder).followerView.setText(mDatas.get(position).getUserTitle());
+            ((ItemViewHolder) holder).describeView.setText(mData.get(position).getUserIntroduce());
+            ((ItemViewHolder) holder).nameView.setText(mData.get(position).getUserName());
+            ((ItemViewHolder) holder).followerView.setText(mData.get(position).getUserTitle());
             ((ItemViewHolder) holder).mContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (SharedPreferencesHelper.getPreferenceString(context, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
-                        Intent intent = new Intent(context, UserProfileActivity.class);
+                    if (SharedPreferencesHelper.getPreferenceString(mContext, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
+                        Intent intent = new Intent(mContext, UserProfileActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("user", mDatas.get(position));
+                        bundle.putSerializable("user", mData.get(position));
                         intent.putExtras(bundle);
-                        context.startActivity(intent);
+                        mContext.startActivity(intent);
                     } else {
-                        Intent intent = new Intent(context, LoginActivity.class);
-                        ((Activity) context).startActivityForResult(intent, Constant.CODE_REQUEST);
+                        Intent intent = new Intent(mContext, LoginActivity.class);
+                        ((Activity) mContext).startActivityForResult(intent, Constant.CODE_REQUEST);
                     }
 
                 }
             });
+        } else {
+            ((FooterViewHolder) holder).progressBar.setVisibility(noMore ? View.GONE : View.VISIBLE);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == getItemCount() && getItemCount() >= 10) {
+        if (position + 1 == getItemCount()) {
             return Constant.TYPE_FOOTER;
         } else {
             return Constant.TYPE_ITEM;
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return mDatas.size();
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -110,8 +101,11 @@ public class PersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder {
+        MaterialProgressBar progressBar;
+
         public FooterViewHolder(View itemView) {
             super(itemView);
+            progressBar = (MaterialProgressBar) itemView.findViewById(R.id.pgb_footer_more);
         }
     }
 }

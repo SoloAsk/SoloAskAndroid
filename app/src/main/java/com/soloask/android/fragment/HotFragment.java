@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.soloask.android.R;
 import com.soloask.android.adapter.HotAdapter;
@@ -41,6 +42,22 @@ public class HotFragment extends Fragment implements View.OnClickListener {
     private TextView mRetryView;
     private int mLastVisibleItem, mSkipNum;
     private List<Question> mDatas = new ArrayList<>();
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Constant.MSG_LOAD_MORE_DATA:
+                    initData(Constant.MSG_LOAD_MORE_DATA);
+                    break;
+                case Constant.MSG_REFRESH_DATA:
+                    mDatas.clear();
+                    mHotAdapter.notifyDataSetChanged();
+                    initData(Constant.MSG_REFRESH_DATA);
+                    break;
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -65,6 +82,12 @@ public class HotFragment extends Fragment implements View.OnClickListener {
                 mDatas.addAll(list);
                 mProgressBar.setVisibility(View.GONE);
                 mRefreshLayout.setRefreshing(false);
+                if (list.size() == 0) {
+                    mHotAdapter.loadNoMore(true);
+                    Toast.makeText(getActivity(), "No more!", Toast.LENGTH_SHORT).show();
+                } else {
+                    mHotAdapter.loadNoMore(false);
+                }
                 mHotAdapter.notifyDataSetChanged();
             }
 
@@ -83,7 +106,6 @@ public class HotFragment extends Fragment implements View.OnClickListener {
             hotManager.getHotList(mSkipNum);
         }
     }
-
 
     private void setNetWorkLayout() {
         if (!NetworkManager.isNetworkValid(getActivity())) {
@@ -104,6 +126,7 @@ public class HotFragment extends Fragment implements View.OnClickListener {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mHotAdapter.loadNoMore(true);
                 handler.sendEmptyMessageDelayed(Constant.MSG_REFRESH_DATA, 2000L);
             }
         });
@@ -129,23 +152,6 @@ public class HotFragment extends Fragment implements View.OnClickListener {
         });
         setNetWorkLayout();
     }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case Constant.MSG_LOAD_MORE_DATA:
-                    initData(Constant.MSG_LOAD_MORE_DATA);
-                    break;
-                case Constant.MSG_REFRESH_DATA:
-                    mDatas.clear();
-                    mHotAdapter.notifyDataSetChanged();
-                    initData(Constant.MSG_REFRESH_DATA);
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onClick(View v) {

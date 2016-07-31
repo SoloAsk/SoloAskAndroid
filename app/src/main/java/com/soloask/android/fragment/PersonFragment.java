@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.soloask.android.R;
 import com.soloask.android.adapter.PersonAdapter;
@@ -41,6 +42,22 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private TextView mRetryView;
     private int mLastVisibleItem, mSkipNum = 0;
     private List<User> mDatas = new ArrayList<>();
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case Constant.MSG_LOAD_MORE_DATA:
+                    initData(Constant.MSG_LOAD_MORE_DATA);
+                    break;
+                case Constant.MSG_REFRESH_DATA:
+                    mDatas.clear();
+                    mPersonAdapter.notifyDataSetChanged();
+                    initData(Constant.MSG_REFRESH_DATA);
+                    break;
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -77,6 +94,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mPersonAdapter.loadNoMore(true);
                 handler.sendEmptyMessageDelayed(Constant.MSG_REFRESH_DATA, 500L);
             }
         });
@@ -85,7 +103,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mPersonAdapter.getItemCount() >= 10 && mLastVisibleItem + 1 == mPersonAdapter.getItemCount()) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItem + 1 == mPersonAdapter.getItemCount()) {
                     handler.sendEmptyMessageDelayed(Constant.MSG_LOAD_MORE_DATA, 500L);
                 }
             }
@@ -114,6 +132,12 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 mDatas.addAll(list);
                 mProgressBar.setVisibility(View.GONE);
                 mRefreshLayout.setRefreshing(false);
+                if (list.size() == 0) {
+                    mPersonAdapter.loadNoMore(true);
+                    Toast.makeText(getActivity(), "No more!", Toast.LENGTH_SHORT).show();
+                } else {
+                    mPersonAdapter.loadNoMore(false);
+                }
                 mPersonAdapter.notifyDataSetChanged();
             }
 
@@ -133,23 +157,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
 
     }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case Constant.MSG_LOAD_MORE_DATA:
-                    initData(Constant.MSG_LOAD_MORE_DATA);
-                    break;
-                case Constant.MSG_REFRESH_DATA:
-                    mDatas.clear();
-                    mPersonAdapter.notifyDataSetChanged();
-                    initData(Constant.MSG_REFRESH_DATA);
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onClick(View v) {
