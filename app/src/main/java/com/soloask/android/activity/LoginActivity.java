@@ -3,6 +3,7 @@ package com.soloask.android.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +29,6 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import cn.bmob.v3.BmobInstallation;
 
 /**
  * Created by Lebron on 2016/6/22.
@@ -38,11 +38,12 @@ public class LoginActivity extends BaseActivity {
     private Tencent mTencent;
     private TextView mFBLoginView;
     private TextView mQQLoginView;
-    private String mDeviceToken;
+    private String mDeviceToken = "device_token";
     private IUiListener mBaseUiListener = new IUiListener() {
         @Override
         public void onComplete(Object o) {
             JSONObject jsonObject = (JSONObject) o;
+            Log.i("LoginActivity", jsonObject.toString());
             getUserQQLoginInfo(jsonObject);
         }
 
@@ -64,7 +65,6 @@ public class LoginActivity extends BaseActivity {
         callbackManager = CallbackManager.Factory.create();
         mTencent = Tencent.createInstance(Constant.QQ_APP_ID, this.getApplicationContext());
         LoginManager.getInstance().logOut();
-        mTencent.logout(this);
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -100,7 +100,6 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-        mDeviceToken = BmobInstallation.getInstallationId(this);
     }
 
     @Override
