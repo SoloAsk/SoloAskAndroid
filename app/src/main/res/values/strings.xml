@@ -34,13 +34,13 @@
     <string name="recording_stop">Recording, click to stop recording</string>
     <string name="recording_play">Finish recording, click to play</string>
     <string name="recording_playing">Playing...</string>
-    <string name="format_second">%1$d\'\'</string>
     <string name="listen_for_free">Listen for Free</string>
     <string name="format_listerers">%1$d heard</string>
     <string name="format_price">Overhear with %1$s</string>
     <string name="format_answered">Answered %1$d</string>
     <string name="format_heard">Heard %1$d</string>
     <string name="format_asked">Asked %1$d</string>
+    <string name="format_second">%1$d\'\'</string>
     <string name="format_write_question">%1$d/100</string>
     <string name="format_write_describe">%1$d/200</string>
     <string name="format_write_title">%1$d/36</string>
