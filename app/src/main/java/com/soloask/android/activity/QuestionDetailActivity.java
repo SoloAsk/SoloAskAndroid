@@ -40,7 +40,6 @@ import com.soloask.android.view.MaterialProgressBar;
 import com.soloask.android.view.ShareDialog;
 import com.umeng.analytics.MobclickAgent;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +68,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
     private Question mQuestion;
     private User mCurrentUser;
     private boolean isIABHelperOK;
-    private boolean isPayed, isPaused;
+    private boolean isPayed = true, isPaused;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +76,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_question_detail);
         initView();
         getCurrentUser();
-        initIabHelper();
+        //initIabHelper();
     }
 
     private void initData() {
@@ -94,14 +93,10 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                         mListenersView.setVisibility(View.VISIBLE);
                         mListenersView.setText(String.format(getResources().getString(R.string.format_listerers), question.getListenerNum()));
                     }
-                    //是否是用户本人在看详情(提问者或者回答者)
-                    if (question.getAnswerUser().getObjectId().equals(mCurrentUser.getObjectId())
-                            || question.getAskUser().getObjectId().equals(mCurrentUser.getObjectId())) {
-                        isPayed = true;
-                        mPriceView.setText(R.string.detail_click_to_play);
-                    } else {
-                        checkUserHeard(mCurrentUser);
-                    }
+
+                    isPayed = true;
+                    mPriceView.setText(R.string.detail_click_to_play);
+
                     Glide.with(QuestionDetailActivity.this)
                             .load(question.getAskUser().getUserIcon())
                             //.placeholder(R.drawable.ic_me_default)
@@ -153,7 +148,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                         return;
                     }
                     isIABHelperOK = true;
-                    doQuery();
+                    //doQuery();
                 }
             });
         } catch (Exception e) {
@@ -329,6 +324,8 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
             public void done(String savePath, BmobException e) {
                 if (e == null) {
                     playAudio();
+                    //纪录偷听用户
+                    new QuestionDetailManager().setHeardUser(mQuestion, mCurrentUser);
                 } else {
                     e.printStackTrace();
                     mPriceView.setText(R.string.detail_click_to_play);

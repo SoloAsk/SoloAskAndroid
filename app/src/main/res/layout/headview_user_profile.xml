@@ -121,7 +121,8 @@
             android:gravity="center"
             android:text="$0.99"
             android:textColor="@color/color_common_red"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/btn_submit_question"
@@ -141,7 +142,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="@dimen/item_common_margin"
         android:paddingTop="10dp"
-        android:text="Answered 121 questions, earned $100"
+        android:text="Answered 121 questions"
         android:textColor="@color/color_user_title"
         android:textSize="13sp" />
 

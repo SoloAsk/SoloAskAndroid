@@ -12,7 +12,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="200dp"
         android:src="@drawable/ic_about_soloask" />
 
     <TextView
@@ -23,54 +23,6 @@
         android:text="v1.0.2"
         android:textColor="@color/color_question"
         android:textSize="16sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="@string/about_payment_rules"
-        android:textColor="#717171"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/item_common_margin"
-        android:layout_marginRight="@dimen/item_common_margin"
-        android:layout_marginTop="10dp"
-        android:text="@string/about_ask_title"
-        android:textColor="@color/color_user_title" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/item_common_margin"
-        android:layout_marginRight="@dimen/item_common_margin"
-        android:layout_marginTop="10dp"
-        android:text="@string/about_share_title"
-        android:textColor="@color/color_user_title" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/item_common_margin"
-        android:layout_marginRight="@dimen/item_common_margin"
-        android:layout_marginTop="10dp"
-        android:text="@string/about_free_title"
-        android:textColor="@color/color_user_title" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/item_common_margin"
-        android:layout_marginRight="@dimen/item_common_margin"
-        android:layout_marginTop="10dp"
-        android:text="@string/about_platform_rules"
-        android:textColor="@color/color_user_title" />
 
 
 </LinearLayout>

@@ -34,13 +34,14 @@
         android:layout_marginTop="10dp"
         android:text="$49.9"
         android:textColor="@color/color_common_red"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone" />
 
     <include
         layout="@layout/layout_voice_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_question_price"
+        android:layout_below="@id/tv_questioner_question"
         android:layout_marginTop="@dimen/item_common_margin"></include>
 
     <include

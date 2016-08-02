@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="facebook_app_id">1618281258486160</string>
-    <string name="app_name">Solo Ask</string>
+    <string name="app_name">弯弯</string>
     <string name="tab_name1">HOT</string>
     <string name="tab_name2">DISCOVER</string>
     <string name="tab_name3">Me</string>
@@ -71,11 +71,11 @@
     <string name="google_pay_is_unavailable">Google Play initialization failed, can not currently pay, make sure your region supports Google Play paid or restart the application and try again!</string>
     <string name="hint_input_account">PayPal account(email)</string>
     <string name="hint_input_account_again">Enter again</string>
-    <string name="hint_ask_question">It will refund to app\'s account if there are no answer for more than 48 hours.</string>
+    <string name="hint_ask_question">We will return the question if there is no answer for more than 48 hours.</string>
     <string name="hint_user_name">Think an attractive nickname</string>
     <string name="hint_user_title">Operations Manager; radio DJ; Google early employees; globe-trotting slash youth</string>
     <string name="hint_user_introduce">Of these,ask me heartily; finance and investment, marry white Formica; and how to manage themselves heterosexual travel impulse ...... or give you a good night to sing songs</string>
-    <string name="check_ask_question">Public Q&amp;A, each time your answer is listened by others, you earn $0.5</string>
+    <string name="check_ask_question">Public Q&amp;A, your answer can be listened by others</string>
     <string name="login_privacy">I have read and agree to the user agreement.</string>
     <string name="launcher_slogan">Vocal Q&amp;A worth to pay</string>
     <string name="failed_to_load_data">Failed to load data, please try again later.</string>
@@ -98,7 +98,7 @@
     <string name="share_content">A hot voice Q&amp;A app</string>
     <string name="format_dollar">$%1$.2f</string>
     <string name="notice_question_expired">The question is expired</string>
-    <string name="overhear_price">Overhear with $1.00</string>
+    <string name="overhear_price">Overhear</string>
     <string name="notice_cannot_record">Unable to properly record</string>
     <string name="menu_title_search">search</string>
     <string name="hint_search">Search</string>

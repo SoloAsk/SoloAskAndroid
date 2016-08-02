@@ -89,9 +89,11 @@
                         android:id="@+id/tv_user_describe"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:layout_marginLeft="@dimen/item_common_margin"
                         android:layout_marginRight="@dimen/item_common_margin"
                         android:layout_marginTop="10dp"
+                        android:gravity="center"
                         android:maxLength="200"
                         android:textColor="@color/color_user_name" />
 
@@ -99,7 +101,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -121,7 +124,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -147,7 +151,8 @@
                         android:layout_marginLeft="@dimen/item_common_margin"
                         android:layout_marginTop="10dp"
                         android:text="@string/user_payment_rules"
-                        android:textColor="@color/color_user_title" />
+                        android:textColor="@color/color_user_title"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -239,9 +244,8 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/item_common_margin"
                 android:text="@string/title_withdraw"
-                android:textColor="@color/color_user_name" />
-
-            <include layout="@layout/divider_horizontal"></include>
+                android:textColor="@color/color_user_name"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_about"

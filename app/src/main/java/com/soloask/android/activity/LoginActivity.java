@@ -3,6 +3,7 @@ package com.soloask.android.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -10,12 +11,9 @@ import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.soloask.android.R;
 import com.soloask.android.data.bmob.UserManager;
 import com.soloask.android.util.Constant;
@@ -62,10 +60,11 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        callbackManager = CallbackManager.Factory.create();
+        //callbackManager = CallbackManager.Factory.create();
         mTencent = Tencent.createInstance(Constant.QQ_APP_ID, this.getApplicationContext());
-        LoginManager.getInstance().logOut();
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        mTencent.logout(this);
+        //LoginManager.getInstance().logOut();
+        /*LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 getLoginInfo(loginResult.getAccessToken());
@@ -80,7 +79,7 @@ public class LoginActivity extends BaseActivity {
             public void onError(FacebookException e) {
                 Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         mFBLoginView = (TextView) findViewById(R.id.tv_facebook_login);
         mQQLoginView = (TextView) findViewById(R.id.tv_qq_login);
         mFBLoginView.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +104,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        //callbackManager.onActivityResult(requestCode, resultCode, data);
         Tencent.onActivityResultData(requestCode, resultCode, data, mBaseUiListener);
     }
 
@@ -152,6 +151,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onFailed() {
                 LoginManager.getInstance().logOut();
+                mTencent.logout(LoginActivity.this);
                 Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
             }
         });
@@ -160,7 +160,7 @@ public class LoginActivity extends BaseActivity {
 
     private void getUserQQLoginInfo(final JSONObject jsonObject) {
         mTencent.setOpenId(jsonObject.optString("openid"));
-        mTencent.setAccessToken(jsonObject.optString("access_token"), jsonObject.optString("expires_in"));
+        mTencent.setAccessToken(jsonObject.optString("access_token"), String.valueOf(jsonObject.optLong("expires_in")));
         UserInfo userInfo = new UserInfo(LoginActivity.this, mTencent.getQQToken());
         userInfo.getUserInfo(new IUiListener() {
             @Override
@@ -169,6 +169,13 @@ public class LoginActivity extends BaseActivity {
                 String id = jsonObject.optString("openid");
                 String name = userInfo.optString("nickname");
                 String photo = userInfo.optString("figureurl_qq_2");
+                Log.i("LoginActivity", userInfo.toString());
+                if (TextUtils.isEmpty(name)) {
+                    name = "匿名用户";
+                }
+                if (TextUtils.isEmpty(photo)) {
+                    photo = "http://mmbiz.qpic.cn/mmbiz/ibnDKD3ktAoaTKCIsnTibTHaojdt1WlibrVf4AdSnzX94jDz4vTvUl1ibeibib9WQAj1dGEPia8OWSUfLB9MJNg1VBxbw/640?wx_fmt=jpeg&tp=webp&wxfrom=5";
+                }
                 doLogin(id, name, photo);
             }
 

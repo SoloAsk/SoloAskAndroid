@@ -100,6 +100,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
+                android:layout_marginTop="@dimen/item_common_margin"
                 android:orientation="vertical">
 
                 <TextView
@@ -202,7 +203,8 @@
                 android:background="@android:color/white"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/item_common_margin"
-                android:paddingTop="@dimen/item_common_margin">
+                android:paddingTop="@dimen/item_common_margin"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -234,7 +236,8 @@
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/item_common_margin"
                 android:paddingLeft="@dimen/item_common_margin"
-                android:paddingRight="@dimen/item_common_margin">
+                android:paddingRight="@dimen/item_common_margin"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_price_1"

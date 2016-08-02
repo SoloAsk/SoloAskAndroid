@@ -42,7 +42,8 @@
         android:paddingTop="10dp"
         android:text="@string/btn_login_with_facebook"
         android:textColor="@android:color/white"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"

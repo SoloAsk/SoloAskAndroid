@@ -83,8 +83,7 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     private void setRespondentInfo() {
-        String summary = String.format(mContext.getResources().getString(R.string.format_answered), mRespondent.getAnswerQuesNum())
-                + " , " + String.format(mContext.getResources().getString(R.string.format_earned), mRespondent.getUserIncome());
+        String summary = String.format(mContext.getResources().getString(R.string.format_answered), mRespondent.getAnswerQuesNum());
         headerViewHolder.mSummaryView.setText(summary);
         headerViewHolder.mNameView.setText(mRespondent.getUserName());
         headerViewHolder.mTitleView.setText(mRespondent.getUserTitle());
@@ -230,7 +229,28 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     } else if (mQuestioner.getObjectId().equals(mRespondent.getObjectId())) {
                         Toast.makeText(mContext, R.string.notice_ask_yourself, Toast.LENGTH_SHORT).show();
                     } else {
-                        doPurchase(mQuestionView);
+                        //doPurchase(mQuestionView);
+                        AskManager askManager = new AskManager();
+                        askManager.setOnAskQuestionListener(new AskManager.OnAskQuestionListener() {
+                            @Override
+                            public void onSuccess(String objectId) {
+                                Intent intent = new Intent(mContext, QuestionDetailActivity.class);
+                                intent.putExtra(Constant.KEY_QUESTION_ID, objectId);
+                                mContext.startActivity(intent);
+                                if (mQuestionView != null) {
+                                    mQuestionView.setText("");
+                                }
+                                Toast.makeText(mContext, R.string.notice_success, Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onFailed() {
+                                Toast.makeText(mContext, "Something wrong", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        if (mRespondent != null && mQuestioner != null) {
+                            askManager.askQuestion(mRespondent, mQuestioner, mContent, isPub, mPrice);
+                        }
                     }
                 }
             });
@@ -335,6 +355,6 @@ public class HistoryQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void setIABHelper(IabHelper iabHelper) {
         mHelper = iabHelper;
-        doQuery();
+        //doQuery();
     }
 }

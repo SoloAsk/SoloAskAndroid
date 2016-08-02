@@ -53,7 +53,7 @@ public class UserProfileActivity extends BaseActivity {
         initView();
         initData(Constant.MSG_REFRESH_DATA);
         getCurrentUser();
-        initIabHelper();
+        //initIabHelper();
     }
 
     @Override
