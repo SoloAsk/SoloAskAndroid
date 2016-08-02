@@ -2,7 +2,6 @@ package com.soloask.android.activity;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,6 @@ import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,13 +32,13 @@ import java.util.List;
  * Created by Lebron on 2016/6/24.
  */
 public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
-    private TextView mPriceView, mTextCountView, mTitleCountView;
-    private EditText mDescribeView, mTitleView;
+    private TextView mPriceView, mTextCountView, mTitleCountView, mNameCountView;
+    private EditText mDescribeView, mTitleView, mNameView;
     private RelativeLayout mSavingLayout;
     private PriceAdapter mPriceAdapter;
     private TextView mPriceView1, mPriceView5, mPriceView10, mPriceViewMore;
     private User mUser;
-    private String mTitle, mIntroduce;
+    private String mTitle, mIntroduce, mName;
     private double mAskPrice;
 
     @Override
@@ -62,10 +60,13 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         if (item.getItemId() == R.id.action_save) {
             mTitle = mTitleView.getText().toString();
             mIntroduce = mDescribeView.getText().toString();
+            mName = mNameView.getText().toString();
             if (TextUtils.isEmpty(mTitle)) {
                 mTitleView.setError(EditProfileActivity.this.getString(R.string.notice_cannot_null));
             } else if (TextUtils.isEmpty(mIntroduce)) {
                 mDescribeView.setError(EditProfileActivity.this.getString(R.string.notice_cannot_null));
+            } else if (TextUtils.isEmpty(mName)) {
+                mNameView.setError(EditProfileActivity.this.getString(R.string.notice_cannot_null));
             } else {
                 mSavingLayout.setVisibility(View.VISIBLE);
                 updateUserInfo();
@@ -79,6 +80,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         if (mUser == null) {
             return;
         }
+        mNameView.setText(mUser.getUserName());
         mTitleView.setText(mUser.getUserTitle());
         mDescribeView.setText(mUser.getUserIntroduce());
         mAskPrice = mUser.getUserPrice();
@@ -101,7 +103,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 Toast.makeText(EditProfileActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
             }
         });
-        userManager.updateUserInfo(mUser, mTitle, mIntroduce, mAskPrice);
+        userManager.updateUserInfo(mUser, mName, mTitle, mIntroduce, mAskPrice);
     }
 
     private void initView() {
@@ -113,8 +115,10 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         mPriceViewMore = (TextView) findViewById(R.id.tv_price_more);
         mTextCountView = (TextView) findViewById(R.id.text_count);
         mTitleCountView = (TextView) findViewById(R.id.tv_edit_count);
+        mNameCountView = (TextView) findViewById(R.id.tv_edit_name_count);
         mDescribeView = (EditText) findViewById(R.id.edit_user_describe);
         mTitleView = (EditText) findViewById(R.id.edit_user_title);
+        mNameView = (EditText) findViewById(R.id.edit_user_name);
 
         addListener();
     }
@@ -149,6 +153,22 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mTitleCountView.setText(String.format(getString(R.string.format_write_title), mTitleView.getText().length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mNameView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mNameCountView.setText(String.format(getString(R.string.format_write_name), mNameView.getText().length()));
             }
 
             @Override

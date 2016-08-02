@@ -43,13 +43,16 @@
     <string name="format_write_question">%1$d/100</string>
     <string name="format_write_describe">%1$d/200</string>
     <string name="format_write_title">%1$d/36</string>
+    <string name="format_write_name">%1$d/15</string>
     <string name="login_failed">登录失败</string>
     <string name="login_cancel">登录取消</string>
     <string name="btn_login_with_facebook">Login with Facebook</string>
+    <string name="btn_login_with_qq">使用QQ登录</string>
     <string name="user_payment_for_asking">向我提问需要支付</string>
     <string name="user_earned">总收入</string>
     <string name="user_payment_rules">收入的50%属于你</string>
     <string name="user_title">你的头衔</string>
+    <string name="user_name">你的昵称</string>
     <string name="user_introduce">介绍一下你自己</string>
     <string name="user_withdraw_account">PayPal账户</string>
     <string name="remember">记住</string>
@@ -68,6 +71,7 @@
     <string name="hint_input_account">PayPal账户(邮箱)</string>
     <string name="hint_input_account_again">再次输入</string>
     <string name="hint_ask_question">超过48小时未回答，将退款至app账户中</string>
+    <string name="hint_user_name">想一个弯弯的昵称</string>
     <string name="hint_user_title">运营经理；电台DJ；Google早期员工；周游列国的青年；心理咨询师</string>
     <string name="hint_user_introduce">关于这些，尽情问我；投资理财，赢取白富美；如何优雅参加前任婚礼...或者给你唱个晚安小夜曲</string>
     <string name="check_ask_question">公开提问回答，答案每被偷听一次，你赚$0.5</string>
@@ -90,11 +94,18 @@
     <string name="notice_ask_yourself">无法向自己提问</string>
     <string name="notice_permission_denied">权限被禁止</string>
     <string name="btn_listen_question">去听</string>
-    <string name="share_content">A hot voice Q&amp;A app</string>
+    <string name="share_content">语音问答，值得付费</string>
     <string name="format_dollar">$%1$.2f</string>
     <string name="notice_question_expired">该问题已过期</string>
     <string name="overhear_price">一元偷听</string>
     <string name="notice_cannot_record">无法正常录音</string>
+    <string name="menu_title_search">搜索</string>
+    <string name="hint_search">搜索</string>
+    <string name="search_title_persons">用户</string>
+    <string name="search_title_questions">问题</string>
+    <string name="notice_no_search_result">未找到相关用户和问题</string>
+    <string name="format_respondent">被%1$s回答</string>
+    <string name="format_notification_message">%1$s刚刚问了你一个问题</string>
 
     <plurals name="dealed_time_second">
         <item quantity="one">%1$d秒前</item>

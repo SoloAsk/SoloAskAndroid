@@ -57,6 +57,56 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/item_common_margin"
                     android:layout_marginTop="@dimen/item_common_margin"
+                    android:text="@string/user_name"
+                    android:textColor="@color/color_user_name"
+                    android:textSize="15.0sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_common_margin"
+                    android:layout_marginRight="@dimen/item_common_margin">
+
+                    <EditText
+                        android:id="@+id/edit_user_name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/item_common_margin"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/white"
+                        android:gravity="top"
+                        android:hint="@string/hint_user_name"
+                        android:maxLength="15"
+                        android:minHeight="23dp"
+                        android:textColor="@color/color_user_name"
+                        android:textColorHint="@color/color_user_title"
+                        android:textCursorDrawable="@null"
+                        android:textSize="14.0sp" />
+
+                    <TextView
+                        android:id="@+id/tv_edit_name_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/edit_user_name"
+                        android:layout_alignRight="@id/edit_user_name"
+                        android:text="0/15"
+                        android:textColor="#ffc3c3c3"
+                        android:textSize="12.0sp"
+                        android:visibility="visible" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_common_margin"
+                    android:layout_marginTop="@dimen/item_common_margin"
                     android:text="@string/user_title"
                     android:textColor="@color/color_user_name"
                     android:textSize="15.0sp" />

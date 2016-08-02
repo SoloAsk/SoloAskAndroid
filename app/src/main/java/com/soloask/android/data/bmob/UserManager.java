@@ -99,11 +99,12 @@ public class UserManager {
         });
     }
 
-    public void updateUserInfo(final User user, String title, String describe, double askPrice) {
+    public void updateUserInfo(final User user, String name, String title, String describe, double askPrice) {
         if (user == null) {
             mInfoListener.onFailed();
             return;
         }
+        user.setUserName(name);
         user.setUserTitle(title);
         user.setUserIntroduce(describe);
         user.setUserPrice(askPrice);
