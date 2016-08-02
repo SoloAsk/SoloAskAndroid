@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/item_common_margin"
-        android:text="v1.0.2"
+        android:text="v1.0.3"
         android:textColor="@color/color_question"
         android:textSize="16sp" />
 
