@@ -36,8 +36,8 @@ public class UserManager {
         user.setUserName(name);
         user.setUserIcon(icon);
         user.setUserPrice(0.99);
-        user.setUserIntroduce("Something");
-        user.setUserTitle("Something");
+        user.setUserIntroduce("上知天文地理，下晓鸡毛蒜皮");
+        user.setUserTitle("神秘人士");
         user.setUserIncome(0.0);
         user.setUserEarned(0.0);
         user.setAnswerQuesNum(0);

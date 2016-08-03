@@ -103,7 +103,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && mLastVisibleItem + 1 == mPersonAdapter.getItemCount()) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && mPersonAdapter.getItemCount() >= 10 && mLastVisibleItem + 1 == mPersonAdapter.getItemCount()) {
                     handler.sendEmptyMessageDelayed(Constant.MSG_LOAD_MORE_DATA, 500L);
                 }
             }
@@ -132,7 +132,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 mDatas.addAll(list);
                 mProgressBar.setVisibility(View.GONE);
                 mRefreshLayout.setRefreshing(false);
-                if (list.size() == 0) {
+                if (list.size() == 0 || mDatas.size() < 10) {
                     mPersonAdapter.loadNoMore(true);
                     Toast.makeText(getActivity(), "No more!", Toast.LENGTH_SHORT).show();
                 } else {

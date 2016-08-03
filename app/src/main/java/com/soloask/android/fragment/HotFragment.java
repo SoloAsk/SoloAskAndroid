@@ -82,7 +82,7 @@ public class HotFragment extends Fragment implements View.OnClickListener {
                 mDatas.addAll(list);
                 mProgressBar.setVisibility(View.GONE);
                 mRefreshLayout.setRefreshing(false);
-                if (list.size() == 0) {
+                if (list.size() == 0 || mDatas.size() < 10) {
                     mHotAdapter.loadNoMore(true);
                     Toast.makeText(getActivity(), "No more!", Toast.LENGTH_SHORT).show();
                 } else {

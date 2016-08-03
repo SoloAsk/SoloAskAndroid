@@ -24,8 +24,8 @@ public class LauncherActivity extends BaseActivity {
 
         //enable Bmob
         //8307cbf7bc30650a6a30ffb25be78b81
-        //26cc3d0d29e618b194be911c994efd11
-        Bmob.initialize(this, "8307cbf7bc30650a6a30ffb25be78b81");
+        //a832709e5fa5bde7557642818e67981f
+        Bmob.initialize(this, "a832709e5fa5bde7557642818e67981f");
 
         setContentView(R.layout.activity_launcher);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
