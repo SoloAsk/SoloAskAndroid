@@ -5,43 +5,50 @@
     android:layout_height="wrap_content"
     android:background="@drawable/selector_common_layout">
 
-    <com.soloask.android.view.BoundImageView
-        android:id="@+id/img_questioner"
-        android:layout_width="@dimen/user_icon_size"
-        android:layout_height="@dimen/user_icon_size"
-        android:layout_marginLeft="@dimen/item_common_margin"
-        android:layout_marginTop="@dimen/item_common_margin"
-        android:background="@drawable/ic_me_default" />
-
-    <TextView
-        android:id="@+id/tv_questioner_question"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rl_question_top"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/img_questioner"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="@dimen/item_common_margin"
-        android:layout_toRightOf="@id/img_questioner"
-        android:text="Young brother , the Warriors lost the finals miserable how to do ? Young brother , the Warriors lost the finals miserable how to do ?"
-        android:textColor="@color/color_user_name"
-        android:textSize="14sp" />
+        android:layout_marginTop="@dimen/item_common_margin">
 
-    <TextView
-        android:id="@+id/tv_question_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/tv_questioner_question"
-        android:layout_below="@id/tv_questioner_question"
-        android:layout_marginTop="10dp"
-        android:text="$49.9"
-        android:textColor="@color/color_common_red"
-        android:textSize="13sp"
-        android:visibility="gone" />
+        <com.soloask.android.view.BoundImageView
+            android:id="@+id/img_questioner"
+            android:layout_width="@dimen/user_icon_size"
+            android:layout_height="@dimen/user_icon_size"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/item_common_margin"
+            android:background="@drawable/ic_me_default" />
+
+        <TextView
+            android:id="@+id/tv_questioner_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="@dimen/item_common_margin"
+            android:layout_toRightOf="@id/img_questioner"
+            android:text="Young brother , the Warriors lost the finals miserable how to do ?"
+            android:textColor="@color/color_user_name"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_question_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_questioner_question"
+            android:layout_below="@id/tv_questioner_question"
+            android:layout_marginTop="10dp"
+            android:text="$49.9"
+            android:textColor="@color/color_common_red"
+            android:textSize="13sp"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <include
         layout="@layout/layout_voice_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_questioner_question"
+        android:layout_below="@id/rl_question_top"
         android:layout_marginTop="@dimen/item_common_margin"></include>
 
     <include
