@@ -20,10 +20,10 @@ import com.soloask.android.R;
 import com.soloask.android.data.bmob.UserManager;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
+import com.soloask.android.util.QQManager;
 import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.view.CircleImageView;
 import com.soloask.android.view.ShareDialog;
-import com.tencent.tauth.Tencent;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -170,8 +170,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             LoginManager.getInstance().logOut();
-                            Tencent mTencent = Tencent.createInstance(Constant.QQ_APP_ID, UserActivity.this.getApplicationContext());
-                            mTencent.logout(UserActivity.this);
+                            QQManager.getTencentInstance(UserActivity.this).logout(UserActivity.this);
                             SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null);
                             SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_ICON_URL, null);
                         } catch (Exception e) {

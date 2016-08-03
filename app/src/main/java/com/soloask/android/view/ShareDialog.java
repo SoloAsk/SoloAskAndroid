@@ -9,12 +9,13 @@ import android.widget.ImageView;
 
 import com.soloask.android.R;
 import com.soloask.android.util.FacebookManager;
+import com.soloask.android.util.QQManager;
 
 /**
  * Created by Lebron on 2016/7/2.
  */
 public class ShareDialog extends AlertDialog implements View.OnClickListener {
-    private ImageView mFacebookView, mTwitterView;
+    private ImageView mFacebookView, mTwitterView, mQQView;
     private Context mContext;
 
     public ShareDialog(Context context) {
@@ -28,8 +29,10 @@ public class ShareDialog extends AlertDialog implements View.OnClickListener {
         setContentView(R.layout.dialog_share);
         mFacebookView = (ImageView) findViewById(R.id.img_share_facebook);
         mTwitterView = (ImageView) findViewById(R.id.img_share_twitter);
+        mQQView = (ImageView) findViewById(R.id.img_share_qq);
         mFacebookView.setOnClickListener(this);
         mTwitterView.setOnClickListener(this);
+        mQQView.setOnClickListener(this);
     }
 
     @Override
@@ -40,6 +43,9 @@ public class ShareDialog extends AlertDialog implements View.OnClickListener {
                 break;
             case R.id.img_share_twitter:
                 //TwitterManager.twitterShare(mContext);
+                break;
+            case R.id.img_share_qq:
+                QQManager.qqShare(mContext);
                 break;
         }
     }
