@@ -47,6 +47,10 @@
 -dontwarn cn.bmob.v3.**
 -keep class cn.bmob.v3.** {*;}
 
+# qq
+-dontwarn com.tencent.**
+-keep class com.tencent.** {*;}
+
 # 确保JavaBean不被混淆-否则gson将无法将数据解析成具体对象
 -keep class * extends cn.bmob.v3.BmobObject {
     *;
