@@ -25,7 +25,7 @@ public class QQManager {
         try {
             Bundle bundle = new Bundle();
             //这条分享消息被好友点击后的跳转URL。
-            bundle.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://play.google.com/store/apps/details?id=com.soloask.android");
+            bundle.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "http://site-916951-2494-7832.strikingly.com/");
             //分享的标题。注：PARAM_TITLE、PARAM_IMAGE_URL、PARAM_SUMMARY不能全为空，最少必须有一个是有值的。
             bundle.putString(QQShare.SHARE_TO_QQ_TITLE, "你丑你提问，我美我回答");
             //分享的图片URL
