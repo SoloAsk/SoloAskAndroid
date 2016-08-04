@@ -18,6 +18,16 @@ public abstract class BaseAdapter extends RecyclerView.Adapter<RecyclerView.View
     protected Context mContext;
     protected List<Question> mDatas;
 
+    public void clearDataList() {
+        mDatas.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addDataList(List<Question> list) {
+        mDatas.addAll(list);
+        notifyDataSetChanged();
+    }
+
     public BaseAdapter(Context context, List<Question> list) {
         mLayoutInflater = LayoutInflater.from(context);
         mContext = context;

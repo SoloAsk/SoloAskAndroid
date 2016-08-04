@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.soloask.android.fragment.HotFragment;
 import com.soloask.android.fragment.PersonFragment;
+import com.soloask.android.main.view.impl.HotFragment;
 
 /**
  * Created by LeBron on 2016/5/18.

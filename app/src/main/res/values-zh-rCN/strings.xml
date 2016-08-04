@@ -95,6 +95,7 @@
     <string name="notice_question_expired">该问题已过期</string>
     <string name="overhear_price">一元偷听</string>
     <string name="notice_cannot_record">无法正常录音</string>
+    <string name="toast_no_more">没有更多了</string>
 
     <plurals name="dealed_time_second">
         <item quantity="one">%1$d秒前</item>
