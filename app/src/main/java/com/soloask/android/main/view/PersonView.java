@@ -1,14 +1,15 @@
 package com.soloask.android.main.view;
 
+
 import com.soloask.android.common.base.BaseView;
-import com.soloask.android.data.model.Question;
+import com.soloask.android.data.model.User;
 
 import java.util.List;
 
 /**
- * Created by lebron on 16-8-4.
+ * Created by lebron on 16-8-5.
  */
-public interface HotView extends BaseView {
+public interface PersonView extends BaseView {
 
     /**
      * 是否显示无网络界面
@@ -27,13 +28,12 @@ public interface HotView extends BaseView {
     /**
      * 显示PopularLives数据列表
      *
-     * @param questionList
+     * @param personList
      */
-    void showHotQuestions(List<Question> questionList);
+    void showPopularPersons(List<User> personList);
 
     /**
      * 获取数据个数
      */
     int getDataSize();
-
 }

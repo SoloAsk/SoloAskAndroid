@@ -63,6 +63,5 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@id/rl_voice_container"
-        android:text="55''"
         android:textColor="@color/color_user_title" />
 </RelativeLayout>

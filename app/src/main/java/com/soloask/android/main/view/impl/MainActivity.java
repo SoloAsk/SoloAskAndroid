@@ -1,42 +1,83 @@
-package com.soloask.android.activity;
-
+package com.soloask.android.main.view.impl;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.R;
-import com.soloask.android.adapter.MainAdapter;
+import com.soloask.android.activity.LoginActivity;
+import com.soloask.android.activity.SearchActivity;
+import com.soloask.android.activity.UserActivity;
+import com.soloask.android.common.base.BaseActivity;
+import com.soloask.android.main.adapter.MainAdapter;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.view.BoundImageView;
-import com.umeng.analytics.MobclickAgent;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+
 
 /**
- * Created by Lebron on 2016/6/21.
+ * Created by lebron on 16-8-5.
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener {
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
+public class MainActivity extends BaseActivity {
+    @BindView(R.id.viewpager_main)
+    ViewPager mViewPager;
+    @BindView(R.id.tab_layout)
+    TabLayout mTabLayout;
+    @BindView(R.id.img_user_icon)
+    BoundImageView mCircleIcon;
+
     private MainAdapter mMainAdapter;
-    private BoundImageView mCircleIcon;
     private long mClickTime = 0;
 
+    @OnClick(R.id.img_user_icon)
+    public void gotoUserActivity() {
+        if (SharedPreferencesHelper.getPreferenceString(MainActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
+            Intent intent = new Intent(MainActivity.this, UserActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivityForResult(intent, Constant.CODE_REQUEST);
+        }
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         this.setDisplayHomeAsUpEnabled(false);
-        initView();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    @Override
+    protected int getContentViewID() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initViewsAndData() {
+        mCircleIcon.showMention(true);
+        Glide.with(MainActivity.this)
+                .load(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_ICON_URL, null))
+                //.placeholder(R.drawable.ic_me_default)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mCircleIcon);
+        String[] tabs = new String[]{getResources().getString(R.string.tab_name1), getResources().getString(R.string.tab_name2)};
+        mMainAdapter = new MainAdapter(getSupportFragmentManager(), tabs);
+        mViewPager.setAdapter(mMainAdapter);
+        mViewPager.setCurrentItem(0);
+        mViewPager.setOffscreenPageLimit(2);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
@@ -56,26 +97,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void initView() {
-        mViewPager = (ViewPager) findViewById(R.id.viewpager_main);
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        mCircleIcon = (BoundImageView) findViewById(R.id.img_user_icon);
-        mCircleIcon.showMention(true);
-        Glide.with(MainActivity.this)
-                .load(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_ICON_URL, null))
-                //.placeholder(R.drawable.ic_me_default)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mCircleIcon);
-        String[] tabs = new String[]{getResources().getString(R.string.tab_name1), getResources().getString(R.string.tab_name2)};
-        mMainAdapter = new MainAdapter(getSupportFragmentManager(), tabs);
-        mViewPager.setAdapter(mMainAdapter);
-        mViewPager.setCurrentItem(0);
-        mViewPager.setOffscreenPageLimit(3);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mCircleIcon.setOnClickListener(this);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override
@@ -98,20 +119,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.img_user_icon) {
-            if (SharedPreferencesHelper.getPreferenceString(MainActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
-                Intent intent = new Intent(MainActivity.this, UserActivity.class);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivityForResult(intent, Constant.CODE_REQUEST);
-            }
-
-        }
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exit();
@@ -127,17 +134,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else {
             this.finish();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
     }
 }

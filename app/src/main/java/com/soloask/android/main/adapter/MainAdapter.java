@@ -1,11 +1,11 @@
-package com.soloask.android.adapter;
+package com.soloask.android.main.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.soloask.android.fragment.PersonFragment;
 import com.soloask.android.main.view.impl.HotFragment;
+import com.soloask.android.main.view.impl.PersonFragment;
 
 /**
  * Created by LeBron on 2016/5/18.

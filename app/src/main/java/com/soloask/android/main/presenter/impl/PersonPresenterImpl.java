@@ -1,10 +1,10 @@
 package com.soloask.android.main.presenter.impl;
 
 import com.soloask.android.R;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.main.interactor.HotInteractor;
-import com.soloask.android.main.presenter.HotPresenter;
-import com.soloask.android.main.view.HotView;
+import com.soloask.android.data.model.User;
+import com.soloask.android.main.interactor.PersonInteractor;
+import com.soloask.android.main.presenter.PersonPresenter;
+import com.soloask.android.main.view.PersonView;
 import com.soloask.android.util.NetworkManager;
 
 import java.util.List;
@@ -12,20 +12,20 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by lebron on 16-8-4.
+ * Created by lebron on 16-8-5.
  */
-public class HotPresenterImpl implements HotPresenter, HotInteractor.HotQuestionResponseListener {
-    private HotView mView;
-    private HotInteractor mInteractor;
+public class PersonPresenterImpl implements PersonPresenter, PersonInteractor.PersonResponseListener {
+    private PersonView mView;
+    private PersonInteractor mInteractor;
 
     @Inject
-    public HotPresenterImpl(HotView view, HotInteractor interactor) {
+    PersonPresenterImpl(PersonView view, PersonInteractor interactor) {
         mView = view;
         mInteractor = interactor;
     }
 
     @Override
-    public void getQuestionList() {
+    public void getPersonList() {
         if (mView == null || mInteractor == null || mInteractor.isLoading()) {
             return;
         }
@@ -38,7 +38,7 @@ public class HotPresenterImpl implements HotPresenter, HotInteractor.HotQuestion
         } else {
             mView.showNetworkError(false);
             mInteractor.setIsLoading(true);
-            mInteractor.getHotQuestionsData(this);
+            mInteractor.getPopularPersonData(this);
             if (mInteractor.getSkipNum() <= 0) {
                 mView.showProgress(true);
             }
@@ -54,27 +54,24 @@ public class HotPresenterImpl implements HotPresenter, HotInteractor.HotQuestion
 
     @Override
     public void start() {
-        getQuestionList();
+        getPersonList();
     }
 
     @Override
     public void stop() {
-        if (mView != null) {
-            mInteractor.setIsLoading(false);
-            mView.showProgress(false);
-        }
+        mView.showProgress(false);
+        mInteractor.setIsLoading(false);
     }
 
     @Override
-    public void onResponseSuccess(List<Question> list) {
+    public void onResponseSuccess(List<User> list) {
         if (mView == null || mInteractor == null) {
             return;
         }
         if (list.size() > 0) {
-            mView.showHotQuestions(list);
+            mView.showPopularPersons(list);
             mInteractor.setSkipNum(list.size());
         } else {
-            //第一页就没数据
             if (mInteractor.getSkipNum() > 0) {
                 mView.showToast(R.string.toast_no_more);
             }
@@ -86,13 +83,13 @@ public class HotPresenterImpl implements HotPresenter, HotInteractor.HotQuestion
 
     @Override
     public void onResponseFailed() {
-        if (mView == null) {
+        if (mView == null || mInteractor == null) {
             return;
         }
         if (mInteractor.getSkipNum() <= 0) {
             mView.showNetworkError(true);
         }
-        mInteractor.setIsLoading(false);
         mView.showProgress(false);
+        mInteractor.setIsLoading(false);
     }
 }
