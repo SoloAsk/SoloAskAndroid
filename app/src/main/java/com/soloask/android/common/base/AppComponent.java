@@ -1,6 +1,10 @@
 package com.soloask.android.common.base;
 
 
+import com.soloask.android.account.injection.EditUserComponent;
+import com.soloask.android.account.injection.EditUserModule;
+import com.soloask.android.account.injection.UserComponent;
+import com.soloask.android.account.injection.UserModule;
 import com.soloask.android.main.component.HotComponent;
 import com.soloask.android.main.component.PersonComponent;
 import com.soloask.android.main.module.HotModule;
@@ -19,4 +23,8 @@ public interface AppComponent {
     HotComponent plus(HotModule module);
 
     PersonComponent plus(PersonModule module);
+
+    UserComponent plus(UserModule module);
+
+    EditUserComponent plus(EditUserModule module);
 }

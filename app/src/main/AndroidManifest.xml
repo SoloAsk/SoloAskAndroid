@@ -51,7 +51,7 @@
             android:name="com.soloask.android.activity.MyCommonActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.soloask.android.activity.EditProfileActivity"
+            android:name=".account.view.impl.EditUserActivity"
             android:label="@string/title_edit_profile"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
@@ -60,7 +60,7 @@
             android:label="@string/title_withdraw"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.soloask.android.activity.UserActivity"
+            android:name=".account.view.impl.UserActivity"
             android:label="@string/tab_name3"
             android:screenOrientation="portrait"></activity>
         <activity

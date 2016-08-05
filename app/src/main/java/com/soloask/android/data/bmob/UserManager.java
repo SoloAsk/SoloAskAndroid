@@ -93,14 +93,11 @@ public class UserManager {
         });
     }
 
-    public void updateUserInfo(final User user, String title, String describe, double askPrice) {
+    public void updateUserInfo(final User user) {
         if (user == null) {
             mInfoListener.onFailed();
             return;
         }
-        user.setUserTitle(title);
-        user.setUserIntroduce(describe);
-        user.setUserPrice(askPrice);
         user.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
