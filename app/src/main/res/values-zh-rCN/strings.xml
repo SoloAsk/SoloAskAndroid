@@ -76,7 +76,7 @@
     <string name="hint_user_introduce">关于这些，尽情问我；投资理财，赢取白富美；如何优雅参加前任婚礼...或者给你唱个晚安小夜曲</string>
     <string name="check_ask_question">公开提问回答，每个人都能偷听你要的答案</string>
     <string name="login_privacy">我已阅读并同意用户协议</string>
-    <string name="launcher_slogan">语音问答，值得付费</string>
+    <string name="launcher_slogan">在这里，听不一样的声音</string>
     <string name="failed_to_load_data">数据拉取失败，请重试</string>
     <string name="toast_withdraw_submited">我们已收到你的请求，会在三个工作日内处理</string>
     <string name="about_payment_rules">收益规则</string>

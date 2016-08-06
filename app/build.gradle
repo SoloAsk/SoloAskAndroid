@@ -7,7 +7,7 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "com.soloask.mobile"
+        applicationId "com.soloask.android.cn"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="facebook_app_id">1618281258486160</string>
-    <string name="app_name">弯弯</string>
+    <string name="app_name">WanWan</string>
     <string name="tab_name1">HOT</string>
     <string name="tab_name2">DISCOVER</string>
     <string name="tab_name3">Me</string>
