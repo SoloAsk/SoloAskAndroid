@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
-import com.soloask.android.activity.LoginActivity;
+import com.soloask.android.account.view.impl.LoginActivity;
 import com.soloask.android.activity.QuestionDetailActivity;
 import com.soloask.android.common.base.BaseFragment;
 import com.soloask.android.data.model.Question;
@@ -54,18 +54,16 @@ public class HotFragment extends BaseFragment implements HotView
     RelativeLayout mNoNetworkLayout;
     @BindView(R.id.tv_retry)
     TextView mRetryView;
+    @Inject
+    HotPresenter mPrestenter;
+    private HotAdapter mHotAdapter;
+    private List<Question> mQuestionList = new ArrayList<>();
 
     @OnClick(R.id.tv_retry)
     public void retry() {
         showNetworkError(false);
         getHotQuestions();
     }
-
-    @Inject
-    HotPresenter mPrestenter;
-
-    private HotAdapter mHotAdapter;
-    private List<Question> mQuestionList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -44,5 +44,5 @@
             android:text="@string/login_privacy" />
     </LinearLayout>
 
-
+    <include layout="@layout/layout_progressbar"></include>
 </RelativeLayout>

@@ -1,7 +1,7 @@
-package com.soloask.android.activity;
+package com.soloask.android.account.view.impl;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -16,33 +16,68 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.soloask.android.MainApplication;
 import com.soloask.android.R;
-import com.soloask.android.data.bmob.WithDrawManager;
+import com.soloask.android.account.injection.WithDrawModule;
+import com.soloask.android.account.presenter.WithDrawPresenter;
+import com.soloask.android.account.view.WithDrawView;
+import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.view.BoundImageView;
-import com.umeng.analytics.MobclickAgent;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
 
 /**
  * Created by Lebron on 2016/6/26.
  */
-public class WithDrawActivity extends BaseActivity {
-    private RelativeLayout mProgressBar;
-    private BoundImageView mUserIcon;
-    private TextView mNameView, mIncomeView;
-    private EditText mPaypalView, mPaypalView2;
-    private CheckBox mRememberBox;
+public class WithDrawActivity extends BaseActivity implements WithDrawView {
+    @BindView(R.id.rl_progressbar)
+    RelativeLayout mProgressBar;
+    @BindView(R.id.img_user_icon)
+    BoundImageView mUserIcon;
+    @BindView(R.id.tv_user_name)
+    TextView mNameView;
+    @BindView(R.id.tv_user_money)
+    TextView mIncomeView;
+    @BindView(R.id.edit_cash_account)
+    EditText mPaypalView;
+    @BindView(R.id.edit_cash_account_again)
+    EditText mPaypalView2;
+    @BindView(R.id.box_remember)
+    CheckBox mRememberBox;
+
+    @Inject
+    WithDrawPresenter mPresenter;
     private User mUser;
     private boolean isRemember;
     private String paypalAccount;
 
     @Override
+    protected int getContentViewID() {
+        return R.layout.activity_withdraw;
+    }
+
+    @Override
+    protected void initViewsAndData() {
+        mRememberBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isRemember = isChecked;
+            }
+        });
+        initData();
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_withdraw);
-        initView();
-        initData();
+        MainApplication.get(this).getAppComponent()
+                .plus(new WithDrawModule(this))
+                .inject(this);
     }
 
     private void initData() {
@@ -63,22 +98,6 @@ public class WithDrawActivity extends BaseActivity {
         mIncomeView.setText(String.format(getString(R.string.format_current_income), mUser.getUserEarned()));
     }
 
-    private void initView() {
-        mProgressBar = (RelativeLayout) findViewById(R.id.rl_progressbar);
-        mUserIcon = (BoundImageView) findViewById(R.id.img_user_icon);
-        mNameView = (TextView) findViewById(R.id.tv_user_name);
-        mIncomeView = (TextView) findViewById(R.id.tv_user_money);
-        mPaypalView = (EditText) findViewById(R.id.edit_cash_account);
-        mPaypalView2 = (EditText) findViewById(R.id.edit_cash_account_again);
-        mRememberBox = (CheckBox) findViewById(R.id.box_remember);
-        mRememberBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isRemember = isChecked;
-            }
-        });
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar_withdraw, menu);
@@ -96,45 +115,35 @@ public class WithDrawActivity extends BaseActivity {
             } else if (!paypalAccount.equals(mPaypalView2.getText().toString())) {
                 mPaypalView2.setError(WithDrawActivity.this.getString(R.string.notice_donot_match));
             } else {
-                mProgressBar.setVisibility(View.VISIBLE);
-                if (isRemember) {
-                    SharedPreferencesHelper.setPreferenceString(WithDrawActivity.this, Constant.KEY_PAYPAL_ACCOUNT, paypalAccount);
+                if (mPresenter != null) {
+                    mPresenter.withDrawRequest(mUser, paypalAccount);
                 }
-                SharedPreferencesHelper.setPreferenceBoolean(WithDrawActivity.this, Constant.KEY_REMEMBER_PAYPAL, isRemember);
-                dealWithdrawApply();
             }
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void dealWithdrawApply() {
-        WithDrawManager withDrawManager = new WithDrawManager();
-        withDrawManager.setOnWithDrawListener(new WithDrawManager.OnWithDrawListener() {
-            @Override
-            public void onSuccess(String objectId) {
-                mProgressBar.setVisibility(View.GONE);
-                Toast.makeText(WithDrawActivity.this, R.string.toast_withdraw_submited, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-
-            @Override
-            public void onFailed() {
-                mProgressBar.setVisibility(View.GONE);
-                Toast.makeText(WithDrawActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
-            }
-        });
-        withDrawManager.dealWithdraw(mUser, paypalAccount);
+    @Override
+    public void requestSuccess() {
+        if (isRemember) {
+            SharedPreferencesHelper.setPreferenceString(WithDrawActivity.this, Constant.KEY_PAYPAL_ACCOUNT, paypalAccount);
+        }
+        SharedPreferencesHelper.setPreferenceBoolean(WithDrawActivity.this, Constant.KEY_REMEMBER_PAYPAL, isRemember);
+        finish();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
+    public void showLoadingLayout(boolean show) {
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
+    public void showToast(int stringId) {
+        Toast.makeText(this, stringId, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Context getViewContext() {
+        return this;
     }
 }

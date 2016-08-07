@@ -30,7 +30,7 @@ public class UserManager {
     }
 
     private void sign(String id, String name, String icon) {
-        User user = new User();
+        final User user = new User();
         user.setUserId(id);
         user.setUserName(name);
         user.setUserIcon(icon);
@@ -46,7 +46,8 @@ public class UserManager {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-                    mListener.onSuccess(s);
+                    user.setObjectId(s);
+                    mListener.onSuccess(user);
                 } else {
                     e.printStackTrace();
                     mListener.onFailed();
@@ -63,7 +64,7 @@ public class UserManager {
             public void done(List<User> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
-                        mListener.onSuccess(list.get(0).getObjectId());
+                        mListener.onSuccess(list.get(0));
                     } else {
                         Log.i("UserManager", " signin");
                         sign(id, name, icon);
@@ -111,7 +112,7 @@ public class UserManager {
     }
 
     public interface UserLoginListener {
-        void onSuccess(String objectId);
+        void onSuccess(User user);
 
         void onFailed();
     }

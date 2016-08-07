@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
-import com.soloask.android.activity.LoginActivity;
+import com.soloask.android.account.view.impl.LoginActivity;
 import com.soloask.android.activity.UserProfileActivity;
 import com.soloask.android.common.base.BaseFragment;
 import com.soloask.android.data.model.User;

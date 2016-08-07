@@ -3,8 +3,12 @@ package com.soloask.android.common.base;
 
 import com.soloask.android.account.injection.EditUserComponent;
 import com.soloask.android.account.injection.EditUserModule;
+import com.soloask.android.account.injection.LoginComponent;
+import com.soloask.android.account.injection.LoginModule;
 import com.soloask.android.account.injection.UserComponent;
 import com.soloask.android.account.injection.UserModule;
+import com.soloask.android.account.injection.WithDrawComponent;
+import com.soloask.android.account.injection.WithDrawModule;
 import com.soloask.android.main.component.HotComponent;
 import com.soloask.android.main.component.PersonComponent;
 import com.soloask.android.main.module.HotModule;
@@ -27,4 +31,8 @@ public interface AppComponent {
     UserComponent plus(UserModule module);
 
     EditUserComponent plus(EditUserModule module);
+
+    LoginComponent plus(LoginModule module);
+
+    WithDrawComponent plus(WithDrawModule module);
 }
