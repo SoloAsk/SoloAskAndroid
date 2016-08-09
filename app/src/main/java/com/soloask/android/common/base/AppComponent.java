@@ -5,6 +5,8 @@ import com.soloask.android.account.injection.EditUserComponent;
 import com.soloask.android.account.injection.EditUserModule;
 import com.soloask.android.account.injection.LoginComponent;
 import com.soloask.android.account.injection.LoginModule;
+import com.soloask.android.account.injection.MyCommonComponent;
+import com.soloask.android.account.injection.MyCommonModule;
 import com.soloask.android.account.injection.UserComponent;
 import com.soloask.android.account.injection.UserModule;
 import com.soloask.android.account.injection.WithDrawComponent;
@@ -35,4 +37,6 @@ public interface AppComponent {
     LoginComponent plus(LoginModule module);
 
     WithDrawComponent plus(WithDrawModule module);
+
+    MyCommonComponent plus(MyCommonModule module);
 }

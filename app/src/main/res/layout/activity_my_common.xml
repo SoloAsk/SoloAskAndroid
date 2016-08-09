@@ -22,10 +22,9 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include
-        layout="@layout/layout_common_empty"
+        layout="@layout/layout_network_invalid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:visibility="gone"></include>
+        android:layout_below="@id/toolbar"></include>
 
 </RelativeLayout>

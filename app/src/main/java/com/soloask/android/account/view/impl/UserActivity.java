@@ -22,7 +22,6 @@ import com.soloask.android.R;
 import com.soloask.android.account.injection.UserModule;
 import com.soloask.android.account.presenter.UserPresenter;
 import com.soloask.android.account.view.UserView;
-import com.soloask.android.activity.MyCommonActivity;
 import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;

@@ -48,7 +48,7 @@
             android:label="@string/title_answer_question"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.soloask.android.activity.MyCommonActivity"
+            android:name=".account.view.impl.MyCommonActivity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".account.view.impl.EditUserActivity"
