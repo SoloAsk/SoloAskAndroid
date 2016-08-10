@@ -15,6 +15,12 @@ import com.soloask.android.main.component.HotComponent;
 import com.soloask.android.main.component.PersonComponent;
 import com.soloask.android.main.module.HotModule;
 import com.soloask.android.main.module.PersonModule;
+import com.soloask.android.question.injection.QuestionDetailComponent;
+import com.soloask.android.question.injection.QuestionDetailModule;
+import com.soloask.android.search.injection.SearchComponent;
+import com.soloask.android.search.injection.SearchModule;
+import com.soloask.android.search.injection.SearchMoreComponent;
+import com.soloask.android.search.injection.SearchMoreModule;
 
 import javax.inject.Singleton;
 
@@ -39,4 +45,10 @@ public interface AppComponent {
     WithDrawComponent plus(WithDrawModule module);
 
     MyCommonComponent plus(MyCommonModule module);
+
+    SearchComponent plus(SearchModule module);
+
+    SearchMoreComponent plus(SearchMoreModule module);
+
+    QuestionDetailComponent plus(QuestionDetailModule module);
 }

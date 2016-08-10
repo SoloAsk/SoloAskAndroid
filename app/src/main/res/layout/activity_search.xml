@@ -22,8 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|left"
-                android:hint="@string/hint_search"
                 android:background="@null"
+                android:hint="@string/hint_search"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
                 android:textColor="@color/white"
@@ -65,6 +65,13 @@
 
     <include
         layout="@layout/layout_common_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:visibility="gone"></include>
+
+    <include
+        layout="@layout/layout_network_invalid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"

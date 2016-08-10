@@ -1,6 +1,7 @@
-package com.soloask.android.activity;
+package com.soloask.android.question.view.impl;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
@@ -22,11 +23,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.soloask.android.MainApplication;
 import com.soloask.android.R;
+import com.soloask.android.activity.UserProfileActivity;
 import com.soloask.android.data.bmob.QuestionDetailManager;
-import com.soloask.android.data.bmob.UserManager;
 import com.soloask.android.data.model.Question;
 import com.soloask.android.data.model.User;
+import com.soloask.android.question.injection.QuestionDetailModule;
+import com.soloask.android.question.presenter.QuestionDetailPresenter;
+import com.soloask.android.question.view.QuestionDetailView;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.FileManager;
 import com.soloask.android.util.MediaManager;
@@ -38,13 +43,15 @@ import com.soloask.android.util.billing.Inventory;
 import com.soloask.android.util.billing.Purchase;
 import com.soloask.android.view.MaterialProgressBar;
 import com.soloask.android.view.ShareDialog;
-import com.umeng.analytics.MobclickAgent;
-
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.DownloadFileListener;
@@ -53,92 +60,81 @@ import cn.bmob.v3.listener.DownloadFileListener;
 /**
  * Created by Lebron on 2016/6/21.
  */
-public class QuestionDetailActivity extends BaseActivity implements View.OnClickListener {
-    private RelativeLayout mUserLayout, mNetworkLayout;
-    private LinearLayout mDetailLayout;
-    private RelativeLayout mVoiceLayout, mVoiceContainer, mBottomView;
-    private ImageView mRespondentImg, mQuestionImg, mRespondentImg2;
-    private ImageView mAnimImg, mPlayImg;
-    private TextView mTimeLengthView, mQuestionerName, mPriceView, mContent, mQuestionPriceView;
-    private TextView mTimeView, mListenersView;
-    private TextView mRespondentView, mTitleView;
-    private MaterialProgressBar mProgressBar;
+public class QuestionDetailActivity extends com.soloask.android.common.base.BaseActivity implements QuestionDetailView {
+    @BindView(R.id.rl_user_profile)
+    RelativeLayout mUserLayout;
+    @BindView(R.id.network_layout)
+    RelativeLayout mNetworkLayout;
+    @BindView(R.id.rl_voice_container)
+    RelativeLayout mVoiceLayout;
+    @BindView(R.id.ll_question_detail)
+    LinearLayout mDetailLayout;
+    @BindView(R.id.tv_question)
+    TextView mContent;
+    @BindView(R.id.tv_time_length)
+    TextView mTimeLengthView;
+    @BindView(R.id.img_respondent)
+    ImageView mRespondentImg;
+    @BindView(R.id.img_respondent2)
+    ImageView mRespondentImg2;
+    @BindView(R.id.tv_questioner_name)
+    TextView mQuestionerName;
+    @BindView(R.id.tv_voice_price)
+    TextView mPriceView;
+    @BindView(R.id.tv_cost)
+    TextView mQuestionPriceView;
+    @BindView(R.id.img_questioner)
+    ImageView mQuestionImg;
+    @BindView(R.id.img_playing_voice_anim)
+    ImageView mAnimImg;
+    @BindView(R.id.img_playing_voice)
+    ImageView mPlayImg;
+    @BindView(R.id.rl_answer_container)
+    RelativeLayout mVoiceContainer;
+    @BindView(R.id.tv_answered_time)
+    TextView mTimeView;
+    @BindView(R.id.tv_listeners_info)
+    TextView mListenersView;
+    @BindView(R.id.tv_respondent_name)
+    TextView mRespondentView;
+    @BindView(R.id.tv_respondent_describe)
+    TextView mTitleView;
+    @BindView(R.id.progressbar_loading)
+    MaterialProgressBar mProgressBar;
+
+    @Inject
+    QuestionDetailPresenter mPresenter;
+
+
     private AnimationDrawable mAnimationDrawable;
     private IabHelper mHelper;
     private List mSKULists;
     private Question mQuestion;
     private User mCurrentUser;
+    private String mQuestionId;
     private boolean isIABHelperOK;
     private boolean isPayed, isPaused;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_question_detail);
-        initView();
-        getCurrentUser();
-        initIabHelper();
+    protected int getContentViewID() {
+        return R.layout.activity_question_detail;
     }
 
-    private void initData() {
-        String objectId = getIntent().getStringExtra(Constant.KEY_QUESTION_ID);
-        QuestionDetailManager manager = new QuestionDetailManager();
-        manager.setOnQuestionDetailListener(new QuestionDetailManager.OnQuestionDetailListener() {
-            @Override
-            public void onSuccess(Question question) {
-                if (question != null) {
-                    mQuestion = question;
-                    //是否有回答
-                    if (question.getQuesVoiceURL() != null) {
-                        mVoiceContainer.setVisibility(View.VISIBLE);
-                        mListenersView.setVisibility(View.VISIBLE);
-                        mListenersView.setText(String.format(getResources().getString(R.string.format_listerers), question.getListenerNum()));
-                    }
-                    //是否是用户本人在看详情(提问者或者回答者)
-                    if (question.getAnswerUser().getObjectId().equals(mCurrentUser.getObjectId())
-                            || question.getAskUser().getObjectId().equals(mCurrentUser.getObjectId())) {
-                        isPayed = true;
-                        mPriceView.setText(R.string.detail_click_to_play);
-                    } else {
-                        checkUserHeard(mCurrentUser);
-                    }
-                    Glide.with(QuestionDetailActivity.this)
-                            .load(question.getAskUser().getUserIcon())
-                            //.placeholder(R.drawable.ic_me_default)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(mQuestionImg);
-                    Glide.with(QuestionDetailActivity.this)
-                            .load(question.getAnswerUser().getUserIcon())
-                            //.placeholder(R.drawable.ic_me_default)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(mRespondentImg);
-                    Glide.with(QuestionDetailActivity.this)
-                            .load(question.getAnswerUser().getUserIcon())
-                            //.placeholder(R.drawable.ic_me_default)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(mRespondentImg2);
-                    mQuestionerName.setText(question.getAskUser().getUserName());
-                    mQuestionPriceView.setText(String.format(getString(R.string.format_dollar), question.getQuesPrice()));
-                    mTimeView.setText(RelativeDateFormat.format(question.getAskTime(), QuestionDetailActivity.this));
-                    mContent.setText(question.getQuesContent());
-                    mRespondentView.setText(question.getAnswerUser().getUserName());
-                    mTitleView.setText(question.getAnswerUser().getUserIntroduce());
-                    mTimeLengthView.setText(String.format(getString(R.string.format_second), question.getVoiceTime()));
-                    mProgressBar.setVisibility(View.GONE);
-                    mDetailLayout.setVisibility(View.VISIBLE);
-                }
-            }
+    @Override
+    protected void initViewsAndData() {
+        mAnimImg.setVisibility(View.VISIBLE);
+        mPlayImg.setVisibility(View.GONE);
+        mQuestionId = getIntent().getStringExtra(Constant.KEY_QUESTION_ID);
+    }
 
-            @Override
-            public void onFailed() {
-                mNetworkLayout.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
-                mDetailLayout.setVisibility(View.GONE);
-                findViewById(R.id.tv_retry).setOnClickListener(QuestionDetailActivity.this);
-                Toast.makeText(QuestionDetailActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
-            }
-        });
-        manager.getQuestionDetail(objectId);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        MainApplication.get(this).getAppComponent()
+                .plus(new QuestionDetailModule(this))
+                .inject(this);
+        getCurrentUser(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null));
+        initIabHelper();
     }
 
     private void initIabHelper() {
@@ -161,73 +157,22 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
 
     }
 
-    private void initView() {
-        mUserLayout = (RelativeLayout) findViewById(R.id.rl_user_profile);
-        mNetworkLayout = (RelativeLayout) findViewById(R.id.network_layout);
-        mVoiceLayout = (RelativeLayout) findViewById(R.id.rl_voice_container);
-        mDetailLayout = (LinearLayout) findViewById(R.id.ll_question_detail);
-        mContent = (TextView) findViewById(R.id.tv_question);
-        mTimeLengthView = (TextView) findViewById(R.id.tv_time_length);
-        mRespondentImg = (ImageView) findViewById(R.id.img_respondent);
-        mRespondentImg2 = (ImageView) findViewById(R.id.img_respondent2);
-        mQuestionerName = (TextView) findViewById(R.id.tv_questioner_name);
-        mPriceView = (TextView) findViewById(R.id.tv_voice_price);
-        mQuestionPriceView = (TextView) findViewById(R.id.tv_cost);
-        mQuestionImg = (ImageView) findViewById(R.id.img_questioner);
-        mAnimImg = (ImageView) findViewById(R.id.img_playing_voice_anim);
-        mPlayImg = (ImageView) findViewById(R.id.img_playing_voice);
-        mVoiceContainer = (RelativeLayout) findViewById(R.id.rl_answer_container);
-        mBottomView = (RelativeLayout) findViewById(R.id.rl_bottom_common_view);
-        mTimeView = (TextView) findViewById(R.id.tv_answered_time);
-        mListenersView = (TextView) findViewById(R.id.tv_listeners_info);
-        mRespondentView = (TextView) findViewById(R.id.tv_respondent_name);
-        mTitleView = (TextView) findViewById(R.id.tv_respondent_describe);
-        mProgressBar = (MaterialProgressBar) findViewById(R.id.progressbar_loading);
-        mAnimImg.setVisibility(View.VISIBLE);
-        mPlayImg.setVisibility(View.GONE);
-
-        mUserLayout.setOnClickListener(this);
-        mVoiceLayout.setOnClickListener(this);
-        mRespondentImg.setOnClickListener(this);
-        mQuestionerName.setOnClickListener(this);
-        mQuestionImg.setOnClickListener(this);
+    private void getQuestionDetail() {
+        if (mPresenter != null) {
+            mPresenter.getQuestionDetail(mQuestionId);
+        }
     }
 
-    private void getCurrentUser() {
-        UserManager userManager = new UserManager();
-        userManager.setUserInfoListener(new UserManager.UserInfoListener() {
-            @Override
-            public void onSuccess(User user) {
-                mCurrentUser = user;
-                initData();
-                Log.i("QuestionDetailActivity", "getCurrentUser successfully" + mCurrentUser.getUserId());
-            }
-
-            @Override
-            public void onFailed() {
-
-            }
-        });
-        userManager.getUserInfo(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null));
+    private void getCurrentUser(String userId) {
+        if (mPresenter != null) {
+            mPresenter.getCurrentUser(userId);
+        }
     }
 
-    private void checkUserHeard(User user) {
-        QuestionDetailManager questionDetailManager = new QuestionDetailManager();
-        questionDetailManager.setOnCheckUserHeardListener(new QuestionDetailManager.OnCheckUserHeardListener() {
-            @Override
-            public void onSuccess(boolean userHeard) {
-                isPayed = userHeard;
-                if (isPayed) {
-                    mPriceView.setText(R.string.detail_click_to_play);
-                }
-            }
-
-            @Override
-            public void onFailed() {
-
-            }
-        });
-        questionDetailManager.checkUserHeard(mQuestion, user);
+    private void checkUserHeard() {
+        if (mPresenter != null) {
+            mPresenter.checkUserHeard(mQuestion, mCurrentUser);
+        }
     }
 
 
@@ -259,52 +204,6 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.img_questioner:
-            case R.id.tv_questioner_name:
-                Intent intent = new Intent(QuestionDetailActivity.this, UserProfileActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("user", mQuestion.getAskUser());
-                intent.putExtras(bundle);
-                QuestionDetailActivity.this.startActivity(intent);
-                break;
-            case R.id.rl_user_profile:
-            case R.id.img_respondent:
-                Intent intent1 = new Intent(QuestionDetailActivity.this, UserProfileActivity.class);
-                Bundle bundle1 = new Bundle();
-                bundle1.putSerializable("user", mQuestion.getAnswerUser());
-                intent1.putExtras(bundle1);
-                QuestionDetailActivity.this.startActivity(intent1);
-                break;
-            case R.id.rl_voice_container:
-                if (isPayed) {
-                    if (MediaManager.isPlaying()) {//播放暂停
-                        MediaManager.pause();
-                        mPriceView.setText(R.string.detail_click_to_play);
-                        mAnimationDrawable.stop();
-                        isPaused = true;
-                    } else if (isPaused) {//恢复播放
-                        MediaManager.resume();
-                        mPriceView.setText(R.string.recording_playing);
-                        mAnimationDrawable.start();
-                        isPaused = false;
-                    } else {//正常播放
-                        checkNeededPermission();
-                    }
-                } else {
-                    doPurchase();
-                }
-                break;
-            case R.id.tv_retry:
-                mProgressBar.setVisibility(View.VISIBLE);
-                mNetworkLayout.setVisibility(View.GONE);
-                initData();
-                break;
-        }
-    }
-
     private void checkNeededPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -313,6 +212,51 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
         } else {
             checkFileExist();
         }
+    }
+
+    @OnClick({R.id.img_questioner, R.id.tv_questioner_name})
+    public void toAskUserInfo() {
+        Intent intent = new Intent(QuestionDetailActivity.this, UserProfileActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user", mQuestion.getAskUser());
+        intent.putExtras(bundle);
+        QuestionDetailActivity.this.startActivity(intent);
+    }
+
+    @OnClick({R.id.rl_user_profile, R.id.img_respondent})
+    public void toAnswerUserInfo() {
+        Intent intent1 = new Intent(QuestionDetailActivity.this, UserProfileActivity.class);
+        Bundle bundle1 = new Bundle();
+        bundle1.putSerializable("user", mQuestion.getAnswerUser());
+        intent1.putExtras(bundle1);
+        QuestionDetailActivity.this.startActivity(intent1);
+    }
+
+    @OnClick(R.id.rl_voice_container)
+    public void listenVoice() {
+        if (isPayed) {
+            if (MediaManager.isPlaying()) {//播放暂停
+                MediaManager.pause();
+                mPriceView.setText(R.string.detail_click_to_play);
+                mAnimationDrawable.stop();
+                isPaused = true;
+            } else if (isPaused) {//恢复播放
+                MediaManager.resume();
+                mPriceView.setText(R.string.recording_playing);
+                mAnimationDrawable.start();
+                isPaused = false;
+            } else {//正常播放
+                checkNeededPermission();
+            }
+        } else {
+            doPurchase();
+        }
+    }
+
+    @OnClick(R.id.tv_retry)
+    public void retry() {
+        showNetworkError(false);
+        getCurrentUser(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null));
     }
 
     private void downloadAudio(String fileUrl) {
@@ -410,7 +354,7 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
                     //纪录偷听用户
                     new QuestionDetailManager().setHeardUser(mQuestion, mCurrentUser);
                 } else {
-                    Log.i("Lebron", "consume successfully");
+                    Log.i("QuestionDetail", "consume successfully");
                 }
             }
         });
@@ -485,12 +429,85 @@ public class QuestionDetailActivity extends BaseActivity implements View.OnClick
             mAnimationDrawable.stop();
             isPaused = true;
         }
-        MobclickAgent.onPause(this);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
+    public void showNetworkError(boolean show) {
+        mNetworkLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showProgress(boolean show) {
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showCurrentUser(User user) {
+        if (user != null) {
+            mCurrentUser = user;
+            getQuestionDetail();
+        }
+    }
+
+    @Override
+    public void showUserHeard(boolean heard) {
+        isPayed = heard;
+        if (isPayed) {
+            mPriceView.setText(R.string.detail_click_to_play);
+        }
+    }
+
+    @Override
+    public void showQuestionDetail(Question question) {
+        if (question != null) {
+            mQuestion = question;
+            //是否有回答
+            if (question.getQuesVoiceURL() != null) {
+                mVoiceContainer.setVisibility(View.VISIBLE);
+                mListenersView.setVisibility(View.VISIBLE);
+                mListenersView.setText(String.format(getResources().getString(R.string.format_listerers), question.getListenerNum()));
+            }
+            //是否是用户本人在看详情(提问者或者回答者)
+            if (question.getAnswerUser().getObjectId().equals(mCurrentUser.getObjectId())
+                    || question.getAskUser().getObjectId().equals(mCurrentUser.getObjectId())) {
+                isPayed = true;
+                mPriceView.setText(R.string.detail_click_to_play);
+            } else {
+                checkUserHeard();
+            }
+            Glide.with(QuestionDetailActivity.this)
+                    .load(question.getAskUser().getUserIcon())
+                    //.placeholder(R.drawable.ic_me_default)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(mQuestionImg);
+            Glide.with(QuestionDetailActivity.this)
+                    .load(question.getAnswerUser().getUserIcon())
+                    //.placeholder(R.drawable.ic_me_default)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(mRespondentImg);
+            Glide.with(QuestionDetailActivity.this)
+                    .load(question.getAnswerUser().getUserIcon())
+                    //.placeholder(R.drawable.ic_me_default)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(mRespondentImg2);
+            mQuestionerName.setText(question.getAskUser().getUserName());
+            mQuestionPriceView.setText(String.format(getString(R.string.format_dollar), question.getQuesPrice()));
+            mTimeView.setText(RelativeDateFormat.format(question.getAskTime(), QuestionDetailActivity.this));
+            mContent.setText(question.getQuesContent());
+            mRespondentView.setText(question.getAnswerUser().getUserName());
+            mTitleView.setText(question.getAnswerUser().getUserIntroduce());
+            mTimeLengthView.setText(String.format(getString(R.string.format_second), question.getVoiceTime()));
+            mDetailLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void showToast(int stringId) {
+        Toast.makeText(this, stringId, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Context getViewContext() {
+        return this;
     }
 }

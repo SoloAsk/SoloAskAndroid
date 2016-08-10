@@ -32,7 +32,7 @@
             android:name="com.soloask.android.main.view.impl.MainActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.soloask.android.activity.QuestionDetailActivity"
+            android:name=".question.view.impl.QuestionDetailActivity"
             android:label="@string/title_question_detail"
             android:screenOrientation="portrait"></activity>
         <activity
@@ -68,10 +68,10 @@
             android:label="@string/title_about"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.soloask.android.activity.SearchActivity"
+            android:name=".search.view.impl.SearchActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.soloask.android.activity.SearchMoreActivity"
+            android:name=".search.view.impl.SearchMoreActivity"
             android:screenOrientation="portrait"></activity>
 
         <meta-data
