@@ -24,14 +24,14 @@ public class AnswerManager {
         mListener = listener;
     }
 
-    public void upLoadAnswer(final Question question, String filePath, final int voiceLength) {
+    public void upLoadAnswer(final Question question, String filePath) {
         final BmobFile bmobFile = new BmobFile(new File(filePath));
         bmobFile.uploadblock(new UploadFileListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null && bmobFile.getFileUrl() != null) {
-                    Log.i("AnswerManager", bmobFile.getFileUrl() + voiceLength);
-                    updateQuestion(question, bmobFile.getFileUrl(), voiceLength);
+                    Log.i("AnswerManager", bmobFile.getFileUrl());
+                    updateQuestion(question, bmobFile.getFileUrl());
                 } else {
                     mListener.onFailed();
                 }
@@ -39,9 +39,8 @@ public class AnswerManager {
         });
     }
 
-    private void updateQuestion(final Question question, String voiceUrl, int voiceLength) {
+    private void updateQuestion(final Question question, String voiceUrl) {
         question.setQuesVoiceURL(voiceUrl);
-        question.setVoiceTime(voiceLength);
         question.setState(Constant.STATUS_ANSWERED);
         question.update(new UpdateListener() {
             @Override

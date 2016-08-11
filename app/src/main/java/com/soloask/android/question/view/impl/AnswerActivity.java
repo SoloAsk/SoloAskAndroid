@@ -1,6 +1,7 @@
-package com.soloask.android.activity;
+package com.soloask.android.question.view.impl;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -12,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -21,32 +21,62 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.soloask.android.MainApplication;
 import com.soloask.android.R;
-import com.soloask.android.data.bmob.AnswerManager;
-import com.soloask.android.data.bmob.QuestionDetailManager;
+import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.data.model.Question;
+import com.soloask.android.question.injection.AnswerModule;
+import com.soloask.android.question.presenter.AnswerPresenter;
+import com.soloask.android.question.view.AnswerView;
 import com.soloask.android.util.AudioManager;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.FileManager;
 import com.soloask.android.util.MediaManager;
 import com.soloask.android.util.RelativeDateFormat;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+
 /**
  * Created by Lebron on 2016/6/22.
  */
-public class AnswerActivity extends BaseActivity implements View.OnClickListener {
+public class AnswerActivity extends BaseActivity implements AnswerView {
     private static final int MAX_RECORDING_LENGTH = 60;
-    private ImageView mRecordingView, mQuestionerIcon;
-    private TextView mQuestionerName, mQuestionPrice, mQuestionView;
-    private TextView mSendView, mRefuseView;
-    private TextView mRestartView;
-    private TextView mStatusView;
-    private TextView mTimeProgress, mDealedTime;
-    private RelativeLayout mSendingLayout;
+    @BindView(R.id.img_questioner)
+    ImageView mQuestionerIcon;
+    @BindView(R.id.tv_questioner_name)
+    TextView mQuestionerName;
+    @BindView(R.id.tv_cost)
+    TextView mQuestionPrice;
+    @BindView(R.id.tv_question)
+    TextView mQuestionView;
+    @BindView(R.id.tv_recording_status)
+    TextView mStatusView;
+    @BindView(R.id.tv_answer_send)
+    TextView mSendView;
+    @BindView(R.id.btn_refuse_answer)
+    TextView mRefuseView;
+    @BindView(R.id.tv_answer_restart)
+    TextView mRestartView;
+    @BindView(R.id.tv_recording_progress)
+    TextView mTimeProgress;
+    @BindView(R.id.tv_answered_time)
+    TextView mDealedTime;
+    @BindView(R.id.img_recording_voice)
+    ImageView mRecordingView;
+    @BindView(R.id.rl_progressbar)
+    RelativeLayout mSendingLayout;
+    @BindView(R.id.network_layout)
+    RelativeLayout mNoNetWorkLayout;
+
+    @Inject
+    AnswerPresenter mPresenter;
+
     private Timer mTimer;
     private TimerTask mTimerTask;
     private boolean isRecording;
@@ -54,60 +84,40 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
     private int mCurrentSecond = 0;
     private int mTotalSeconds = 0;
     private int mPlayProgress = 0;
-    private Question question;
+    private Question mQuestion;
+    private String mQuestionId;
+
+    @Override
+    protected int getContentViewID() {
+        return R.layout.activity_answer;
+    }
+
+    @Override
+    protected void initViewsAndData() {
+        mQuestionId = getIntent().getStringExtra(Constant.KEY_QUESTION_ID);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_answer);
-        initView();
-        initData();
+        MainApplication.get(this).getAppComponent()
+                .plus(new AnswerModule(this))
+                .inject(this);
+        getQuestionDetail();
     }
 
-    private void initView() {
-        mQuestionerIcon = (ImageView) findViewById(R.id.img_questioner);
-        mQuestionerName = (TextView) findViewById(R.id.tv_questioner_name);
-        mQuestionPrice = (TextView) findViewById(R.id.tv_cost);
-        mQuestionView = (TextView) findViewById(R.id.tv_question);
-        mStatusView = (TextView) findViewById(R.id.tv_recording_status);
-        mSendView = (TextView) findViewById(R.id.tv_answer_send);
-        mRefuseView = (TextView) findViewById(R.id.btn_refuse_answer);
-        mRestartView = (TextView) findViewById(R.id.tv_answer_restart);
-        mTimeProgress = (TextView) findViewById(R.id.tv_recording_progress);
-        mDealedTime = (TextView) findViewById(R.id.tv_answered_time);
-        mRecordingView = (ImageView) findViewById(R.id.img_recording_voice);
-        mSendingLayout = (RelativeLayout) findViewById(R.id.rl_progressbar);
-
-        mRecordingView.setOnClickListener(this);
-        mSendView.setOnClickListener(this);
-        mRestartView.setOnClickListener(this);
-        mRefuseView.setOnClickListener(this);
+    private void getQuestionDetail() {
+        if (mPresenter != null) {
+            mPresenter.getQuestionDetail(mQuestionId);
+        }
     }
 
-    private void initData() {
-        String questionId = getIntent().getStringExtra(Constant.KEY_QUESTION_ID);
-        QuestionDetailManager questionDetailManager = new QuestionDetailManager();
-        questionDetailManager.setOnQuestionDetailListener(new QuestionDetailManager.OnQuestionDetailListener() {
-            @Override
-            public void onSuccess(Question question) {
-                AnswerActivity.this.question = question;
-                Glide.with(AnswerActivity.this)
-                        .load(question.getAskUser().getUserIcon())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mQuestionerIcon);
-                mQuestionerName.setText(question.getAskUser().getUserName());
-                mQuestionPrice.setText(String.format(getString(R.string.format_dollar), question.getQuesPrice()));
-                mQuestionView.setText(question.getQuesContent());
-                mDealedTime.setText(RelativeDateFormat.format(question.getAskTime(), AnswerActivity.this));
-            }
-
-            @Override
-            public void onFailed() {
-                Toast.makeText(AnswerActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
-            }
-        });
-        questionDetailManager.getQuestionDetail(questionId);
+    private void uploadAnswer() {
+        if (mPresenter != null) {
+            mPresenter.uploadAnswer(mQuestion, FileManager.getFilePath(Constant.FILE_NAME_VOICE));
+        }
     }
+
 
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -261,93 +271,107 @@ public class AnswerActivity extends BaseActivity implements View.OnClickListener
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 doRecordingBtnMethod();
             } else {
-                Toast.makeText(AnswerActivity.this, R.string.notice_permission_denied, Toast.LENGTH_SHORT).show();
+                showToast(R.string.notice_permission_denied);
             }
             return;
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.img_recording_voice:
-                if (question.getState() == Constant.STATUS_UNANSWERED) {
-                    checkNeededPermission();
-                } else {
-                    Toast.makeText(AnswerActivity.this, R.string.notice_question_expired, Toast.LENGTH_SHORT).show();
-                }
+    @OnClick(R.id.tv_retry)
+    public void retry() {
+        showNetworkError(false);
+        getQuestionDetail();
+    }
 
-                break;
-            case R.id.tv_answer_restart:
-                AlertDialog.Builder builder = new AlertDialog.Builder(AnswerActivity.this);
-                builder.setTitle(R.string.rerecording_title);
-                builder.setMessage(R.string.rerecording_message);
-                builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        MediaManager.release();
-                        AudioManager.getInstance().reRecording();
-                        stopTimer();
-                        mTimeProgress.setText(String.format(getResources().getString(R.string.format_second), 0));
-                        mCurrentSecond = 0;
-                        mTotalSeconds = 0;
-                        mStatusView.setText(R.string.recording_start);
-                        mRecordingView.setBackgroundResource(R.drawable.ic_answer_record);
-                        mRestartView.setEnabled(false);
-                        mSendView.setEnabled(false);
-                        isRecordingFinished = false;
-                        isRecording = false;
-                    }
-                });
-                builder.create().show();
-                break;
-            case R.id.tv_answer_send:
-                if (FileManager.isFileExits(Constant.FILE_NAME_VOICE)) {
-                    mSendingLayout.setVisibility(View.VISIBLE);
-                    upLoadAnswer();
-                } else {
-                    Toast.makeText(AnswerActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
-                }
-                break;
+    @OnClick(R.id.img_recording_voice)
+    public void recording() {
+        if (mQuestion.getState() == Constant.STATUS_UNANSWERED) {
+            checkNeededPermission();
+        } else {
+            showToast(R.string.notice_question_expired);
         }
     }
 
-    private void upLoadAnswer() {
-        AnswerManager answerManager = new AnswerManager();
-        answerManager.setOnUpLoadAnswerListener(new AnswerManager.OnUpLoadAnswerListener() {
-            @Override
-            public void onSuccess() {
-                mSendingLayout.setVisibility(View.GONE);
-                Toast.makeText(AnswerActivity.this, R.string.notice_success, Toast.LENGTH_SHORT).show();
-                setResult(Constant.KEY_FROM_MY_ANSWER);
-                finish();
-            }
 
+    @OnClick(R.id.tv_answer_restart)
+    public void restart() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AnswerActivity.this);
+        builder.setTitle(R.string.rerecording_title);
+        builder.setMessage(R.string.rerecording_message);
+        builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
             @Override
-            public void onFailed() {
-                mSendingLayout.setVisibility(View.GONE);
-                Toast.makeText(AnswerActivity.this, R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
             }
         });
-        answerManager.upLoadAnswer(question, FileManager.getFilePath(Constant.FILE_NAME_VOICE), --mTotalSeconds);
+        builder.setPositiveButton(R.string.btn_sure, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                MediaManager.release();
+                AudioManager.getInstance().reRecording();
+                stopTimer();
+                mTimeProgress.setText(String.format(getResources().getString(R.string.format_second), 0));
+                mCurrentSecond = 0;
+                mTotalSeconds = 0;
+                mStatusView.setText(R.string.recording_start);
+                mRecordingView.setBackgroundResource(R.drawable.ic_answer_record);
+                mRestartView.setEnabled(false);
+                mSendView.setEnabled(false);
+                isRecordingFinished = false;
+                isRecording = false;
+            }
+        });
+        builder.create().show();
+    }
+
+    @OnClick(R.id.tv_answer_send)
+    public void send() {
+        if (FileManager.isFileExits(Constant.FILE_NAME_VOICE)) {
+            mQuestion.setVoiceTime(--mTotalSeconds);
+            uploadAnswer();
+        } else {
+            showToast(R.string.failed_to_load_data);
+        }
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
+    public void showToast(int stringId) {
+        Toast.makeText(this, stringId, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
+    public Context getViewContext() {
+        return this;
+    }
+
+    @Override
+    public void showNetworkError(boolean show) {
+        mNoNetWorkLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showProgress(boolean show) {
+        mSendingLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void showQuestionDetail(Question question) {
+        mQuestion = question;
+        Glide.with(AnswerActivity.this)
+                .load(question.getAskUser().getUserIcon())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(mQuestionerIcon);
+        mQuestionerName.setText(question.getAskUser().getUserName());
+        mQuestionPrice.setText(String.format(getString(R.string.format_dollar), question.getQuesPrice()));
+        mQuestionView.setText(question.getQuesContent());
+        mDealedTime.setText(RelativeDateFormat.format(question.getAskTime(), AnswerActivity.this));
+    }
+
+    @Override
+    public void showUploadAnswerSuccess() {
+        showToast(R.string.notice_success);
+        setResult(Constant.KEY_FROM_MY_ANSWER);
+        finish();
     }
 }

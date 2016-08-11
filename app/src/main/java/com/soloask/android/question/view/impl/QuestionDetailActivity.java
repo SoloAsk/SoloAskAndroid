@@ -282,7 +282,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
 
             @Override
             public void onProgress(Integer value, long newworkSpeed) {
-                Log.i("Lebron", value + "/" + newworkSpeed);
+                Log.i("QuestionDetail", value + "/" + newworkSpeed);
             }
 
         });
@@ -321,7 +321,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
     }
 
     private void doPurchase() {
-        Log.i("Lebron", (mHelper != null) + " " + isIABHelperOK + " vs " + !mHelper.isAsyncInProgress());
+        Log.i("QuestionDetail", (mHelper != null) + " " + isIABHelperOK + " vs " + !mHelper.isAsyncInProgress());
         if (mHelper != null && isIABHelperOK && !mHelper.isAsyncInProgress()) {
             mHelper.launchPurchaseFlow(QuestionDetailActivity.this, Constant.OVERHEAR_PRICE_ID, 10003, new IabHelper.OnIabPurchaseFinishedListener() {
                 @Override
@@ -380,7 +380,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
                             e.printStackTrace();
                         }
                     }
-                    Log.i("Lebron", hasPurchase + " " + inv.getSkuDetails(Constant.OVERHEAR_PRICE_ID).toString());
+                    Log.i("QuestionDetail", hasPurchase + " " + inv.getSkuDetails(Constant.OVERHEAR_PRICE_ID).toString());
                     String priceResult = inv.getSkuDetails(Constant.OVERHEAR_PRICE_ID).getPrice();
                     if (isPayed) {
                         mPriceView.setText(R.string.detail_click_to_play);
@@ -399,7 +399,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
         if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         } else {
-            Log.i("Lebron", "onActivityResult handled by IABUtil.");
+            Log.i("QuestionDetail", "onActivityResult handled by IABUtil.");
         }
     }
 

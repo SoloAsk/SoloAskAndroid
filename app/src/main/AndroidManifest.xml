@@ -44,7 +44,7 @@
             android:label="@string/title_login"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.soloask.android.activity.AnswerActivity"
+            android:name=".question.view.impl.AnswerActivity"
             android:label="@string/title_answer_question"
             android:screenOrientation="portrait"></activity>
         <activity

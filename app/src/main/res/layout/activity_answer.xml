@@ -138,6 +138,12 @@
         </LinearLayout>
     </ScrollView>
 
+    <include
+        layout="@layout/layout_network_invalid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"></include>
+
     <include layout="@layout/layout_progressbar"></include>
 
 </RelativeLayout>
