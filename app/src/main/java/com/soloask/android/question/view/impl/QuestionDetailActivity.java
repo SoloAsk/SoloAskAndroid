@@ -25,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
-import com.soloask.android.activity.UserProfileActivity;
 import com.soloask.android.data.bmob.QuestionDetailManager;
 import com.soloask.android.data.model.Question;
 import com.soloask.android.data.model.User;

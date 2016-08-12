@@ -104,6 +104,7 @@
     <string name="format_respondent">Answered by %1$s</string>
     <string name="toast_no_more">No more!</string>
     <string name="notice_empty">Empty~</string>
+    <string name="login_account_disable">Your account is disabled.</string>
 
     <plurals name="dealed_time_second">
         <item quantity="one">%1$d second ago</item>

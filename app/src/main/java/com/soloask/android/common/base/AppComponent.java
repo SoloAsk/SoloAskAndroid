@@ -17,6 +17,8 @@ import com.soloask.android.main.module.HotModule;
 import com.soloask.android.main.module.PersonModule;
 import com.soloask.android.question.injection.AnswerComponent;
 import com.soloask.android.question.injection.AnswerModule;
+import com.soloask.android.question.injection.AskComponent;
+import com.soloask.android.question.injection.AskModule;
 import com.soloask.android.question.injection.QuestionDetailComponent;
 import com.soloask.android.question.injection.QuestionDetailModule;
 import com.soloask.android.search.injection.SearchComponent;
@@ -55,4 +57,6 @@ public interface AppComponent {
     QuestionDetailComponent plus(QuestionDetailModule module);
 
     AnswerComponent plus(AnswerModule module);
+
+    AskComponent plus(AskModule module);
 }

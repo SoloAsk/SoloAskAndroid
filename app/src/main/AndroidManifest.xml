@@ -36,7 +36,7 @@
             android:label="@string/title_question_detail"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.soloask.android.activity.UserProfileActivity"
+            android:name=".question.view.impl.UserProfileActivity"
             android:label="@string/title_ask_question"
             android:screenOrientation="portrait"></activity>
         <activity
