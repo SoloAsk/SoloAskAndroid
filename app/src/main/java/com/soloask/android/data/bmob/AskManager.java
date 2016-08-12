@@ -65,6 +65,7 @@ public class AskManager {
         query.setLimit(10);
         query.setSkip(skip);
         query.addWhereExists("quesVoiceURL");
+        query.addWhereEqualTo("isPublic", true);
         query.addWhereEqualTo("answerUser", user);
         query.order("-createdAt");
         query.include("askUser,answerUser");

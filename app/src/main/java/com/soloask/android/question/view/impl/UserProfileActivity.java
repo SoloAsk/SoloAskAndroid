@@ -382,7 +382,7 @@ public class UserProfileActivity extends BaseActivity implements AskView
                         question.setAskUser(mQuestioner);
                         question.setAnswerUser(mRespondent);
                         question.setQuesContent(mContent);
-                        question.setFree(isPub);
+                        question.setPub(isPub);
                         question.setQuesPrice(mPrice);
                         askQuestions(question);
                     }
