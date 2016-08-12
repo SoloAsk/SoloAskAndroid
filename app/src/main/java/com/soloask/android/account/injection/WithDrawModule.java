@@ -28,13 +28,13 @@ public class WithDrawModule extends BaseModule<WithDrawView> {
 
     @Provides
     @ActivityScoped
-    WithDrawInteractor provideUserInteractor(WithDrawInteractorImpl interactor) {
+    WithDrawInteractor provideInteractor(WithDrawInteractorImpl interactor) {
         return interactor;
     }
 
     @Provides
     @ActivityScoped
-    WithDrawPresenter provideUserPresenter(WithDrawPresenterImpl presenter) {
+    WithDrawPresenter providePresenter(WithDrawPresenterImpl presenter) {
         return presenter;
     }
 }

@@ -28,13 +28,13 @@ public class UserModule extends BaseModule<UserView> {
 
     @Provides
     @ActivityScoped
-    UserInteractor provideUserInteractor(UserInteractorImpl interactor) {
+    UserInteractor provideInteractor(UserInteractorImpl interactor) {
         return interactor;
     }
 
     @Provides
     @ActivityScoped
-    UserPresenter provideUserPresenter(UserPresenterImpl presenter) {
+    UserPresenter providePresenter(UserPresenterImpl presenter) {
         return presenter;
     }
 }

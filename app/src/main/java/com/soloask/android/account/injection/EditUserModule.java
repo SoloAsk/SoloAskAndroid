@@ -28,13 +28,13 @@ public class EditUserModule extends BaseModule<EditUserView> {
 
     @Provides
     @ActivityScoped
-    EditUserInteractor provideUserInteractor(EditUserInteractorImpl interactor) {
+    EditUserInteractor provideInteractor(EditUserInteractorImpl interactor) {
         return interactor;
     }
 
     @Provides
     @ActivityScoped
-    EditUserPresenter provideUserPresenter(EditUserPresenterImpl presenter) {
+    EditUserPresenter providePresenter(EditUserPresenterImpl presenter) {
         return presenter;
     }
 }

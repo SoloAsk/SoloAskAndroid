@@ -28,13 +28,13 @@ public class LoginModule extends BaseModule<LoginView> {
 
     @Provides
     @ActivityScoped
-    LoginInteractor provideUserInteractor(LoginInteractorImpl interactor) {
+    LoginInteractor provideInteractor(LoginInteractorImpl interactor) {
         return interactor;
     }
 
     @Provides
     @ActivityScoped
-    LoginPresenter provideUserPresenter(LoginPresenterImpl presenter) {
+    LoginPresenter providePresenter(LoginPresenterImpl presenter) {
         return presenter;
     }
 }

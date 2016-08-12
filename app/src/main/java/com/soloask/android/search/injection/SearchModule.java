@@ -28,13 +28,13 @@ public class SearchModule extends BaseModule<SearchView> {
 
     @Provides
     @ActivityScoped
-    SearchInteractor provideUserInteractor(SearchInteractorImpl interactor) {
+    SearchInteractor provideInteractor(SearchInteractorImpl interactor) {
         return interactor;
     }
 
     @Provides
     @ActivityScoped
-    SearchPresenter provideUserPresenter(SearchPresenterImpl presenter) {
+    SearchPresenter providePresenter(SearchPresenterImpl presenter) {
         return presenter;
     }
 }

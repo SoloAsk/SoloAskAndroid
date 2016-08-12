@@ -28,13 +28,13 @@ public class MyCommonModule extends BaseModule<MyCommonView> {
 
     @Provides
     @ActivityScoped
-    MyCommonInteractor provideUserInteractor(MyCommonInteractorImpl interactor) {
+    MyCommonInteractor provideInteractor(MyCommonInteractorImpl interactor) {
         return interactor;
     }
 
     @Provides
     @ActivityScoped
-    MyCommonPresenter provideUserPresenter(MyCommonPresenterImpl presenter) {
+    MyCommonPresenter providePresenter(MyCommonPresenterImpl presenter) {
         return presenter;
     }
 }
