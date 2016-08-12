@@ -80,7 +80,7 @@ public class PersonFragment extends BaseFragment implements PersonView
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.start();
+        onRefresh();
     }
 
     private void getPersonList() {
@@ -111,9 +111,11 @@ public class PersonFragment extends BaseFragment implements PersonView
 
     @Override
     public void onRefresh() {
-        mPersonList.clear();
-        mPresenter.resetSkipNum();
-        getPersonList();
+        if (mPresenter != null) {
+            mPersonList.clear();
+            mPresenter.resetSkipNum();
+            getPersonList();
+        }
     }
 
     @Override

@@ -82,7 +82,7 @@ public class HotFragment extends BaseFragment implements HotView
     @Override
     public void onResume() {
         super.onResume();
-        mPrestenter.start();
+        onRefresh();
     }
 
     @Override
