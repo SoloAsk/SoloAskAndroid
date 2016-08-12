@@ -35,7 +35,7 @@ import butterknife.BindView;
  * Created by Lebron on 2016/6/26.
  */
 public class WithDrawActivity extends BaseActivity implements WithDrawView {
-    @BindView(R.id.rl_progressbar)
+    @BindView(R.id.progressbar_loading_layout)
     RelativeLayout mProgressBar;
     @BindView(R.id.img_user_icon)
     BoundImageView mUserIcon;

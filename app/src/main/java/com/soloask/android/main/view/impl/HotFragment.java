@@ -27,7 +27,6 @@ import com.soloask.android.main.view.HotView;
 import com.soloask.android.question.view.impl.QuestionDetailActivity;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
-import com.soloask.android.view.MaterialProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +47,8 @@ public class HotFragment extends BaseFragment implements HotView
     RecyclerView mRecyclerView;
     @BindView(R.id.refresh_layout_hot)
     SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.progressbar_loading)
-    MaterialProgressBar mProgressBar;
+    @BindView(R.id.progressbar_loading_layout)
+    RelativeLayout mLoadingLayout;
     @BindView(R.id.network_layout)
     RelativeLayout mNoNetworkLayout;
     @BindView(R.id.tv_retry)
@@ -123,7 +122,7 @@ public class HotFragment extends BaseFragment implements HotView
     @Override
     public void showProgress(boolean show) {
         mRefreshLayout.setRefreshing(show);
-        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoadingLayout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

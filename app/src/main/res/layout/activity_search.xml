@@ -61,7 +61,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <include layout="@layout/progressbar"></include>
+    <include layout="@layout/layout_progressbar"></include>
 
     <include
         layout="@layout/layout_common_empty"

@@ -47,7 +47,7 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
 
     @BindView(R.id.tv_choose_price)
     TextView mPriceView;
-    @BindView(R.id.rl_progressbar)
+    @BindView(R.id.progressbar_loading_layout)
     RelativeLayout mSavingLayout;
     @BindView(R.id.tv_price_1)
     TextView mPriceView1;

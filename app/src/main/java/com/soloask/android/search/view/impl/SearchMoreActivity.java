@@ -27,7 +27,6 @@ import com.soloask.android.search.injection.SearchMoreModule;
 import com.soloask.android.search.presenter.SearchMorePresenter;
 import com.soloask.android.search.view.SearchMoreView;
 import com.soloask.android.util.Constant;
-import com.soloask.android.view.MaterialProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +46,8 @@ public class SearchMoreActivity extends BaseActivity implements SearchMoreView
     RecyclerView mRecyclerView;
     @BindView(R.id.refresh_layout_search)
     SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.progressbar_loading)
-    MaterialProgressBar mProgressbar;
+    @BindView(R.id.progressbar_loading_layout)
+    RelativeLayout mLoadingLayout;
     @BindView(R.id.network_layout)
     RelativeLayout mNoNetworkLayout;
 
@@ -110,7 +109,7 @@ public class SearchMoreActivity extends BaseActivity implements SearchMoreView
     @Override
     public void showProgress(boolean show) {
         mRefreshLayout.setRefreshing(show);
-        mProgressbar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoadingLayout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

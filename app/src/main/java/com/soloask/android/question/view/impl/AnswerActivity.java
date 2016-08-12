@@ -69,7 +69,7 @@ public class AnswerActivity extends BaseActivity implements AnswerView {
     TextView mDealedTime;
     @BindView(R.id.img_recording_voice)
     ImageView mRecordingView;
-    @BindView(R.id.rl_progressbar)
+    @BindView(R.id.progressbar_loading_layout)
     RelativeLayout mSendingLayout;
     @BindView(R.id.network_layout)
     RelativeLayout mNoNetWorkLayout;

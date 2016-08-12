@@ -40,7 +40,6 @@ import com.soloask.android.util.billing.IabHelper;
 import com.soloask.android.util.billing.IabResult;
 import com.soloask.android.util.billing.Inventory;
 import com.soloask.android.util.billing.Purchase;
-import com.soloask.android.view.MaterialProgressBar;
 import com.soloask.android.view.ShareDialog;
 
 import java.io.File;
@@ -98,8 +97,8 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
     TextView mRespondentView;
     @BindView(R.id.tv_respondent_describe)
     TextView mTitleView;
-    @BindView(R.id.progressbar_loading)
-    MaterialProgressBar mProgressBar;
+    @BindView(R.id.progressbar_loading_layout)
+    RelativeLayout mLoadingLayout;
 
     @Inject
     QuestionDetailPresenter mPresenter;
@@ -437,7 +436,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
 
     @Override
     public void showProgress(boolean show) {
-        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoadingLayout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

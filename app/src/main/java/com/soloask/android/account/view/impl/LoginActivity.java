@@ -30,7 +30,7 @@ import butterknife.OnClick;
 public class LoginActivity extends BaseActivity implements LoginView {
     @BindView(R.id.tv_facebook_login)
     TextView mLoginView;
-    @BindView(R.id.rl_progressbar)
+    @BindView(R.id.progressbar_loading_layout)
     RelativeLayout mLoadingLayout;
 
     @Inject

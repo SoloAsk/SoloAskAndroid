@@ -28,7 +28,6 @@ import com.soloask.android.main.view.PersonView;
 import com.soloask.android.question.view.impl.UserProfileActivity;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
-import com.soloask.android.view.MaterialProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +49,8 @@ public class PersonFragment extends BaseFragment implements PersonView
     SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.recycler_person_view)
     RecyclerView mRecyclerView;
-    @BindView(R.id.progressbar_loading)
-    MaterialProgressBar mProgressBar;
+    @BindView(R.id.progressbar_loading_layout)
+    RelativeLayout mLoadingLayout;
     @BindView(R.id.network_layout)
     RelativeLayout mNoNetworkLayout;
     @BindView(R.id.tv_retry)
@@ -138,7 +137,7 @@ public class PersonFragment extends BaseFragment implements PersonView
     @Override
     public void showProgress(boolean show) {
         mRefreshLayout.setRefreshing(show);
-        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoadingLayout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

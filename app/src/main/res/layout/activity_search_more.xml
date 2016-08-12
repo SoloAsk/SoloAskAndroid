@@ -6,8 +6,6 @@
 
     <include layout="@layout/toolbar"></include>
 
-    <include layout="@layout/progressbar"></include>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout_search"
         android:layout_width="match_parent"
@@ -25,5 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"></include>
+
+    <include layout="@layout/layout_progressbar"></include>
 
 </RelativeLayout>

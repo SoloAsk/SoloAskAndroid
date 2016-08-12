@@ -32,7 +32,6 @@ import com.soloask.android.search.injection.SearchModule;
 import com.soloask.android.search.presenter.SearchPresenter;
 import com.soloask.android.search.view.SearchView;
 import com.soloask.android.util.Constant;
-import com.soloask.android.view.MaterialProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +50,8 @@ public class SearchActivity extends BaseActivity implements SearchView
     EditText mSearchEdit;
     @BindView(R.id.btn_clear)
     ImageButton mClearButton;
-    @BindView(R.id.progressbar_loading)
-    MaterialProgressBar mLoadingBar;
+    @BindView(R.id.progressbar_loading_layout)
+    RelativeLayout mLoadingLayout;
     @BindView(R.id.rl_empty)
     RelativeLayout mEmptyLayout;
     @BindView(R.id.network_layout)
@@ -144,7 +143,7 @@ public class SearchActivity extends BaseActivity implements SearchView
         mQuestionsView.setLayoutManager(new LinearLayoutManager(this));
         mQuestionsView.setAdapter(mQuestionAdapter);
 
-        mLoadingBar.setVisibility(View.GONE);
+        mLoadingLayout.setVisibility(View.GONE);
         mEmptyDescribe.setText(R.string.notice_no_search_result);
         addListener();
     }
@@ -212,7 +211,7 @@ public class SearchActivity extends BaseActivity implements SearchView
 
     @Override
     public void showProgress(boolean show) {
-        mLoadingBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mLoadingLayout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
