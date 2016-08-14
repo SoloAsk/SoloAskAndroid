@@ -88,6 +88,7 @@ public class UserManager {
                 if (e == null) {
                     mInfoListener.onSuccess(user);
                 } else {
+                    Log.i("UserManager", e.toString());
                     mInfoListener.onFailed();
                 }
             }

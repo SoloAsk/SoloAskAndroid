@@ -36,13 +36,13 @@ public class AskInteractorImpl implements AskInteractor {
     }
 
     @Override
-    public void setSkipNum(int skipNum) {
-        mSkipNum = skipNum;
+    public int getSkipNum() {
+        return mSkipNum;
     }
 
     @Override
-    public int getSkipNum() {
-        return mSkipNum;
+    public void setSkipNum(int skipNum) {
+        mSkipNum += skipNum;
     }
 
     @Override
