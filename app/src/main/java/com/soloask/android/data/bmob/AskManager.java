@@ -31,13 +31,7 @@ public class AskManager {
         onAskQuestionListener = listener;
     }
 
-    public void askQuestion(User respondent, final User questioner, String content, boolean isPub, double price) {
-        Question question = new Question();
-        question.setQuesContent(content);
-        question.setPub(isPub);
-        question.setQuesPrice(price);
-        question.setAnswerUser(respondent);
-        question.setAskUser(questioner);
+    public void askQuestion(final Question question) {
         question.setListenerNum(0);
         question.setAskTime(RelativeDateFormat.getCurrentTime());
         question.setState(Constant.STATUS_UNANSWERED);
@@ -45,7 +39,7 @@ public class AskManager {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-                    updateUserAskNum(questioner);
+                    updateUserAskNum(question.getAskUser());
                     onAskQuestionListener.onSuccess(s);
                 } else {
                     onAskQuestionListener.onFailed();
@@ -71,9 +65,10 @@ public class AskManager {
         query.setLimit(10);
         query.setSkip(skip);
         query.addWhereExists("quesVoiceURL");
+        query.addWhereEqualTo("isPublic", true);
         query.addWhereEqualTo("answerUser", user);
         query.order("-createdAt");
-        query.include("askUser");
+        query.include("askUser,answerUser");
         query.findObjects(new FindListener<Question>() {
             @Override
             public void done(List<Question> list, BmobException e) {

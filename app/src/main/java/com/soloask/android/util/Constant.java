@@ -1,5 +1,9 @@
 package com.soloask.android.util;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
 import com.soloask.android.R;
 
 /**
@@ -25,13 +29,6 @@ public class Constant {
     public static final int CODE_REQUEST = 0;
     public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 10;
 
-    public static final int TYPE_ITEM = 10;
-    public static final int TYPE_HEADER = 20;
-    public static final int TYPE_FOOTER = 30;
-
-    public static final int MSG_REFRESH_DATA = 1;
-    public static final int MSG_LOAD_MORE_DATA = 2;
-
     public static final int KEY_FROM_MY_QUESTION = 10;
     public static final int KEY_FROM_MY_ANSWER = 20;
     public static final int KEY_FROM_MY_LISTEN = 30;
@@ -39,4 +36,16 @@ public class Constant {
     public static final int STATUS_ANSWERED = 1;//已回答
     public static final int STATUS_REFUND = 2;//已退款
     public static final int STATUS_TIMEOUT = 3;//已过期
+
+    public static String getVersion(Context context)//获取版本号
+    {
+        try {
+            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            return pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "1.0.0";
+    }
 }

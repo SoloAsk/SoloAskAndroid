@@ -6,13 +6,11 @@
     android:background="@android:color/white">
 
     <com.soloask.android.view.MaterialProgressBar
-        android:id="@+id/pgb_footer_more"
-        android:layout_width="@dimen/progressbar_size"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/progressbar_size"
         android:layout_centerInParent="true"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:visibility="gone"
         app:matProg_barColor="@color/colorPrimary"
         app:matProg_circleRadius="@dimen/progressbar_size"
         app:matProg_progressIndeterminate="true" />

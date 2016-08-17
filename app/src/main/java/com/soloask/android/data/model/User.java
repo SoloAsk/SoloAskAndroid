@@ -21,7 +21,6 @@ public class User extends BmobObject implements Serializable {
     private Integer answerQuesNum;
     private Integer askQuesNum;
     private Integer heardQuesNum;
-    private String deviceToken;
 
     public String getUserId() {
         return userId;
@@ -117,14 +116,6 @@ public class User extends BmobObject implements Serializable {
 
     public void setAskQuesNum(Integer askQuesNum) {
         this.askQuesNum = askQuesNum;
-    }
-
-    public String getDeviceToken() {
-        return deviceToken;
-    }
-
-    public void setDeviceToken(String deviceToken) {
-        this.deviceToken = deviceToken;
     }
 
     @Override

@@ -14,6 +14,7 @@
         android:layout_marginRight="10.0dip"
         android:layout_marginTop="20.0dip"
         android:gravity="center"
+        android:text="@string/notice_empty"
         android:textColor="#ff999999"
         android:textSize="15.0sp" />
 
@@ -32,5 +33,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_hint_empty"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/item_common_margin" />
+        android:layout_marginTop="@dimen/item_common_margin"
+        android:visibility="gone" />
 </RelativeLayout>

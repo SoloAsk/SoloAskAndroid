@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="facebook_app_id">1618281258486160</string>
-    <string name="app_name">WanWan</string>
+    <string name="app_name">Wanwan</string>
     <string name="tab_name1">HOT</string>
     <string name="tab_name2">DISCOVER</string>
     <string name="tab_name3">Me</string>
@@ -106,7 +106,9 @@
     <string name="search_title_questions">QUESTIONS</string>
     <string name="notice_no_search_result">No results</string>
     <string name="format_respondent">Answered by %1$s</string>
-    <string name="format_notification_message">%1$s has asked you a question just now!</string>
+    <string name="toast_no_more">No more!</string>
+    <string name="notice_empty">Empty~</string>
+    <string name="login_account_disable">Your account is disabled.</string>
 
     <plurals name="dealed_time_second">
         <item quantity="one">%1$d second ago</item>

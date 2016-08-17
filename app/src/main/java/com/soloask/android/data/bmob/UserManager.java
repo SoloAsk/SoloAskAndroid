@@ -1,6 +1,5 @@
 package com.soloask.android.data.bmob;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.soloask.android.data.model.User;
@@ -30,8 +29,8 @@ public class UserManager {
         mInfoListener = listener;
     }
 
-    private void sign(String id, String name, String icon, String deviceToken) {
-        User user = new User();
+    private void sign(String id, String name, String icon) {
+        final User user = new User();
         user.setUserId(id);
         user.setUserName(name);
         user.setUserIcon(icon);
@@ -43,12 +42,12 @@ public class UserManager {
         user.setAnswerQuesNum(0);
         user.setAskQuesNum(0);
         user.setHeardQuesNum(0);
-        user.setDeviceToken(deviceToken);
         user.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-                    mListener.onSuccess(s);
+                    user.setObjectId(s);
+                    mListener.onSuccess(user);
                 } else {
                     e.printStackTrace();
                     mListener.onFailed();
@@ -57,22 +56,18 @@ public class UserManager {
         });
     }
 
-    public void signOrLogin(final String id, final String name, final String icon, final String deviceToken) {
+    public void signOrLogin(final String id, final String name, final String icon) {
         BmobQuery<User> query = new BmobQuery<>();
-        if (TextUtils.isEmpty(id) || TextUtils.isEmpty(name) || TextUtils.isEmpty(icon)) {
-            mListener.onFailed();
-            return;
-        }
         query.addWhereEqualTo("userId", id);
         query.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
-                        mListener.onSuccess(list.get(0).getObjectId());
+                        mListener.onSuccess(list.get(0));
                     } else {
                         Log.i("UserManager", " signin");
-                        sign(id, name, icon, deviceToken);
+                        sign(id, name, icon);
                     }
                 } else {
                     mListener.onFailed();
@@ -93,21 +88,18 @@ public class UserManager {
                 if (e == null) {
                     mInfoListener.onSuccess(user);
                 } else {
+                    Log.i("UserManager", e.toString());
                     mInfoListener.onFailed();
                 }
             }
         });
     }
 
-    public void updateUserInfo(final User user, String name, String title, String describe, double askPrice) {
+    public void updateUserInfo(final User user) {
         if (user == null) {
             mInfoListener.onFailed();
             return;
         }
-        user.setUserName(name);
-        user.setUserTitle(title);
-        user.setUserIntroduce(describe);
-        user.setUserPrice(askPrice);
         user.update(new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -121,7 +113,7 @@ public class UserManager {
     }
 
     public interface UserLoginListener {
-        void onSuccess(String objectId);
+        void onSuccess(User user);
 
         void onFailed();
     }

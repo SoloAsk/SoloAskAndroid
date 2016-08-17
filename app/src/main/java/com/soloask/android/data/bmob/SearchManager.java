@@ -45,6 +45,8 @@ public class SearchManager {
     public void getSearchQuestions(String text, int limit, int skipNum) {
         BmobQuery<Question> query = new BmobQuery<>();
         query.addWhereContains("quesContent", text);
+        query.addWhereExists("quesVoiceURL");
+        query.addWhereEqualTo("isPublic", true);
         query.include("answerUser");
         query.setLimit(limit);
         query.setSkip(skipNum);

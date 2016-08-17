@@ -94,11 +94,14 @@
     <string name="notice_ask_yourself">无法向自己提问</string>
     <string name="notice_permission_denied">权限被禁止</string>
     <string name="btn_listen_question">去听</string>
-    <string name="share_content">语音问答，值得付费</string>
+    <string name="share_content">一个听不一样的声音的app</string>
     <string name="format_dollar">$%1$.2f</string>
     <string name="notice_question_expired">该问题已过期</string>
     <string name="overhear_price">偷偷听</string>
     <string name="notice_cannot_record">无法正常录音</string>
+    <string name="toast_no_more">没有更多了</string>
+    <string name="notice_empty">空空如也~</string>
+    <string name="login_account_disable">您的账户已失效，请重新登录</string>
     <string name="menu_title_search">搜索</string>
     <string name="hint_search">搜索</string>
     <string name="search_title_persons">用户</string>

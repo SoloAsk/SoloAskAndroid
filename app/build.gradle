@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
@@ -37,4 +38,13 @@ dependencies {
     //umeng
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'cn.bmob.android:bmob-sdk:3.5.0'
+    //dagger2
+    apt "com.google.dagger:dagger-compiler:2.0.2"
+    compile 'com.google.dagger:dagger:2.0.2'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+    //butterknife
+    compile 'com.jakewharton:butterknife:8.2.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    //common adapter
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.7'
 }

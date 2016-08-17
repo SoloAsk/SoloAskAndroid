@@ -99,8 +99,8 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
                 android:layout_marginTop="@dimen/item_common_margin"
+                android:background="@android:color/white"
                 android:orientation="vertical">
 
                 <TextView
@@ -275,6 +275,8 @@
         </LinearLayout>
     </ScrollView>
 
-    <include layout="@layout/layout_progressbar"></include>
+    <include
+        layout="@layout/layout_progressbar"
+        android:background="@color/half_transparent"></include>
 
 </RelativeLayout>

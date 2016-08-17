@@ -27,7 +27,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="@dimen/item_common_margin"
             android:layout_toRightOf="@id/img_questioner"
-            android:text="Young brother , the Warriors lost the finals miserable how to do ?"
+            android:text="Young brother , the Warriors lost the finals miserable how to do ? Young brother , the Warriors lost the finals miserable how to do ?"
             android:textColor="@color/color_user_name"
             android:textSize="14sp" />
 
@@ -42,6 +42,7 @@
             android:textColor="@color/color_common_red"
             android:textSize="13sp"
             android:visibility="gone" />
+
     </RelativeLayout>
 
     <include
