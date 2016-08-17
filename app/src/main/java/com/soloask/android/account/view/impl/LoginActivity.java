@@ -57,11 +57,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         if (mPresenter != null) {
             mPresenter.doLogin(mCallbackManager);
         }
-        /*User user = new User();
-        user.setObjectId("6c8d5c4865");
-        user.setUserName("Heyong");
-        user.setUserIcon("https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xft1/v/t1.0-1/p720x720/11703164_1432811433714866_750303433030121790_n.jpg?oh=b72934c9efad3ade7c92fc8990c17dd7&oe=5821FB1E&__gda__=1475159383_f2d077770029b513159caaa8fe1e8925");
-        loginSuccess(user);*/
     }
 
     @Override

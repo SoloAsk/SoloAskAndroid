@@ -29,6 +29,7 @@ import com.soloask.android.account.view.EditUserView;
 import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
+import com.umeng.message.UmengRegistrar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -93,6 +94,7 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
     private User mUser;
     private String mTitle, mIntroduce;
     private double mAskPrice;
+    private String mDeviceToken;
     private PriceAdapter mPriceAdapter;
 
     @Override
@@ -129,6 +131,9 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
                     mUser.setUserTitle(mTitle);
                     mUser.setUserIntroduce(mIntroduce);
                     mUser.setUserPrice(mAskPrice);
+                    if (mDeviceToken != null) {
+                        mUser.setDeviceToken(mDeviceToken);
+                    }
                     mPresenter.setUserInfo(mUser);
                 }
             }
@@ -146,6 +151,7 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
         mDescribeView.setText(mUser.getUserIntroduce());
         mAskPrice = mUser.getUserPrice();
         mPriceView.setText(String.format(getString(R.string.format_dollar), mUser.getUserPrice()));
+        mDeviceToken = UmengRegistrar.getRegistrationId(getViewContext());
     }
 
     @Override

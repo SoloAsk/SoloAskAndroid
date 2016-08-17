@@ -3,6 +3,7 @@ package com.soloask.android.account.interactor.impl;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -15,6 +16,7 @@ import com.facebook.login.LoginResult;
 import com.soloask.android.account.interactor.LoginInteractor;
 import com.soloask.android.data.bmob.UserManager;
 import com.soloask.android.data.model.User;
+import com.umeng.message.UmengRegistrar;
 
 import org.json.JSONObject;
 
@@ -33,11 +35,13 @@ public class LoginInteractorImpl implements LoginInteractor {
     }
 
     @Override
-    public void doLogin(Context context, CallbackManager manager, final LoginResponseListener listener) {
+    public void doLogin(final Context context, CallbackManager manager, final LoginResponseListener listener) {
         LoginManager.getInstance().registerCallback(manager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                getLoginInfo(listener, loginResult.getAccessToken());
+                String device_token = UmengRegistrar.getRegistrationId(context);
+                Log.i("LoginInteractor", device_token);
+                getLoginInfo(listener, loginResult.getAccessToken(), device_token);
             }
 
             @Override
@@ -61,7 +65,7 @@ public class LoginInteractorImpl implements LoginInteractor {
      *
      * @param accessToken
      */
-    public void getLoginInfo(final LoginResponseListener listener, AccessToken accessToken) {
+    public void getLoginInfo(final LoginResponseListener listener, AccessToken accessToken, final String deviceToken) {
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
@@ -88,7 +92,7 @@ public class LoginInteractorImpl implements LoginInteractor {
                             listener.onResponseFailed();
                         }
                     });
-                    mManager.signOrLogin(id, name, photo);
+                    mManager.signOrLogin(id, name, photo, deviceToken);
                 }
             }
         });

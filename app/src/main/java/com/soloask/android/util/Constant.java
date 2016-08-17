@@ -10,6 +10,8 @@ import com.soloask.android.R;
  * Created by Lebron on 2016/6/24.
  */
 public class Constant {
+    public static final String BMOB_APP_KEY_RELEASE = "26cc3d0d29e618b194be911c994efd11";
+    public static final String BMOB_APP_KEY_DEBUG = "8307cbf7bc30650a6a30ffb25be78b81";
     public static final String BASE64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjrE9YpIyhj3xbKuawz/6nqyKhOrAjSr/rXfiFIFb2nWtwpCdoIpYM9HGEjEDSE6iwwNZbHxRlezbjpdMxoxkkkQE8y1T2Lz2xsyPp+OJ7xhNaf28Mcj9gZ7J1Lr1zL6jKTw+RDk8HgMM0dmZXzAwCGq4iPH+KaZc94kr3xcTfg6FdV3N1cxq6UcWezusyUoqwhnE52KEgwPzRduwsKjr4xcZGro4ClQ9XocIuTNiVMoDXOaTCrAynhYp5bzlEKcnmByDntqF8rGxShIIGJ/NCySBehnEWhA0wstXAIKJt3fCunhSKTLuR/lgUXxvJMpBnLeaoTpky8/Ua7PHj3qZKwIDAQAB";
     public static final String KEY_FROM_MINE = "key_from_mine";
     public static final String KEY_FROM_SEARCH = "key_from_search";

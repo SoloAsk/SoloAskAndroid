@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.main.view.impl.MainActivity;
+import com.soloask.android.util.Constant;
 
 import cn.bmob.v3.Bmob;
 
@@ -24,7 +25,7 @@ public class LauncherActivity extends BaseActivity {
     @Override
     protected void initViewsAndData() {
         //enable Bmob
-        Bmob.initialize(this, "26cc3d0d29e618b194be911c994efd11");
+        Bmob.initialize(this, Constant.BMOB_APP_KEY_RELEASE);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {

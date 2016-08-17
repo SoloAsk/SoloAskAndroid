@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "24"
     //**兼容Android6.0系统所需，如果这句话报错，可在dependencies标签下使用compile 'cn.bmob.android:http-legacy:1.0'**
     useLibrary 'org.apache.http.legacy'
 
@@ -11,8 +11,8 @@ android {
         applicationId "com.soloask.android"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
     }
     buildTypes {
         release {
@@ -24,24 +24,33 @@ android {
         }
     }
 
+    sourceSets {
+        main.jniLibs.srcDirs = ['libs']
+    }
+
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
-
     //facebook
     compile 'com.facebook.android:facebook-android-sdk:4.+'
-
     //glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
+    //retrofit
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    //Rx
+    compile 'io.reactivex:rxandroid:1.2.1'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    compile 'io.reactivex:rxjava:1.1.6'
     //umeng
     compile 'com.umeng.analytics:analytics:latest.integration'
-
-    compile 'cn.bmob.android:bmob-sdk:3.5.0'
+    compile project(':PushSDK')
     //dagger2
     apt "com.google.dagger:dagger-compiler:2.0.2"
     compile 'com.google.dagger:dagger:2.0.2'
@@ -51,4 +60,7 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
     //common adapter
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:v1.9.7'
+    //bmob
+    //compile 'cn.bmob.android:bmob-sdk:3.5.0'
+    compile files('libs/BmobSDK_3.5.1_20160719.jar')
 }
