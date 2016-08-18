@@ -28,6 +28,8 @@ import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.view.CircleImageView;
 import com.soloask.android.view.ShareDialog;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
@@ -75,9 +77,18 @@ public class UserActivity extends BaseActivity implements UserView {
 
     @Inject
     UserPresenter mPresenter;
+    @Inject
+    Bus mBus;
 
     private Intent mIntent;
     private User mUser;
+
+    @Subscribe
+    public void updateInfo(String busEvent) {
+        if (busEvent.equals(Constant.BUS_EVENT_EDIT)) {
+            getUserInfo();
+        }
+    }
 
     @Override
     protected int getContentViewID() {
@@ -102,7 +113,14 @@ public class UserActivity extends BaseActivity implements UserView {
                 .getAppComponent()
                 .plus(new UserModule(this))
                 .inject(this);
+        mBus.register(this);
         getUserInfo();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBus.unregister(this);
     }
 
     @Override
@@ -131,7 +149,7 @@ public class UserActivity extends BaseActivity implements UserView {
             mLoginView.setVisibility(View.GONE);
             mLogoutView.setVisibility(View.VISIBLE);
             getUserInfo();
-        } else if (resultCode == Constant.CODE_RESULT_EDIT || resultCode == Constant.KEY_FROM_MY_ANSWER) {
+        } else if (resultCode == Constant.KEY_FROM_MY_ANSWER) {
             getUserInfo();
         } else if (resultCode == Constant.KEY_FROM_MY_QUESTION) {
             setResult(Constant.KEY_FROM_MY_QUESTION);
@@ -160,8 +178,10 @@ public class UserActivity extends BaseActivity implements UserView {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     LoginManager.getInstance().logOut();
+                    mUser = null;
                     SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_OBJECT_ID, null);
                     SharedPreferencesHelper.setPreferenceString(UserActivity.this, Constant.KEY_LOGINED_ICON_URL, null);
+                    mBus.post(Constant.BUS_EVENT_LOGOUT);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

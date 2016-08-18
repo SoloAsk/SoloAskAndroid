@@ -12,8 +12,10 @@ import com.soloask.android.account.injection.UserModule;
 import com.soloask.android.account.injection.WithDrawComponent;
 import com.soloask.android.account.injection.WithDrawModule;
 import com.soloask.android.main.component.HotComponent;
+import com.soloask.android.main.component.MainComponent;
 import com.soloask.android.main.component.PersonComponent;
 import com.soloask.android.main.module.HotModule;
+import com.soloask.android.main.module.MainModule;
 import com.soloask.android.main.module.PersonModule;
 import com.soloask.android.question.injection.AnswerComponent;
 import com.soloask.android.question.injection.AnswerModule;
@@ -36,6 +38,9 @@ import dagger.Component;
 @Singleton
 @Component(modules = AppModule.class)
 public interface AppComponent {
+
+    MainComponent plus(MainModule module);
+
     HotComponent plus(HotModule module);
 
     PersonComponent plus(PersonModule module);

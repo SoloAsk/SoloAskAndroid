@@ -26,7 +26,6 @@ public class Constant {
     public static final int[] ARRAY_STATUS = new int[]{R.string.status_unanswered, R.string.status_answered, R.string.status_refunded, R.string.status_timeout};
 
     public static final int CODE_RESULT_LOGIN = 100;
-    public static final int CODE_RESULT_EDIT = 200;
     public static final int CODE_REQUEST = 0;
     public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 10;
 
@@ -37,6 +36,9 @@ public class Constant {
     public static final int STATUS_ANSWERED = 1;//已回答
     public static final int STATUS_REFUND = 2;//已退款
     public static final int STATUS_TIMEOUT = 3;//已过期
+
+    public static final String BUS_EVENT_LOGOUT = "bus_event_logout";
+    public static final String BUS_EVENT_EDIT = "bus_event_edit";
 
     public static String getVersion(Context context)//获取版本号
     {

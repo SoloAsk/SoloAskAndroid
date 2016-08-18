@@ -3,6 +3,7 @@ package com.soloask.android.common.base;
 import android.content.res.Resources;
 
 import com.soloask.android.MainApplication;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -30,5 +31,11 @@ public class AppModule {
     @Singleton
     protected Resources provideResources() {
         return mApplication.getResources();
+    }
+
+    @Provides
+    @Singleton
+    Bus provideBus() {
+        return new Bus();
     }
 }

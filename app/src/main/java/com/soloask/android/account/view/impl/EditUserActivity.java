@@ -29,6 +29,7 @@ import com.soloask.android.account.view.EditUserView;
 import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
+import com.squareup.otto.Bus;
 import com.umeng.message.UmengRegistrar;
 
 import java.util.Arrays;
@@ -45,6 +46,8 @@ import butterknife.OnClick;
 public class EditUserActivity extends BaseActivity implements EditUserView {
     @Inject
     EditUserPresenter mPresenter;
+    @Inject
+    Bus mBus;
 
     @BindView(R.id.tv_choose_price)
     TextView mPriceView;
@@ -108,7 +111,14 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
         MainApplication.get(this).getAppComponent()
                 .plus(new EditUserModule(this))
                 .inject(this);
+        mBus.register(this);
         addListener();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBus.unregister(this);
     }
 
     @Override
@@ -156,7 +166,7 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
 
     @Override
     public void updateUserInfoSuccess() {
-        EditUserActivity.this.setResult(Constant.CODE_RESULT_EDIT, null);
+        mBus.post(Constant.BUS_EVENT_EDIT);
         finish();
     }
 
