@@ -13,15 +13,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.soloask.android.MainApplication;
 import com.soloask.android.R;
 import com.soloask.android.account.view.impl.LoginActivity;
 import com.soloask.android.account.view.impl.UserActivity;
 import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.main.adapter.MainAdapter;
+import com.soloask.android.main.module.MainModule;
 import com.soloask.android.search.view.impl.SearchActivity;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.view.BoundImageView;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -38,6 +44,9 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.img_user_icon)
     BoundImageView mCircleIcon;
 
+    @Inject
+    Bus mBus;
+
     private MainAdapter mMainAdapter;
     private long mClickTime = 0;
 
@@ -52,11 +61,32 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Subscribe
+    public void logout(String event) {
+        if (event.equals(Constant.BUS_EVENT_LOGOUT)) {
+            Glide.with(MainActivity.this)
+                    .load(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_ICON_URL, null))
+                    //.placeholder(R.drawable.ic_me_default)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(mCircleIcon);
+        }
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainApplication.get(this).getAppComponent()
+                .plus(new MainModule())
+                .inject(this);
         this.setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mBus.register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBus.unregister(this);
     }
 
     @Override

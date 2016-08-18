@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,8 @@ import com.soloask.android.account.view.EditUserView;
 import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
+import com.squareup.otto.Bus;
+import com.umeng.message.UmengRegistrar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +47,8 @@ import butterknife.OnClick;
 public class EditUserActivity extends BaseActivity implements EditUserView {
     @Inject
     EditUserPresenter mPresenter;
+    @Inject
+    Bus mBus;
 
     @BindView(R.id.tv_choose_price)
     TextView mPriceView;
@@ -72,6 +77,7 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
     private User mUser;
     private String mTitle, mIntroduce, mName;
     private double mAskPrice;
+    private String mDeviceToken;
     private PriceAdapter mPriceAdapter;
 
     @OnClick(R.id.tv_price_1)
@@ -108,7 +114,14 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
         MainApplication.get(this).getAppComponent()
                 .plus(new EditUserModule(this))
                 .inject(this);
+        mBus.register(this);
         addListener();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBus.unregister(this);
     }
 
     @Override
@@ -135,6 +148,10 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
                     mUser.setUserTitle(mTitle);
                     mUser.setUserIntroduce(mIntroduce);
                     mUser.setUserPrice(mAskPrice);
+                    if (mDeviceToken != null) {
+                        Log.i("Lebron", mDeviceToken);
+                        mUser.setDeviceToken(mDeviceToken);
+                    }
                     mPresenter.setUserInfo(mUser);
                 }
             }
@@ -153,11 +170,12 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
         mDescribeView.setText(mUser.getUserIntroduce());
         mAskPrice = mUser.getUserPrice();
         mPriceView.setText(String.format(getString(R.string.format_dollar), mUser.getUserPrice()));
+        mDeviceToken = UmengRegistrar.getRegistrationId(getViewContext());
     }
 
     @Override
     public void updateUserInfoSuccess() {
-        EditUserActivity.this.setResult(Constant.CODE_RESULT_EDIT, null);
+        mBus.post(Constant.BUS_EVENT_EDIT);
         finish();
     }
 

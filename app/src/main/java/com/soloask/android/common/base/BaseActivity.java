@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.soloask.android.R;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 import butterknife.ButterKnife;
 
@@ -33,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PushAgent.getInstance(this).onAppStart();
         if (getContentViewID() != 0) {
             setContentView(getContentViewID());
         }

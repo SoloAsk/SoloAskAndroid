@@ -2,6 +2,7 @@ package com.soloask.android.account.injection;
 
 import com.soloask.android.account.view.impl.EditUserActivity;
 import com.soloask.android.common.base.ActivityScoped;
+import com.squareup.otto.Bus;
 
 import dagger.Subcomponent;
 
@@ -12,4 +13,5 @@ import dagger.Subcomponent;
 @Subcomponent(modules = EditUserModule.class)
 public interface EditUserComponent {
     void inject(EditUserActivity editUserActivity);
+    Bus provideBus();
 }

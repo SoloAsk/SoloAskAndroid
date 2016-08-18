@@ -10,6 +10,8 @@ import com.soloask.android.R;
  * Created by Lebron on 2016/6/24.
  */
 public class Constant {
+    public static final String BMOB_APP_KEY_RELEASE = "a832709e5fa5bde7557642818e67981f";
+    public static final String BMOB_APP_KEY_DEBUG = "8307cbf7bc30650a6a30ffb25be78b81";
     public static final String BASE64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjrE9YpIyhj3xbKuawz/6nqyKhOrAjSr/rXfiFIFb2nWtwpCdoIpYM9HGEjEDSE6iwwNZbHxRlezbjpdMxoxkkkQE8y1T2Lz2xsyPp+OJ7xhNaf28Mcj9gZ7J1Lr1zL6jKTw+RDk8HgMM0dmZXzAwCGq4iPH+KaZc94kr3xcTfg6FdV3N1cxq6UcWezusyUoqwhnE52KEgwPzRduwsKjr4xcZGro4ClQ9XocIuTNiVMoDXOaTCrAynhYp5bzlEKcnmByDntqF8rGxShIIGJ/NCySBehnEWhA0wstXAIKJt3fCunhSKTLuR/lgUXxvJMpBnLeaoTpky8/Ua7PHj3qZKwIDAQAB";
     public static final String QQ_APP_ID = "1105502369";
     public static final String KEY_FROM_MINE = "key_from_mine";
@@ -25,7 +27,6 @@ public class Constant {
     public static final int[] ARRAY_STATUS = new int[]{R.string.status_unanswered, R.string.status_answered, R.string.status_refunded, R.string.status_timeout};
 
     public static final int CODE_RESULT_LOGIN = 100;
-    public static final int CODE_RESULT_EDIT = 200;
     public static final int CODE_REQUEST = 0;
     public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 10;
 
@@ -36,6 +37,9 @@ public class Constant {
     public static final int STATUS_ANSWERED = 1;//已回答
     public static final int STATUS_REFUND = 2;//已退款
     public static final int STATUS_TIMEOUT = 3;//已过期
+
+    public static final String BUS_EVENT_LOGOUT = "bus_event_logout";
+    public static final String BUS_EVENT_EDIT = "bus_event_edit";
 
     public static String getVersion(Context context)//获取版本号
     {

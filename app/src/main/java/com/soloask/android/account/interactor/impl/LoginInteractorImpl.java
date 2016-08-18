@@ -21,6 +21,7 @@ import com.tencent.connect.UserInfo;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
+import com.umeng.message.UmengRegistrar;
 
 import org.json.JSONObject;
 
@@ -39,11 +40,13 @@ public class LoginInteractorImpl implements LoginInteractor {
     }
 
     @Override
-    public void doLogin(Context context, CallbackManager manager, final LoginResponseListener listener) {
+    public void doLogin(final Context context, CallbackManager manager, final LoginResponseListener listener) {
         LoginManager.getInstance().registerCallback(manager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                getLoginInfo(listener, loginResult.getAccessToken());
+                String device_token = UmengRegistrar.getRegistrationId(context);
+                Log.i("LoginInteractor", device_token);
+                getLoginInfo(listener, loginResult.getAccessToken(), device_token);
             }
 
             @Override
@@ -65,6 +68,8 @@ public class LoginInteractorImpl implements LoginInteractor {
     @Override
     public void doQQLogin(final Context context, final JSONObject jsonObject, final Tencent tencent, final LoginResponseListener listener) {
         try {
+            final String device_token = UmengRegistrar.getRegistrationId(context);
+            Log.i("LoginInteractor", device_token);
             tencent.setOpenId(jsonObject.optString("openid"));
             tencent.setAccessToken(jsonObject.optString("access_token"), String.valueOf(jsonObject.optLong("expires_in")));
             UserInfo userInfo = new UserInfo(context, tencent.getQQToken());
@@ -98,7 +103,7 @@ public class LoginInteractorImpl implements LoginInteractor {
                             listener.onResponseFailed();
                         }
                     });
-                    mManager.signOrLogin(id, name, photo);
+                    mManager.signOrLogin(id, name, photo, device_token);
                 }
 
                 @Override
@@ -120,7 +125,7 @@ public class LoginInteractorImpl implements LoginInteractor {
      *
      * @param accessToken
      */
-    public void getLoginInfo(final LoginResponseListener listener, AccessToken accessToken) {
+    public void getLoginInfo(final LoginResponseListener listener, AccessToken accessToken, final String deviceToken) {
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
@@ -147,7 +152,7 @@ public class LoginInteractorImpl implements LoginInteractor {
                             listener.onResponseFailed();
                         }
                     });
-                    mManager.signOrLogin(id, name, photo);
+                    mManager.signOrLogin(id, name, photo, deviceToken);
                 }
             }
         });
