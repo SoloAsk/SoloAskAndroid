@@ -21,7 +21,7 @@ public class DiscoverManager {
     public void getUserList(int skip) {
         BmobQuery<User> query = new BmobQuery<>();
         query.setLimit(10);
-        query.order("-createdAt");
+        query.order("-answerQuesNum,-askQuesNum,-createdAt");
         query.setSkip(skip);
         query.findObjects(new FindListener<User>() {
             @Override

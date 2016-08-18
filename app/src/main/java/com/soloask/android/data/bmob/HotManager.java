@@ -1,7 +1,5 @@
 package com.soloask.android.data.bmob;
 
-import android.util.Log;
-
 import com.soloask.android.data.model.Question;
 
 import java.util.List;
@@ -26,7 +24,7 @@ public class HotManager {
         query.setSkip(skip);
         query.addWhereExists("quesVoiceURL");
         query.addWhereEqualTo("isPublic", true);
-        query.order("-createdAt");
+        query.order("-listenerNum,-createdAt");
         query.include("answerUser");
         query.findObjects(new FindListener<Question>() {
             @Override
