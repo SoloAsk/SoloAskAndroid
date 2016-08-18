@@ -98,3 +98,10 @@
 -keepclassmembers class * {
    public <init> (org.json.JSONObject);
 }
+
+#otto
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @com.squareup.otto.Subscribe public *;
+    @com.squareup.otto.Produce public *;
+}

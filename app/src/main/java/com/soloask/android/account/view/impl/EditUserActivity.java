@@ -149,7 +149,6 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
                     mUser.setUserIntroduce(mIntroduce);
                     mUser.setUserPrice(mAskPrice);
                     if (mDeviceToken != null) {
-                        Log.i("Lebron", mDeviceToken);
                         mUser.setDeviceToken(mDeviceToken);
                     }
                     mPresenter.setUserInfo(mUser);
@@ -171,6 +170,7 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
         mAskPrice = mUser.getUserPrice();
         mPriceView.setText(String.format(getString(R.string.format_dollar), mUser.getUserPrice()));
         mDeviceToken = UmengRegistrar.getRegistrationId(getViewContext());
+        Log.i("EditUserActivity", "devicetoken " + mDeviceToken);
     }
 
     @Override
