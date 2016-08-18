@@ -1,9 +1,14 @@
 package com.soloask.android.main.view.impl;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -81,6 +86,7 @@ public class MainActivity extends BaseActivity {
         this.setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mBus.register(this);
+        checkNeededPermission();
     }
 
     @Override
@@ -157,12 +163,31 @@ public class MainActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Constant.MY_PERMISSIONS_READ_PHONE_STATE) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, R.string.notice_permission_denied, Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+    }
+
     private void exit() {
         if ((System.currentTimeMillis() - mClickTime) > 2000) {
             Toast.makeText(getApplicationContext(), R.string.notice_back_to_exit, Toast.LENGTH_SHORT).show();
             mClickTime = System.currentTimeMillis();
         } else {
             this.finish();
+        }
+    }
+
+    private void checkNeededPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    Constant.MY_PERMISSIONS_READ_PHONE_STATE);
         }
     }
 }

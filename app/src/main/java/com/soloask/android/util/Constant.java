@@ -29,6 +29,7 @@ public class Constant {
     public static final int CODE_RESULT_LOGIN = 100;
     public static final int CODE_REQUEST = 0;
     public static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 10;
+    public static final int MY_PERMISSIONS_READ_PHONE_STATE = 20;
 
     public static final int KEY_FROM_MY_QUESTION = 10;
     public static final int KEY_FROM_MY_ANSWER = 20;
