@@ -33,13 +33,13 @@
     <string name="recording_stop">录音中，点击停止</string>
     <string name="recording_play">录音完成，点击播放</string>
     <string name="recording_playing">正在播放</string>
+    <string name="format_second">%1$d\'\'</string>
     <string name="listen_for_free">免费听</string>
     <string name="format_listerers">%1$d听过</string>
     <string name="format_price"> %1$s偷听</string>
     <string name="format_answered">回答 %1$d</string>
     <string name="format_heard">听过 %1$d</string>
     <string name="format_asked">问过 %1$d</string>
-    <string name="format_second">%1$d\'\'</string>
     <string name="format_write_question">%1$d/100</string>
     <string name="format_write_describe">%1$d/200</string>
     <string name="format_write_title">%1$d/36</string>
@@ -99,16 +99,15 @@
     <string name="notice_question_expired">该问题已过期</string>
     <string name="overhear_price">偷偷听</string>
     <string name="notice_cannot_record">无法正常录音</string>
-    <string name="toast_no_more">没有更多了</string>
-    <string name="notice_empty">空空如也~</string>
-    <string name="login_account_disable">您的账户已失效，请重新登录</string>
     <string name="menu_title_search">搜索</string>
     <string name="hint_search">搜索</string>
     <string name="search_title_persons">用户</string>
     <string name="search_title_questions">问题</string>
     <string name="notice_no_search_result">未找到相关用户和问题</string>
     <string name="format_respondent">被%1$s回答</string>
-    <string name="format_notification_message">%1$s刚刚问了你一个问题</string>
+    <string name="toast_no_more">没有更多了</string>
+    <string name="notice_empty">空空如也~</string>
+    <string name="login_account_disable">您的账户已失效，请重新登录</string>
 
     <plurals name="dealed_time_second">
         <item quantity="one">%1$d秒前</item>
