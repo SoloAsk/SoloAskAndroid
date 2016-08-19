@@ -30,6 +30,7 @@ public class MainApplication extends Application {
         //Umeng
         MobclickAgent.setScenarioType(getApplicationContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
         PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.setResourcePackageName("com.soloask.android");
         mPushAgent.enable();
 
         mAppComponent = DaggerAppComponent.builder()
