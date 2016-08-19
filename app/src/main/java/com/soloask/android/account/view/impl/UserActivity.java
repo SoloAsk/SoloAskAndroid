@@ -22,6 +22,7 @@ import com.soloask.android.account.injection.UserModule;
 import com.soloask.android.account.presenter.UserPresenter;
 import com.soloask.android.account.view.UserView;
 import com.soloask.android.common.base.BaseActivity;
+import com.soloask.android.data.bmob.UserManager;
 import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.QQManager;
@@ -30,6 +31,7 @@ import com.soloask.android.view.CircleImageView;
 import com.soloask.android.view.ShareDialog;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import com.umeng.message.UmengRegistrar;
 
 import javax.inject.Inject;
 
@@ -283,6 +285,10 @@ public class UserActivity extends BaseActivity implements UserView {
         mIntroduceView.setText(user.getUserIntroduce());
         mUserPriceView.setText(String.format(getString(R.string.format_dollar), user.getUserPrice()));
         mUserIncomeView.setText(String.format(getString(R.string.format_dollar), user.getUserIncome()));
+        //后期可去掉这个方法
+        if (mUser.getDeviceToken().equals("device_token")) {
+            setUserDeviceToken();
+        }
     }
 
     @Override
@@ -293,5 +299,23 @@ public class UserActivity extends BaseActivity implements UserView {
     @Override
     public Context getViewContext() {
         return this;
+    }
+
+    private void setUserDeviceToken() {
+        String deviceToken = UmengRegistrar.getRegistrationId(getViewContext());
+        UserManager mManager = new UserManager();
+        mManager.setUserInfoListener(new UserManager.UserInfoListener() {
+            @Override
+            public void onSuccess(User user) {
+                Log.i("UserActivity", "update user devicetoken success!");
+            }
+
+            @Override
+            public void onFailed() {
+                Log.i("UserActivity", "update user devicetoken failed!");
+            }
+        });
+        mUser.setDeviceToken(deviceToken);
+        mManager.updateUserInfo(mUser);
     }
 }
