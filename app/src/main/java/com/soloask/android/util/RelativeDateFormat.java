@@ -47,7 +47,7 @@ public class RelativeDateFormat {
             e.printStackTrace();
         }
         if (date == null) {
-            return "just now";
+            return "刚刚";
         }
         long delta = new Date().getTime() - date.getTime();
         if (delta < 1L * ONE_MINUTE) {
@@ -66,7 +66,7 @@ public class RelativeDateFormat {
             return context.getResources().getQuantityString(R.plurals.dealed_time_hour, (int) displayTime, (int) displayTime);
         }
         if (delta < 48L * ONE_HOUR) {
-            return "yesterday";
+            return "昨天";
         }
         if (delta < 30L * ONE_DAY) {
             long days = toDays(delta);
