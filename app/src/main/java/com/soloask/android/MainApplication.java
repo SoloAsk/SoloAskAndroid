@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.soloask.android.common.base.ApiModule;
 import com.soloask.android.common.base.AppComponent;
 import com.soloask.android.common.base.AppModule;
 import com.soloask.android.common.base.DaggerAppComponent;
@@ -33,11 +34,16 @@ public class MainApplication extends Application {
         mPushAgent.enable();
 
         mAppComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this)).build();
+                .appModule(new AppModule(this))
+                .apiModule(new ApiModule()).build();
     }
 
     public static MainApplication get(Context context) {
         return (MainApplication) context.getApplicationContext();
+    }
+
+    public static MainApplication getInstance() {
+        return mInstance;
     }
 
     public AppComponent getAppComponent() {

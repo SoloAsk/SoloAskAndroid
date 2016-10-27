@@ -3,7 +3,9 @@ package com.soloask.android.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.widget.Toast;
 
+import com.soloask.android.MainApplication;
 import com.soloask.android.R;
 
 /**
@@ -50,5 +52,9 @@ public class Constant {
             e.printStackTrace();
         }
         return "1.0.0";
+    }
+
+    public static void showToastMessage(String message) {
+        Toast.makeText(MainApplication.getInstance(), message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -36,7 +36,7 @@ import dagger.Component;
  * Created by lebron on 16-8-4.
  */
 @Singleton
-@Component(modules = AppModule.class)
+@Component(modules = {AppModule.class, ApiModule.class})
 public interface AppComponent {
 
     MainComponent plus(MainModule module);
