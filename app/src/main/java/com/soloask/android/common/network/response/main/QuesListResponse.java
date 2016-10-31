@@ -2,7 +2,7 @@ package com.soloask.android.common.network.response.main;
 
 import com.google.gson.annotations.SerializedName;
 import com.soloask.android.common.network.response.BaseResponse;
-import com.soloask.android.data.model.Question;
+import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;
 
@@ -10,12 +10,12 @@ import java.util.List;
  * Created by lebron on 16-10-27.
  */
 
-public class HotResponse extends BaseResponse {
+public class QuesListResponse extends BaseResponse {
     @SerializedName("data")
-    private List<Question> questionList;
+    private List<QuestionModel> questionList;
 
 
-    public List<Question> getQuestionList() {
+    public List<QuestionModel> getQuestionList() {
         return questionList;
     }
 }

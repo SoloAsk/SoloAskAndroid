@@ -23,6 +23,7 @@ public class Constant {
     public static final String KEY_REMEMBER_PAYPAL = "key_remember_paypal";
     public static final String KEY_PAYPAL_ACCOUNT = "key_paypal_account";
     public static final String KEY_QUESTION_ID = "key_question_id";
+    public static final String KEY_TOKEN = "key_token";
     public static final String FILE_NAME_VOICE = "answer_temp.aac";
     public static final String OVERHEAR_PRICE_ID = "payment_1";
     public static final int[] ARRAY_STATUS = new int[]{R.string.status_unanswered, R.string.status_answered, R.string.status_refunded, R.string.status_timeout};

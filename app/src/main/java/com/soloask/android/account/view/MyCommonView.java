@@ -2,6 +2,7 @@ package com.soloask.android.account.view;
 
 import com.soloask.android.common.base.BaseView;
 import com.soloask.android.data.model.Question;
+import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface MyCommonView extends BaseView {
      *
      * @param questionList
      */
-    void showMyQuestions(List<Question> questionList);
+    void showMyQuestions(List<QuestionModel> questionList);
 
     /**
      * 获取数据个数

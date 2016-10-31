@@ -25,7 +25,7 @@ import com.soloask.android.account.presenter.MyCommonPresenter;
 import com.soloask.android.account.view.MyCommonView;
 import com.soloask.android.common.base.BaseActivity;
 import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.view.impl.AnswerActivity;
 import com.soloask.android.question.view.impl.QuestionDetailActivity;
 import com.soloask.android.util.Constant;
@@ -66,7 +66,7 @@ public class MyCommonActivity extends BaseActivity implements MyCommonView
     private BaseQuickAdapter mBaseAdapter;
     private List<Question> mDatas = new ArrayList<Question>();
     private int mFrom;
-    private User mUser;
+    private String mUserId;
 
     @OnClick(R.id.tv_retry)
     public void retry() {
@@ -82,8 +82,8 @@ public class MyCommonActivity extends BaseActivity implements MyCommonView
     @Override
     protected void initViewsAndData() {
         mFrom = getIntent().getIntExtra(Constant.KEY_FROM_MINE, Constant.KEY_FROM_MY_QUESTION);
-        mUser = (User) getIntent().getSerializableExtra("user");
-        if (mUser == null) {
+        mUserId = getIntent().getStringExtra("user");
+        if (mUserId == null) {
             return;
         }
 
@@ -104,7 +104,7 @@ public class MyCommonActivity extends BaseActivity implements MyCommonView
 
     private void getData() {
         if (mPresenter != null) {
-            mPresenter.getQuestionList(mUser, mFrom);
+            mPresenter.getQuestionList(mUserId, mFrom);
         }
     }
 
@@ -182,7 +182,7 @@ public class MyCommonActivity extends BaseActivity implements MyCommonView
     }
 
     @Override
-    public void showMyQuestions(List<Question> questionList) {
+    public void showMyQuestions(List<QuestionModel> questionList) {
         mRefreshLayout.setRefreshing(false);
         mBaseAdapter.notifyDataChangedAfterLoadMore(questionList, true);
     }

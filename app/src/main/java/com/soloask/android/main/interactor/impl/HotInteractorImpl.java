@@ -1,12 +1,18 @@
 package com.soloask.android.main.interactor.impl;
 
-import com.soloask.android.data.bmob.HotManager;
-import com.soloask.android.data.model.Question;
+import com.soloask.android.common.network.ApiResponseHandler;
+import com.soloask.android.common.network.ApiSubscriber;
+import com.soloask.android.common.network.ApiWrapper;
+import com.soloask.android.common.network.request.main.HotRequest;
+import com.soloask.android.common.network.response.main.QuesListResponse;
 import com.soloask.android.main.interactor.HotInteractor;
 
-import java.util.List;
-
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by lebron on 16-8-4.
@@ -14,10 +20,14 @@ import javax.inject.Inject;
 public class HotInteractorImpl implements HotInteractor {
     private boolean isLoading;
     private int mSkipNum = 0;
-    private HotManager mHotManager;
+    private ApiWrapper mApiWrapper;
+    private CompositeSubscription mSub;
+    private HotRequest mRequest;
 
     @Inject
-    public HotInteractorImpl() {
+    public HotInteractorImpl(ApiWrapper apiWrapper, CompositeSubscription subscription) {
+        mApiWrapper = apiWrapper;
+        mSub = subscription;
     }
 
     @Override
@@ -47,20 +57,36 @@ public class HotInteractorImpl implements HotInteractor {
 
     @Override
     public void getHotQuestionsData(final HotQuestionResponseListener listener) {
-        if (mHotManager == null) {
-            mHotManager = new HotManager();
-        }
-        mHotManager.setOnGetHotListener(new HotManager.OnGetHotListener() {
+        mRequest = new HotRequest();
+        mRequest.setOffset(mSkipNum);
+        mRequest.setSize(10);
+
+        ApiResponseHandler.CustomHandler<QuesListResponse> handler = new ApiResponseHandler.CustomHandler<QuesListResponse>() {
             @Override
-            public void onSuccess(List<Question> list) {
-                listener.onResponseSuccess(list);
+            public void success(QuesListResponse hotResponse) {
+                if (hotResponse.getCode() == 1 && hotResponse.getQuestionList() != null) {
+                    listener.onResponseSuccess(hotResponse.getQuestionList());
+                } else {
+                    listener.onResponseFailed();
+                }
             }
 
             @Override
-            public void onFailed() {
+            public boolean operationError(QuesListResponse hotResponse, int status, String message) {
                 listener.onResponseFailed();
+                return false;
             }
-        });
-        mHotManager.getHotList(mSkipNum);
+
+            @Override
+            public boolean error(Throwable e) {
+                listener.onResponseFailed();
+                return false;
+            }
+        };
+        Subscription subscription = mApiWrapper.getHotQues(mRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber<>(handler));
+        mSub.add(subscription);
     }
 }

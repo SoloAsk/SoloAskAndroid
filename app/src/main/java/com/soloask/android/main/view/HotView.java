@@ -2,6 +2,7 @@ package com.soloask.android.main.view;
 
 import com.soloask.android.common.base.BaseView;
 import com.soloask.android.data.model.Question;
+import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface HotView extends BaseView {
      *
      * @param questionList
      */
-    void showHotQuestions(List<Question> questionList);
+    void showHotQuestions(List<QuestionModel> questionList);
 
     /**
      * 获取数据个数

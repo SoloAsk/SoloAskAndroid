@@ -1,5 +1,6 @@
 package com.soloask.android.main.interactor;
 
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseInteractor;
 import com.soloask.android.data.model.User;
 
@@ -12,6 +13,6 @@ public interface PersonInteractor extends BaseInteractor {
     void getPopularPersonData(PersonResponseListener listener);
 
     interface PersonResponseListener extends BaseResponseListener {
-        void onResponseSuccess(List<User> list);
+        void onResponseSuccess(List<UserModel> list);
     }
 }

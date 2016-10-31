@@ -14,8 +14,12 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.soloask.android.account.interactor.LoginInteractor;
-import com.soloask.android.data.bmob.UserManager;
-import com.soloask.android.data.model.User;
+import com.soloask.android.common.network.ApiConstant;
+import com.soloask.android.common.network.ApiResponseHandler;
+import com.soloask.android.common.network.ApiSubscriber;
+import com.soloask.android.common.network.ApiWrapper;
+import com.soloask.android.common.network.request.account.LoginRequest;
+import com.soloask.android.common.network.response.account.UserResponse;
 import com.umeng.message.UmengRegistrar;
 
 import org.json.JSONObject;
@@ -24,14 +28,23 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * Created by LeBron on 2016/8/6.
  */
 public class LoginInteractorImpl implements LoginInteractor {
-    private UserManager mManager;
+    private LoginRequest mRequest;
+    private ApiWrapper mApiWrapper;
+    private CompositeSubscription mSub;
 
     @Inject
-    LoginInteractorImpl() {
+    LoginInteractorImpl(ApiWrapper apiWrapper, CompositeSubscription subscription) {
+        mApiWrapper = apiWrapper;
+        mSub = subscription;
     }
 
     @Override
@@ -76,23 +89,44 @@ public class LoginInteractorImpl implements LoginInteractor {
                     JSONObject object_pic = object.optJSONObject("picture");
                     JSONObject object_data = object_pic.optJSONObject("data");
                     final String photo = object_data.optString("url");
-
-                    if (mManager == null) {
-                        mManager = new UserManager();
+                    if (mRequest == null) {
+                        mRequest = new LoginRequest();
                     }
-                    mManager.setUserLoginListener(new UserManager.UserLoginListener() {
+                    mRequest.setThirdId(id);
+                    mRequest.setIcon(photo);
+                    mRequest.setUserName(name);
+                    mRequest.setDeviceToken(deviceToken);
+                    ApiResponseHandler.CustomHandler<UserResponse> handler = new ApiResponseHandler.CustomHandler<UserResponse>() {
                         @Override
-                        public void onSuccess(User user) {
-                            listener.OnLoginResponseSuccess(user);
+                        public void success(UserResponse userResponse) {
+                            if (userResponse.getCode() == ApiConstant.STATUS_CODE_SUCC && userResponse.getUserModel() != null) {
+                                listener.OnLoginResponseSuccess(userResponse.getUserModel());
+                            } else {
+                                LoginManager.getInstance().logOut();
+                                listener.onResponseFailed();
+                            }
                         }
 
                         @Override
-                        public void onFailed() {
+                        public boolean operationError(UserResponse userResponse, int status, String message) {
                             LoginManager.getInstance().logOut();
                             listener.onResponseFailed();
+                            return false;
                         }
-                    });
-                    mManager.signOrLogin(id, name, photo, deviceToken);
+
+                        @Override
+                        public boolean error(Throwable e) {
+                            LoginManager.getInstance().logOut();
+                            listener.onResponseFailed();
+                            return false;
+                        }
+                    };
+                    Subscription subscription = mApiWrapper.userLogin(mRequest)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new ApiSubscriber<>(handler));
+                    mSub.add(subscription);
+
                 }
             }
         });

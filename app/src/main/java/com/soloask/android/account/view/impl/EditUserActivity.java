@@ -24,6 +24,7 @@ import com.soloask.android.MainApplication;
 import com.soloask.android.R;
 import com.soloask.android.account.adapter.PriceAdapter;
 import com.soloask.android.account.injection.EditUserModule;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.EditUserPresenter;
 import com.soloask.android.account.view.EditUserView;
 import com.soloask.android.common.base.BaseActivity;
@@ -94,7 +95,7 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
     }
 
 
-    private User mUser;
+    private UserModel mUser;
     private String mTitle, mIntroduce;
     private double mAskPrice;
     private String mDeviceToken;
@@ -140,7 +141,7 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
                 if (mUser != null && mPresenter != null) {
                     mUser.setUserTitle(mTitle);
                     mUser.setUserIntroduce(mIntroduce);
-                    mUser.setUserPrice(mAskPrice);
+                    mUser.setPrice(mAskPrice);
                     if (mDeviceToken != null) {
                         mUser.setDeviceToken(mDeviceToken);
                     }
@@ -153,14 +154,14 @@ public class EditUserActivity extends BaseActivity implements EditUserView {
 
     @Override
     protected void initViewsAndData() {
-        mUser = (User) getIntent().getSerializableExtra("user");
+        mUser = (UserModel) getIntent().getSerializableExtra("user");
         if (mUser == null) {
             return;
         }
         mTitleView.setText(mUser.getUserTitle());
         mDescribeView.setText(mUser.getUserIntroduce());
-        mAskPrice = mUser.getUserPrice();
-        mPriceView.setText(String.format(getString(R.string.format_dollar), mUser.getUserPrice()));
+        mAskPrice = mUser.getPrice();
+        mPriceView.setText(String.format(getString(R.string.format_dollar), mAskPrice));
         mDeviceToken = UmengRegistrar.getRegistrationId(getViewContext());
     }
 

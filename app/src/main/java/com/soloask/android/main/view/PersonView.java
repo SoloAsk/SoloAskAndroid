@@ -1,6 +1,7 @@
 package com.soloask.android.main.view;
 
 
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseView;
 import com.soloask.android.data.model.User;
 
@@ -30,7 +31,7 @@ public interface PersonView extends BaseView {
      *
      * @param personList
      */
-    void showPopularPersons(List<User> personList);
+    void showPopularPersons(List<UserModel> personList);
 
     /**
      * 获取数据个数

@@ -20,10 +20,10 @@ import com.facebook.login.LoginManager;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
 import com.soloask.android.account.injection.UserModule;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.UserPresenter;
 import com.soloask.android.account.view.UserView;
 import com.soloask.android.common.base.BaseActivity;
-import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.view.CircleImageView;
@@ -81,12 +81,13 @@ public class UserActivity extends BaseActivity implements UserView {
     Bus mBus;
 
     private Intent mIntent;
-    private User mUser;
+    private UserModel mUser;
 
     @Subscribe
     public void updateInfo(String busEvent) {
         if (busEvent.equals(Constant.BUS_EVENT_EDIT)) {
             getUserInfo();
+            Log.i("UserActivity", "userLogin");
         }
     }
 
@@ -254,9 +255,7 @@ public class UserActivity extends BaseActivity implements UserView {
         if (mUser != null) {
             mIntent.setClass(UserActivity.this, MyCommonActivity.class);
             mIntent.putExtra(Constant.KEY_FROM_MINE, from);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("user", mUser);
-            mIntent.putExtras(bundle);
+            mIntent.putExtra("user", mUser.getUserId());
             startActivityForResult(mIntent, Constant.CODE_REQUEST);
         } else {
             mIntent.setClass(UserActivity.this, LoginActivity.class);
@@ -271,7 +270,7 @@ public class UserActivity extends BaseActivity implements UserView {
     }
 
     @Override
-    public void showUserInfo(User user) {
+    public void showUserInfo(UserModel user) {
         mUser = user;
         Glide.with(UserActivity.this)
                 .load(user.getUserIcon())
@@ -280,8 +279,8 @@ public class UserActivity extends BaseActivity implements UserView {
         mUserNameView.setText(user.getUserName());
         mTitleView.setText(user.getUserTitle());
         mIntroduceView.setText(user.getUserIntroduce());
-        mUserPriceView.setText(String.format(getString(R.string.format_dollar), user.getUserPrice()));
-        mUserIncomeView.setText(String.format(getString(R.string.format_dollar), user.getUserIncome()));
+        mUserPriceView.setText(String.format(getString(R.string.format_dollar), user.getPrice()));
+        mUserIncomeView.setText(String.format(getString(R.string.format_dollar), user.getIncome()));
     }
 
     @Override

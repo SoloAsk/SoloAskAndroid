@@ -1,7 +1,7 @@
 package com.soloask.android.common.base;
 
 import com.soloask.android.MainApplication;
-import com.soloask.android.common.network.Api;
+import com.soloask.android.common.network.ApiConstant;
 import com.soloask.android.common.network.ApiService;
 import com.soloask.android.common.network.ApiWrapper;
 
@@ -18,6 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by lebron on 16-10-27.
@@ -33,10 +34,16 @@ public class ApiModule {
 
     @Provides
     @Singleton
+    CompositeSubscription getCompositeSubscription() {
+        return new CompositeSubscription();
+    }
+
+    @Provides
+    @Singleton
     ApiService getApiService(OkHttpClient client) {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl(Api.BASE_URL)
+                .baseUrl(ApiConstant.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

@@ -8,21 +8,22 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.soloask.android.R;
 import com.soloask.android.data.model.Question;
+import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;
 
 /**
  * Created by lebron on 16-8-5.
  */
-public class HotAdapter extends BaseQuickAdapter<Question> {
+public class HotAdapter extends BaseQuickAdapter<QuestionModel> {
 
-    public HotAdapter(List<Question> data) {
+    public HotAdapter(List<QuestionModel> data) {
         super(R.layout.item_hot_view, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder baseViewHolder, Question question) {
-        baseViewHolder.setText(R.id.tv_question, question.getQuesContent());
+    protected void convert(BaseViewHolder baseViewHolder, QuestionModel question) {
+        baseViewHolder.setText(R.id.tv_question, question.getContent());
         baseViewHolder.setText(R.id.tv_respondent_describe, question.getAnswerUser().getUserName() + " | " + question.getAnswerUser().getUserTitle());
         baseViewHolder.setText(R.id.tv_listeners_amount, String.format(mContext.getResources().getString(R.string.format_listerers), question.getListenerNum()));
 

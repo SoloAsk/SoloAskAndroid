@@ -7,9 +7,9 @@ import com.soloask.android.data.model.User;
  * Created by LeBron on 2016/8/6.
  */
 public interface WithDrawInteractor {
-    void requestWithDraw(User user, String paypalAccount, WithDrawResponseListener listener);
+    void requestWithDraw(String userId, String paypalAccount, WithDrawResponseListener listener);
 
     interface WithDrawResponseListener extends BaseInteractor.BaseResponseListener {
-        void OnResponseSuccess(String id);
+        void OnResponseSuccess();
     }
 }

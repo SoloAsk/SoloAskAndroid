@@ -6,6 +6,7 @@ import com.soloask.android.account.presenter.MyCommonPresenter;
 import com.soloask.android.account.view.MyCommonView;
 import com.soloask.android.data.model.Question;
 import com.soloask.android.data.model.User;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.util.NetworkManager;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class MyCommonPresenterImpl implements MyCommonPresenter, MyCommonInterac
     }
 
     @Override
-    public void getQuestionList(User user, int type) {
+    public void getQuestionList(String user_id, int type) {
         if (mView == null || mInteractor == null || mInteractor.isLoading()) {
             return;
         }
@@ -39,7 +40,7 @@ public class MyCommonPresenterImpl implements MyCommonPresenter, MyCommonInterac
         } else {
             mView.showNetworkError(false);
             mInteractor.setIsLoading(true);
-            mInteractor.getMyQuestionsData(user,type, this);
+            mInteractor.getMyQuestionsData(user_id, type, this);
             if (mInteractor.getSkipNum() <= 0) {
                 mView.showProgress(true);
             }
@@ -67,7 +68,7 @@ public class MyCommonPresenterImpl implements MyCommonPresenter, MyCommonInterac
     }
 
     @Override
-    public void OnQuestionsResponseSuccess(List<Question> list) {
+    public void OnQuestionsResponseSuccess(List<QuestionModel> list) {
         if (mView == null || mInteractor == null) {
             return;
         }

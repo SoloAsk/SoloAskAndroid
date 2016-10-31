@@ -24,6 +24,7 @@ import com.soloask.android.main.adapter.HotAdapter;
 import com.soloask.android.main.module.HotModule;
 import com.soloask.android.main.presenter.HotPresenter;
 import com.soloask.android.main.view.HotView;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.view.impl.QuestionDetailActivity;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
@@ -56,7 +57,7 @@ public class HotFragment extends BaseFragment implements HotView
     @Inject
     HotPresenter mPrestenter;
     private HotAdapter mHotAdapter;
-    private List<Question> mQuestionList = new ArrayList<>();
+    private List<QuestionModel> mQuestionList = new ArrayList<>();
 
     @OnClick(R.id.tv_retry)
     public void retry() {
@@ -126,7 +127,7 @@ public class HotFragment extends BaseFragment implements HotView
     }
 
     @Override
-    public void showHotQuestions(List<Question> questionList) {
+    public void showHotQuestions(List<QuestionModel> questionList) {
         mRefreshLayout.setRefreshing(false);
         mHotAdapter.notifyDataChangedAfterLoadMore(questionList, true);
     }
@@ -145,7 +146,7 @@ public class HotFragment extends BaseFragment implements HotView
     public void onItemClick(View view, int position) {
         if (SharedPreferencesHelper.getPreferenceString(getViewContext(), Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
             Intent intent = new Intent(getViewContext(), QuestionDetailActivity.class);
-            intent.putExtra(Constant.KEY_QUESTION_ID, mQuestionList.get(position).getObjectId());
+            intent.putExtra(Constant.KEY_QUESTION_ID, mQuestionList.get(position).getId());
             getViewContext().startActivity(intent);
         } else {
             Intent intent = new Intent(getViewContext(), LoginActivity.class);

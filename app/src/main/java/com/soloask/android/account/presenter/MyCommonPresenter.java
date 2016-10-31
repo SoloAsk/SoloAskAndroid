@@ -7,7 +7,7 @@ import com.soloask.android.data.model.User;
  * Created by lebron on 16-8-8.
  */
 public interface MyCommonPresenter extends BasePresenter {
-    void getQuestionList(User user, int type);
+    void getQuestionList(String user_id, int type);
 
     void resetSkipNum();
 }

@@ -1,5 +1,6 @@
 package com.soloask.android.account.view;
 
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseView;
 import com.soloask.android.data.model.User;
 
@@ -8,5 +9,5 @@ import com.soloask.android.data.model.User;
  */
 public interface UserView extends BaseView<User> {
 
-    void showUserInfo(User user);
+    void showUserInfo(UserModel user);
 }

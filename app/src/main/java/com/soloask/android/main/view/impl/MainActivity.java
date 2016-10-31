@@ -133,8 +133,10 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.CODE_RESULT_LOGIN) {
-            SharedPreferencesHelper.setPreferenceString(MainActivity.this, Constant.KEY_LOGINED_OBJECT_ID, data.getStringExtra("user_object_id"));
+            SharedPreferencesHelper.setPreferenceString(MainActivity.this, Constant.KEY_LOGINED_OBJECT_ID, data.getStringExtra("user_id"));
             SharedPreferencesHelper.setPreferenceString(MainActivity.this, Constant.KEY_LOGINED_ICON_URL, data.getStringExtra("user_icon_url"));
+            SharedPreferencesHelper.setPreferenceString(MainActivity.this, Constant.KEY_TOKEN, data.getStringExtra("token"));
+            Log.i("MainActivity", data.getStringExtra("token"));
             Glide.with(MainActivity.this)
                     .load(data.getStringExtra("user_icon_url"))
                     //.placeholder(R.drawable.ic_me_default)

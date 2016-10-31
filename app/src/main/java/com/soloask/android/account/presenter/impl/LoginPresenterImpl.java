@@ -3,6 +3,7 @@ package com.soloask.android.account.presenter.impl;
 import com.facebook.CallbackManager;
 import com.soloask.android.R;
 import com.soloask.android.account.interactor.LoginInteractor;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.LoginPresenter;
 import com.soloask.android.account.view.LoginView;
 import com.soloask.android.data.model.User;
@@ -45,7 +46,7 @@ public class LoginPresenterImpl implements LoginPresenter, LoginInteractor.Login
     }
 
     @Override
-    public void OnLoginResponseSuccess(User user) {
+    public void OnLoginResponseSuccess(UserModel user) {
         if (user != null) {
             mView.loginSuccess(user);
         } else {

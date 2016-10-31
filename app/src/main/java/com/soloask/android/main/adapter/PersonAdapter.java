@@ -7,6 +7,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.soloask.android.R;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.data.model.User;
 
 import java.util.List;
@@ -14,13 +15,13 @@ import java.util.List;
 /**
  * Created by lebron on 16-8-5.
  */
-public class PersonAdapter extends BaseQuickAdapter<User> {
-    public PersonAdapter(List<User> data) {
+public class PersonAdapter extends BaseQuickAdapter<UserModel> {
+    public PersonAdapter(List<UserModel> data) {
         super(R.layout.item_person_view, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder baseViewHolder, User user) {
+    protected void convert(BaseViewHolder baseViewHolder, UserModel user) {
         ImageView imageView = (ImageView) baseViewHolder.getView(R.id.img_respondent);
         Glide.with(mContext)
                 .load(user.getUserIcon())

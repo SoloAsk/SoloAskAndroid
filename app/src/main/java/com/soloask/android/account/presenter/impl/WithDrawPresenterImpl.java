@@ -23,7 +23,7 @@ public class WithDrawPresenterImpl implements WithDrawPresenter, WithDrawInterac
     }
 
     @Override
-    public void withDrawRequest(User user, String paypalAccount) {
+    public void withDrawRequest(String user, String paypalAccount) {
         if (mView == null || mInteractor == null) {
             return;
         }
@@ -36,7 +36,7 @@ public class WithDrawPresenterImpl implements WithDrawPresenter, WithDrawInterac
     }
 
     @Override
-    public void OnResponseSuccess(String id) {
+    public void OnResponseSuccess() {
         if (mView != null) {
             mView.showLoadingLayout(false);
             mView.requestSuccess();

@@ -1,5 +1,6 @@
 package com.soloask.android.account.interactor;
 
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseInteractor;
 import com.soloask.android.data.model.User;
 
@@ -10,6 +11,6 @@ public interface UserInteractor {
     void getUserInfo(String id, UserInfoResponseListener listener);
 
     interface UserInfoResponseListener extends BaseInteractor.BaseResponseListener {
-        void onResponseSuccess(User user);
+        void onResponseSuccess(UserModel user);
     }
 }

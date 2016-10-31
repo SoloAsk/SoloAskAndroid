@@ -19,10 +19,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
 import com.soloask.android.account.injection.WithDrawModule;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.WithDrawPresenter;
 import com.soloask.android.account.view.WithDrawView;
 import com.soloask.android.common.base.BaseActivity;
-import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.soloask.android.util.SharedPreferencesHelper;
 import com.soloask.android.view.BoundImageView;
@@ -52,7 +52,7 @@ public class WithDrawActivity extends BaseActivity implements WithDrawView {
 
     @Inject
     WithDrawPresenter mPresenter;
-    private User mUser;
+    private UserModel mUser;
     private boolean isRemember;
     private String paypalAccount;
 
@@ -86,7 +86,7 @@ public class WithDrawActivity extends BaseActivity implements WithDrawView {
             mRememberBox.setChecked(true);
             mPaypalView.setText(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_PAYPAL_ACCOUNT, ""));
         }
-        mUser = (User) getIntent().getSerializableExtra("user");
+        mUser = (UserModel) getIntent().getSerializableExtra("user");
         if (mUser == null) {
             return;
         }
@@ -95,7 +95,7 @@ public class WithDrawActivity extends BaseActivity implements WithDrawView {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mUserIcon);
         mNameView.setText(mUser.getUserName());
-        mIncomeView.setText(String.format(getString(R.string.format_current_income), mUser.getUserEarned()));
+        mIncomeView.setText(String.format(getString(R.string.format_current_income), mUser.getEarning()));
     }
 
     @Override
@@ -116,7 +116,7 @@ public class WithDrawActivity extends BaseActivity implements WithDrawView {
                 mPaypalView2.setError(WithDrawActivity.this.getString(R.string.notice_donot_match));
             } else {
                 if (mPresenter != null) {
-                    mPresenter.withDrawRequest(mUser, paypalAccount);
+                    mPresenter.withDrawRequest(mUser.getUserId(), paypalAccount);
                 }
             }
         }

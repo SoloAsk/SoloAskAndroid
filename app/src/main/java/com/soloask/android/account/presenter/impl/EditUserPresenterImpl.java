@@ -3,6 +3,7 @@ package com.soloask.android.account.presenter.impl;
 
 import com.soloask.android.R;
 import com.soloask.android.account.interactor.EditUserInteractor;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.EditUserPresenter;
 import com.soloask.android.account.view.EditUserView;
 import com.soloask.android.data.model.User;
@@ -24,7 +25,7 @@ public class EditUserPresenterImpl implements EditUserPresenter, EditUserInterac
     }
 
     @Override
-    public void setUserInfo(User user) {
+    public void setUserInfo(UserModel user) {
         if (mView == null || mInteractor == null) {
             return;
         }

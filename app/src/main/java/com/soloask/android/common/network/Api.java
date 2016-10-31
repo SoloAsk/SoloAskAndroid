@@ -11,8 +11,6 @@ import rx.schedulers.Schedulers;
  */
 
 public class Api {
-    public static final String BASE_URL = "http://192.168.0.82:5000";
-
     /**
      * 对 Observable<T> 做统一的处理，处理了线程调度、分割返回结果等操作组合了起来
      *

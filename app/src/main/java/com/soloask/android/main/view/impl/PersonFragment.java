@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.view.impl.LoginActivity;
 import com.soloask.android.common.base.BaseFragment;
 import com.soloask.android.data.model.User;
@@ -60,7 +61,7 @@ public class PersonFragment extends BaseFragment implements PersonView
     PersonPresenter mPresenter;
 
     private PersonAdapter mPersonAdapter;
-    private List<User> mPersonList = new ArrayList<>();
+    private List<UserModel> mPersonList = new ArrayList<>();
 
     @OnClick(R.id.tv_retry)
     public void retry() {
@@ -143,7 +144,7 @@ public class PersonFragment extends BaseFragment implements PersonView
     }
 
     @Override
-    public void showPopularPersons(List<User> personList) {
+    public void showPopularPersons(List<UserModel> personList) {
         mRefreshLayout.setRefreshing(false);
         mPersonAdapter.notifyDataChangedAfterLoadMore(personList, true);
     }

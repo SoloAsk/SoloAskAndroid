@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import com.facebook.CallbackManager;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
 import com.soloask.android.account.injection.LoginModule;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.LoginPresenter;
 import com.soloask.android.account.view.LoginView;
 import com.soloask.android.common.base.BaseActivity;
@@ -70,11 +72,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     @Override
-    public void loginSuccess(User user) {
+    public void loginSuccess(UserModel user) {
         Intent intent = new Intent();
         intent.putExtra("user_name", user.getUserName());
         intent.putExtra("user_icon_url", user.getUserIcon());
-        intent.putExtra("user_object_id", user.getObjectId());
+        intent.putExtra("user_id", user.getUserId());
+        intent.putExtra("token", user.getToken());
         LoginActivity.this.setResult(Constant.CODE_RESULT_LOGIN, intent);
         LoginActivity.this.finish();
     }

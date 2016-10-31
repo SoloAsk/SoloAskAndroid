@@ -1,7 +1,7 @@
 package com.soloask.android.main.interactor;
 
 import com.soloask.android.common.base.BaseInteractor;
-import com.soloask.android.data.model.Question;
+import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;
 
@@ -13,6 +13,6 @@ public interface HotInteractor extends BaseInteractor {
     void getHotQuestionsData(HotQuestionResponseListener listener);
 
     interface HotQuestionResponseListener extends BaseResponseListener {
-        void onResponseSuccess(List<Question> list);
+        void onResponseSuccess(List<QuestionModel> list);
     }
 }

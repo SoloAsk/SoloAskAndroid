@@ -2,6 +2,7 @@ package com.soloask.android.account.presenter.impl;
 
 import com.soloask.android.R;
 import com.soloask.android.account.interactor.UserInteractor;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.UserPresenter;
 import com.soloask.android.account.view.UserView;
 import com.soloask.android.data.model.User;
@@ -45,7 +46,7 @@ public class UserPresenterImpl implements UserPresenter, UserInteractor.UserInfo
     }
 
     @Override
-    public void onResponseSuccess(User user) {
+    public void onResponseSuccess(UserModel user) {
         if (mView == null || mInteractor == null) {
             return;
         }
