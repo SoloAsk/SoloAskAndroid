@@ -7,10 +7,18 @@ import com.soloask.android.common.network.request.account.UserRequest;
 import com.soloask.android.common.network.request.account.WithDrawRequest;
 import com.soloask.android.common.network.request.main.DiscoverRequest;
 import com.soloask.android.common.network.request.main.HotRequest;
+import com.soloask.android.common.network.request.question.AnswerRequest;
+import com.soloask.android.common.network.request.question.AskRequest;
+import com.soloask.android.common.network.request.question.CheckHeardRequest;
+import com.soloask.android.common.network.request.question.QuesDetailRequest;
+import com.soloask.android.common.network.request.search.SearchRequest;
 import com.soloask.android.common.network.response.WithDrawResponse;
 import com.soloask.android.common.network.response.account.UserResponse;
 import com.soloask.android.common.network.response.main.UserListResponse;
 import com.soloask.android.common.network.response.main.QuesListResponse;
+import com.soloask.android.common.network.response.question.CheckHeardResponse;
+import com.soloask.android.common.network.response.question.QuestionResponse;
+import com.soloask.android.common.network.response.question.SetHeardResponse;
 
 import javax.inject.Inject;
 
@@ -58,5 +66,33 @@ public class ApiWrapper extends Api {
 
     public Observable<WithDrawResponse> createWithDraw(WithDrawRequest request) {
         return applySchedulers(mService.createWithDraw(request));
+    }
+
+    public Observable<QuestionResponse> getQuesDetail(QuesDetailRequest request) {
+        return applySchedulers(mService.getQuesDetail(request));
+    }
+
+    public Observable<CheckHeardResponse> checkQuesHeard(CheckHeardRequest request) {
+        return applySchedulers(mService.checkQuesHeard(request));
+    }
+
+    public Observable<SetHeardResponse> setHeardUser(CheckHeardRequest request) {
+        return applySchedulers(mService.setHeardUser(request));
+    }
+
+    public Observable<QuestionResponse> createQuestion(AskRequest request) {
+        return applySchedulers(mService.createQuestion(request));
+    }
+
+    public Observable<QuestionResponse> answerQuestion(AnswerRequest request) {
+        return applySchedulers(mService.answerQuestion(request));
+    }
+
+    public Observable<QuesListResponse> searchQuestions(SearchRequest request) {
+        return applySchedulers(mService.searchQuestions(request));
+    }
+
+    public Observable<UserListResponse> searchUsers(SearchRequest request) {
+        return applySchedulers(mService.searchUsers(request));
     }
 }

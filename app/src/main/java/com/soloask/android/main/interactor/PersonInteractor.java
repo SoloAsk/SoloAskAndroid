@@ -2,7 +2,6 @@ package com.soloask.android.main.interactor;
 
 import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseInteractor;
-import com.soloask.android.data.model.User;
 
 import java.util.List;
 

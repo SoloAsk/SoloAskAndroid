@@ -16,9 +16,9 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseActivity;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.view.impl.QuestionDetailActivity;
 import com.soloask.android.question.view.impl.UserProfileActivity;
 import com.soloask.android.search.adapter.SearchPersonAdapter;
@@ -113,13 +113,13 @@ public class SearchMoreActivity extends BaseActivity implements SearchMoreView
     }
 
     @Override
-    public void showSearchPersons(List<User> list) {
+    public void showSearchPersons(List<UserModel> list) {
         mRefreshLayout.setRefreshing(false);
         mBaseAdapter.notifyDataChangedAfterLoadMore(list, true);
     }
 
     @Override
-    public void showSearchQuestions(List<Question> list) {
+    public void showSearchQuestions(List<QuestionModel> list) {
         mRefreshLayout.setRefreshing(false);
         mBaseAdapter.notifyDataChangedAfterLoadMore(list, true);
     }
@@ -142,12 +142,12 @@ public class SearchMoreActivity extends BaseActivity implements SearchMoreView
         if (isFromPerson) {
             Intent intent = new Intent(getViewContext(), UserProfileActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("user", (User) mData.get(i));
+            bundle.putSerializable("user", (UserModel) mData.get(i));
             intent.putExtras(bundle);
             getViewContext().startActivity(intent);
         } else {
             Intent intent = new Intent(getViewContext(), QuestionDetailActivity.class);
-            intent.putExtra(Constant.KEY_QUESTION_ID, ((Question) mData.get(i)).getObjectId());
+            intent.putExtra(Constant.KEY_QUESTION_ID, ((QuestionModel) mData.get(i)).getId());
             getViewContext().startActivity(intent);
         }
     }

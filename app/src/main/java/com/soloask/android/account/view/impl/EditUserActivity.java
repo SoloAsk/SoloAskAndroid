@@ -28,7 +28,6 @@ import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.EditUserPresenter;
 import com.soloask.android.account.view.EditUserView;
 import com.soloask.android.common.base.BaseActivity;
-import com.soloask.android.data.model.User;
 import com.soloask.android.util.Constant;
 import com.squareup.otto.Bus;
 import com.umeng.message.UmengRegistrar;

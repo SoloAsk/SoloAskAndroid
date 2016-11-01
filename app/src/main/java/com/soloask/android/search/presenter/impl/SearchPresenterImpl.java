@@ -1,8 +1,8 @@
 package com.soloask.android.search.presenter.impl;
 
 import com.soloask.android.R;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.account.model.UserModel;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.search.interactor.SearchInteractor;
 import com.soloask.android.search.presenter.SearchPresenter;
 import com.soloask.android.search.view.SearchView;
@@ -71,7 +71,7 @@ public class SearchPresenterImpl implements SearchPresenter, SearchInteractor.Se
     }
 
     @Override
-    public void OnSearchPersonSuccess(List<User> list) {
+    public void OnSearchPersonSuccess(List<UserModel> list) {
         isUserEmpty = list.size() <= 0;
         if (mView != null) {
             mView.showPersons(list);
@@ -83,7 +83,7 @@ public class SearchPresenterImpl implements SearchPresenter, SearchInteractor.Se
     }
 
     @Override
-    public void OnSearchQuestionSuccess(List<Question> list) {
+    public void OnSearchQuestionSuccess(List<QuestionModel> list) {
         isQuestionEmpty = list.size() <= 0;
         if (mView != null) {
             mView.showQuestions(list);

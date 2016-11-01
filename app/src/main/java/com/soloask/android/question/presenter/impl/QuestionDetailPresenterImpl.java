@@ -1,9 +1,10 @@
 package com.soloask.android.question.presenter.impl;
 
+import android.util.Log;
+
 import com.soloask.android.R;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
 import com.soloask.android.question.interactor.QuestionDetailInteractor;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.presenter.QuestionDetailPresenter;
 import com.soloask.android.question.view.QuestionDetailView;
 import com.soloask.android.util.NetworkManager;
@@ -24,23 +25,7 @@ public class QuestionDetailPresenterImpl implements QuestionDetailPresenter, Que
     }
 
     @Override
-    public void getCurrentUser(String userId) {
-        if (mView == null || mInteractor == null) {
-            return;
-        }
-        if (!NetworkManager.isNetworkValid(mView.getViewContext())) {
-            mView.showNetworkError(true);
-            mView.showProgress(false);
-            mView.showToast(R.string.failed_to_load_data);
-        } else {
-            mView.showProgress(true);
-            mView.showNetworkError(false);
-            mInteractor.getCurrentUser(userId, this);
-        }
-    }
-
-    @Override
-    public void checkUserHeard(Question question, User user) {
+    public void checkUserHeard(String question, String user) {
         if (mView == null || mInteractor == null) {
             return;
         }
@@ -72,19 +57,20 @@ public class QuestionDetailPresenterImpl implements QuestionDetailPresenter, Que
     }
 
     @Override
+    public void setHeardUser(String question, String user) {
+        if (mInteractor == null) {
+            return;
+        }
+        mInteractor.setHeardUser(question, user, this);
+    }
+
+    @Override
     public void start() {
     }
 
     @Override
     public void stop() {
 
-    }
-
-    @Override
-    public void OnGetCurrentUserSuccess(User user) {
-        if (user != null && mView != null) {
-            mView.showCurrentUser(user);
-        }
     }
 
     @Override
@@ -95,12 +81,17 @@ public class QuestionDetailPresenterImpl implements QuestionDetailPresenter, Que
     }
 
     @Override
-    public void OnGetDetailSuccess(Question question) {
+    public void OnGetDetailSuccess(QuestionModel question) {
         if (mView != null && question != null) {
             mView.showQuestionDetail(question);
             mView.showProgress(false);
             mView.showNetworkError(false);
         }
+    }
+
+    @Override
+    public void OnSetHeardUserSuccess() {
+        Log.i("QuestionDetail", "listen question successfully");
     }
 
     @Override

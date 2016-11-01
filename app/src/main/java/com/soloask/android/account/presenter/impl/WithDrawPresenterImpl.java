@@ -4,7 +4,6 @@ import com.soloask.android.R;
 import com.soloask.android.account.interactor.WithDrawInteractor;
 import com.soloask.android.account.presenter.WithDrawPresenter;
 import com.soloask.android.account.view.WithDrawView;
-import com.soloask.android.data.model.User;
 import com.soloask.android.util.NetworkManager;
 
 import javax.inject.Inject;

@@ -5,7 +5,6 @@ import com.soloask.android.account.interactor.UserInteractor;
 import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.presenter.UserPresenter;
 import com.soloask.android.account.view.UserView;
-import com.soloask.android.data.model.User;
 import com.soloask.android.util.NetworkManager;
 
 import javax.inject.Inject;

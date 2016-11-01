@@ -1,7 +1,7 @@
 package com.soloask.android.question.view;
 
 import com.soloask.android.common.base.BaseView;
-import com.soloask.android.data.model.Question;
+import com.soloask.android.question.model.QuestionModel;
 
 /**
  * Created by lebron on 16-8-10.
@@ -26,7 +26,7 @@ public interface AnswerView extends BaseView {
      *
      * @param question
      */
-    void showQuestionDetail(Question question);
+    void showQuestionDetail(QuestionModel question);
 
     /**
      * 显示上传成功

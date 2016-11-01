@@ -1,8 +1,8 @@
 package com.soloask.android.question.view;
 
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseView;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;
 
@@ -18,25 +18,18 @@ public interface AskView extends BaseView {
     void showNetworkError(boolean show);
 
     /**
-     * 得到当前用户
-     *
-     * @param user
-     */
-    void getCurrentUser(User user);
-
-    /**
      * 显示当前回答用户
      *
      * @param user
      */
-    void showCurrentRespondentInfo(User user);
+    void showCurrentRespondentInfo(UserModel user);
 
     /**
      * 得到当前回答用户历史问题列表
      *
      * @param questions
      */
-    void showRelatedQuestions(List<Question> questions);
+    void showRelatedQuestions(List<QuestionModel> questions);
 
     /**
      * 提问成功

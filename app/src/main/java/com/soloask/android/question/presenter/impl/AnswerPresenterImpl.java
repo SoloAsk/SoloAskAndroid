@@ -1,8 +1,8 @@
 package com.soloask.android.question.presenter.impl;
 
 import com.soloask.android.R;
-import com.soloask.android.data.model.Question;
 import com.soloask.android.question.interactor.AnswerInteractor;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.presenter.AnswerPresenter;
 import com.soloask.android.question.view.AnswerView;
 import com.soloask.android.util.NetworkManager;
@@ -40,17 +40,17 @@ public class AnswerPresenterImpl implements AnswerPresenter, AnswerInteractor.An
     }
 
     @Override
-    public void uploadAnswer(Question question, String filePath) {
+    public void uploadAnswer(String questionId, String filepath, int length) {
         if (mView == null || mInteractor == null) {
             return;
         }
         mView.showProgress(true);
         mView.showNetworkError(false);
-        mInteractor.uploadAnswer(question, filePath, this);
+        mInteractor.uploadAnswer(questionId, filepath, length, this);
     }
 
     @Override
-    public void OnQuestionDetailSucess(Question question) {
+    public void OnQuestionDetailSucess(QuestionModel question) {
         if (mView != null && question != null) {
             mView.showProgress(false);
             mView.showNetworkError(false);

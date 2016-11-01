@@ -2,7 +2,6 @@ package com.soloask.android.account.interactor;
 
 import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseInteractor;
-import com.soloask.android.data.model.User;
 
 /**
  * Created by lebron on 16-8-5.

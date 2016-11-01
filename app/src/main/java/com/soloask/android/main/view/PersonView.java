@@ -3,7 +3,6 @@ package com.soloask.android.main.view;
 
 import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseView;
-import com.soloask.android.data.model.User;
 
 import java.util.List;
 

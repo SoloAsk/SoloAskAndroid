@@ -3,8 +3,8 @@ package com.soloask.android.search.presenter.impl;
 import android.util.Log;
 
 import com.soloask.android.R;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.account.model.UserModel;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.search.interactor.SearchMoreInteractor;
 import com.soloask.android.search.presenter.SearchMorePresenter;
 import com.soloask.android.search.view.SearchMoreView;
@@ -56,7 +56,7 @@ public class SearchMorePresenterImpl implements SearchMorePresenter, SearchMoreI
     }
 
     @Override
-    public void OnSearchQuestionSuccess(List<Question> list) {
+    public void OnSearchQuestionSuccess(List<QuestionModel> list) {
         if (mView == null || mInteractor == null) {
             return;
         }
@@ -74,7 +74,7 @@ public class SearchMorePresenterImpl implements SearchMorePresenter, SearchMoreI
     }
 
     @Override
-    public void OnSearchPersonSuccess(List<User> list) {
+    public void OnSearchPersonSuccess(List<UserModel> list) {
         if (mView == null || mInteractor == null) {
             return;
         }

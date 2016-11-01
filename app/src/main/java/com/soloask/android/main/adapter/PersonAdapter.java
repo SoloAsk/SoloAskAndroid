@@ -8,7 +8,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.soloask.android.R;
 import com.soloask.android.account.model.UserModel;
-import com.soloask.android.data.model.User;
 
 import java.util.List;
 

@@ -24,7 +24,6 @@ import com.soloask.android.account.injection.MyCommonModule;
 import com.soloask.android.account.presenter.MyCommonPresenter;
 import com.soloask.android.account.view.MyCommonView;
 import com.soloask.android.common.base.BaseActivity;
-import com.soloask.android.data.model.Question;
 import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.view.impl.AnswerActivity;
 import com.soloask.android.question.view.impl.QuestionDetailActivity;
@@ -64,7 +63,7 @@ public class MyCommonActivity extends BaseActivity implements MyCommonView
     private MyAnswerAdapter mAnswerAdapter;
     private MyListenAdapter mListenAdapter;
     private BaseQuickAdapter mBaseAdapter;
-    private List<Question> mDatas = new ArrayList<Question>();
+    private List<QuestionModel> mDatas = new ArrayList<QuestionModel>();
     private int mFrom;
     private String mUserId;
 
@@ -211,18 +210,18 @@ public class MyCommonActivity extends BaseActivity implements MyCommonView
             case Constant.KEY_FROM_MY_QUESTION:
             case Constant.KEY_FROM_MY_LISTEN:
                 Intent intentQuestion = new Intent(getViewContext(), QuestionDetailActivity.class);
-                intentQuestion.putExtra(Constant.KEY_QUESTION_ID, mDatas.get(i).getObjectId());
+                intentQuestion.putExtra(Constant.KEY_QUESTION_ID, mDatas.get(i).getId());
                 startActivity(intentQuestion);
                 break;
             case Constant.KEY_FROM_MY_ANSWER:
-                Question question = mDatas.get(i);
+                QuestionModel question = mDatas.get(i);
                 if (question.getState().intValue() == Constant.STATUS_UNANSWERED) {
                     Intent intentAnswer = new Intent(getViewContext(), AnswerActivity.class);
-                    intentAnswer.putExtra(Constant.KEY_QUESTION_ID, question.getObjectId());
+                    intentAnswer.putExtra(Constant.KEY_QUESTION_ID, question.getId());
                     startActivityForResult(intentAnswer, Constant.CODE_REQUEST);
                 } else if (question.getState().intValue() == Constant.STATUS_ANSWERED) {
                     Intent intentListen = new Intent(getViewContext(), QuestionDetailActivity.class);
-                    intentListen.putExtra(Constant.KEY_QUESTION_ID, question.getObjectId());
+                    intentListen.putExtra(Constant.KEY_QUESTION_ID, question.getId());
                     startActivity(intentListen);
                 }
                 break;

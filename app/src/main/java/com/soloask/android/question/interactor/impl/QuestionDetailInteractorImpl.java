@@ -1,78 +1,136 @@
 package com.soloask.android.question.interactor.impl;
 
-import com.soloask.android.data.bmob.QuestionDetailManager;
-import com.soloask.android.data.bmob.UserManager;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.common.network.ApiConstant;
+import com.soloask.android.common.network.ApiResponseHandler;
+import com.soloask.android.common.network.ApiSubscriber;
+import com.soloask.android.common.network.ApiWrapper;
+import com.soloask.android.common.network.request.question.CheckHeardRequest;
+import com.soloask.android.common.network.request.question.QuesDetailRequest;
+import com.soloask.android.common.network.response.question.CheckHeardResponse;
+import com.soloask.android.common.network.response.question.QuestionResponse;
+import com.soloask.android.common.network.response.question.SetHeardResponse;
 import com.soloask.android.question.interactor.QuestionDetailInteractor;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by lebron on 16-8-10.
  */
 public class QuestionDetailInteractorImpl implements QuestionDetailInteractor {
-    private UserManager mUserManager;
-    private QuestionDetailManager mQuestionManager;
+    private ApiWrapper mApiWrapper;
+    private CompositeSubscription mSub;
+    private CheckHeardRequest mCheckRequest;
+    private QuesDetailRequest mRequest;
 
     @Inject
-    public QuestionDetailInteractorImpl() {
+    public QuestionDetailInteractorImpl(ApiWrapper apiWrapper, CompositeSubscription subscription) {
+        mApiWrapper = apiWrapper;
+        mSub = subscription;
     }
 
     @Override
-    public void getCurrentUser(String userId, final QuestionDetailResponseListener listener) {
-        if (mUserManager == null) {
-            mUserManager = new UserManager();
+    public void checkUserHeard(String question, String user, final QuestionDetailResponseListener listener) {
+        if (mCheckRequest == null) {
+            mCheckRequest = new CheckHeardRequest();
         }
-        mUserManager.setUserInfoListener(new UserManager.UserInfoListener() {
+        mCheckRequest.setUser_id(user);
+        mCheckRequest.setQuestion_id(question);
+        ApiResponseHandler.CustomHandler<CheckHeardResponse> handler = new ApiResponseHandler.CustomHandler<CheckHeardResponse>() {
             @Override
-            public void onSuccess(User user) {
-                listener.OnGetCurrentUserSuccess(user);
+            public void success(CheckHeardResponse checkHeardResponse) {
+                if (checkHeardResponse.getCode() == ApiConstant.STATUS_CODE_SUCC) {
+                    listener.OnCheckUserHeardSuccess(checkHeardResponse.isHeard());
+                }
             }
 
             @Override
-            public void onFailed() {
+            public boolean operationError(CheckHeardResponse checkHeardResponse, int status, String message) {
                 listener.onResponseFailed();
+                return false;
             }
-        });
-        mUserManager.getUserInfo(userId);
+
+            @Override
+            public boolean error(Throwable e) {
+                listener.onResponseFailed();
+                return false;
+            }
+        };
+        Subscription subscription = mApiWrapper.checkQuesHeard(mCheckRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber<>(handler));
+        mSub.add(subscription);
     }
 
     @Override
-    public void checkUserHeard(Question question, User user, final QuestionDetailResponseListener listener) {
-        if (mQuestionManager == null) {
-            mQuestionManager = new QuestionDetailManager();
+    public void getQuestionDetail(final String questionId, final QuestionDetailResponseListener listener) {
+        if (mRequest == null) {
+            mRequest = new QuesDetailRequest();
         }
-        mQuestionManager.setOnCheckUserHeardListener(new QuestionDetailManager.OnCheckUserHeardListener() {
+        mRequest.setId(questionId);
+        ApiResponseHandler.CustomHandler<QuestionResponse> handler = new ApiResponseHandler.CustomHandler<QuestionResponse>() {
             @Override
-            public void onSuccess(boolean userHeard) {
-                listener.OnCheckUserHeardSuccess(userHeard);
+            public void success(QuestionResponse questionResponse) {
+                if (questionResponse.getCode() == ApiConstant.STATUS_CODE_SUCC && questionResponse.getQuestionModel() != null) {
+                    listener.OnGetDetailSuccess(questionResponse.getQuestionModel());
+                }
             }
 
             @Override
-            public void onFailed() {
+            public boolean operationError(QuestionResponse questionResponse, int status, String message) {
                 listener.onResponseFailed();
+                return false;
             }
-        });
-        mQuestionManager.checkUserHeard(question, user);
+
+            @Override
+            public boolean error(Throwable e) {
+                listener.onResponseFailed();
+                return false;
+            }
+        };
+        Subscription subscription = mApiWrapper.getQuesDetail(mRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber<>(handler));
+        mSub.add(subscription);
     }
 
     @Override
-    public void getQuestionDetail(String questionId, final QuestionDetailResponseListener listener) {
-        if (mQuestionManager == null) {
-            mQuestionManager = new QuestionDetailManager();
+    public void setHeardUser(String question, String user, final QuestionDetailResponseListener listener) {
+        if (mCheckRequest == null) {
+            mCheckRequest = new CheckHeardRequest();
         }
-        mQuestionManager.setOnQuestionDetailListener(new QuestionDetailManager.OnQuestionDetailListener() {
+        mCheckRequest.setQuestion_id(question);
+        mCheckRequest.setUser_id(user);
+        ApiResponseHandler.CustomHandler<SetHeardResponse> handler = new ApiResponseHandler.CustomHandler<SetHeardResponse>() {
             @Override
-            public void onSuccess(Question question) {
-                listener.OnGetDetailSuccess(question);
+            public void success(SetHeardResponse response) {
+                if (response.getCode() == ApiConstant.STATUS_CODE_SUCC) {
+                    listener.OnSetHeardUserSuccess();
+                }
             }
 
             @Override
-            public void onFailed() {
+            public boolean operationError(SetHeardResponse setHeardResponse, int status, String message) {
                 listener.onResponseFailed();
+                return false;
             }
-        });
-        mQuestionManager.getQuestionDetail(questionId);
+
+            @Override
+            public boolean error(Throwable e) {
+                listener.onResponseFailed();
+                return false;
+            }
+        };
+        Subscription subscription = mApiWrapper.setHeardUser(mCheckRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber<>(handler));
+        mSub.add(subscription);
     }
 }

@@ -19,7 +19,6 @@ import com.soloask.android.MainApplication;
 import com.soloask.android.R;
 import com.soloask.android.account.view.impl.LoginActivity;
 import com.soloask.android.common.base.BaseFragment;
-import com.soloask.android.data.model.Question;
 import com.soloask.android.main.adapter.HotAdapter;
 import com.soloask.android.main.module.HotModule;
 import com.soloask.android.main.presenter.HotPresenter;
@@ -146,7 +145,7 @@ public class HotFragment extends BaseFragment implements HotView
     public void onItemClick(View view, int position) {
         if (SharedPreferencesHelper.getPreferenceString(getViewContext(), Constant.KEY_LOGINED_OBJECT_ID, null) != null) {
             Intent intent = new Intent(getViewContext(), QuestionDetailActivity.class);
-            intent.putExtra(Constant.KEY_QUESTION_ID, mQuestionList.get(position).getId());
+            intent.putExtra(Constant.KEY_QUESTION_ID, String.valueOf(mQuestionList.get(position).getId()));
             getViewContext().startActivity(intent);
         } else {
             Intent intent = new Intent(getViewContext(), LoginActivity.class);

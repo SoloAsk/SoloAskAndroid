@@ -24,8 +24,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
 import com.soloask.android.common.base.BaseActivity;
-import com.soloask.android.data.model.Question;
 import com.soloask.android.question.injection.AnswerModule;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.presenter.AnswerPresenter;
 import com.soloask.android.question.view.AnswerView;
 import com.soloask.android.util.AudioManager;
@@ -84,7 +84,7 @@ public class AnswerActivity extends BaseActivity implements AnswerView {
     private int mCurrentSecond = 0;
     private int mTotalSeconds = 0;
     private int mPlayProgress = 0;
-    private Question mQuestion;
+    private QuestionModel mQuestion;
     private String mQuestionId;
 
     @Override
@@ -114,7 +114,7 @@ public class AnswerActivity extends BaseActivity implements AnswerView {
 
     private void uploadAnswer() {
         if (mPresenter != null) {
-            mPresenter.uploadAnswer(mQuestion, FileManager.getFilePath(Constant.FILE_NAME_VOICE));
+            mPresenter.uploadAnswer(mQuestionId, FileManager.getFilePath(Constant.FILE_NAME_VOICE), --mTotalSeconds);
         }
     }
 
@@ -328,7 +328,6 @@ public class AnswerActivity extends BaseActivity implements AnswerView {
     @OnClick(R.id.tv_answer_send)
     public void send() {
         if (FileManager.isFileExits(Constant.FILE_NAME_VOICE)) {
-            mQuestion.setVoiceTime(--mTotalSeconds);
             uploadAnswer();
         } else {
             showToast(R.string.failed_to_load_data);
@@ -356,15 +355,15 @@ public class AnswerActivity extends BaseActivity implements AnswerView {
     }
 
     @Override
-    public void showQuestionDetail(Question question) {
+    public void showQuestionDetail(QuestionModel question) {
         mQuestion = question;
         Glide.with(AnswerActivity.this)
                 .load(question.getAskUser().getUserIcon())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(mQuestionerIcon);
         mQuestionerName.setText(question.getAskUser().getUserName());
-        mQuestionPrice.setText(String.format(getString(R.string.format_dollar), question.getQuesPrice()));
-        mQuestionView.setText(question.getQuesContent());
+        mQuestionPrice.setText(String.format(getString(R.string.format_dollar), question.getPrice()));
+        mQuestionView.setText(question.getContent());
         mDealedTime.setText(RelativeDateFormat.format(question.getAskTime(), AnswerActivity.this));
     }
 

@@ -1,8 +1,8 @@
 package com.soloask.android.search.view;
 
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseView;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;
 
@@ -29,12 +29,12 @@ public interface SearchMoreView extends BaseView {
      *
      * @param list
      */
-    void showSearchPersons(List<User> list);
+    void showSearchPersons(List<UserModel> list);
 
     /**
      * 显示搜索到的问题列表
      *
      * @param list
      */
-    void showSearchQuestions(List<Question> list);
+    void showSearchQuestions(List<QuestionModel> list);
 }

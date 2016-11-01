@@ -1,9 +1,9 @@
 package com.soloask.android.question.presenter.impl;
 
 import com.soloask.android.R;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.question.interactor.AskInteractor;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.presenter.AskPresenter;
 import com.soloask.android.question.view.AskView;
 import com.soloask.android.util.NetworkManager;
@@ -26,13 +26,6 @@ public class AskPresenterImpl implements AskPresenter, AskInteractor.AskResponse
     }
 
     @Override
-    public void getCurrentUser(String userId) {
-        if (mInteractor != null) {
-            mInteractor.getCurrentUser(userId, this);
-        }
-    }
-
-    @Override
     public void getRespondentInfo(String userId) {
         if (mInteractor != null) {
             mInteractor.getRespondentInfo(userId, this);
@@ -40,7 +33,7 @@ public class AskPresenterImpl implements AskPresenter, AskInteractor.AskResponse
     }
 
     @Override
-    public void getRespondentRelatedQuestions(User user) {
+    public void getRespondentRelatedQuestions(String userId) {
         if (mView == null || mInteractor == null || mInteractor.isLoading()) {
             return;
         }
@@ -52,12 +45,12 @@ public class AskPresenterImpl implements AskPresenter, AskInteractor.AskResponse
         } else {
             mView.showNetworkError(false);
             mInteractor.setIsLoading(true);
-            mInteractor.getRespondentRelatedQuestions(user, this);
+            mInteractor.getRespondentRelatedQuestions(userId, this);
         }
     }
 
     @Override
-    public void askQuestion(Question question) {
+    public void askQuestion(QuestionModel question) {
         if (mInteractor != null) {
             mInteractor.askQuestion(question, this);
         }
@@ -71,21 +64,14 @@ public class AskPresenterImpl implements AskPresenter, AskInteractor.AskResponse
     }
 
     @Override
-    public void onGetCurrentUserSuccess(User user) {
-        if (mView != null && user != null) {
-            mView.getCurrentUser(user);
-        }
-    }
-
-    @Override
-    public void onGetRespondentInfoSucc(User user) {
+    public void onGetRespondentInfoSucc(UserModel user) {
         if (mView != null && user != null) {
             mView.showCurrentRespondentInfo(user);
         }
     }
 
     @Override
-    public void onGetRelatedQuestionsSucc(List<Question> questions) {
+    public void onGetRelatedQuestionsSucc(List<QuestionModel> questions) {
         if (mView == null || mInteractor == null) {
             return;
         }

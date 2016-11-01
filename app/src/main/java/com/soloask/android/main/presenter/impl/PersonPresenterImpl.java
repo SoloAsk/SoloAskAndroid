@@ -2,7 +2,6 @@ package com.soloask.android.main.presenter.impl;
 
 import com.soloask.android.R;
 import com.soloask.android.account.model.UserModel;
-import com.soloask.android.data.model.User;
 import com.soloask.android.main.interactor.PersonInteractor;
 import com.soloask.android.main.presenter.PersonPresenter;
 import com.soloask.android.main.view.PersonView;

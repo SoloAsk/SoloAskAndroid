@@ -5,7 +5,6 @@ import android.content.Context;
 import com.facebook.CallbackManager;
 import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseInteractor;
-import com.soloask.android.data.model.User;
 
 /**
  * Created by LeBron on 2016/8/6.

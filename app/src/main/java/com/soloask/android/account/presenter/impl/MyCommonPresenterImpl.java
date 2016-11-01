@@ -4,8 +4,6 @@ import com.soloask.android.R;
 import com.soloask.android.account.interactor.MyCommonInteractor;
 import com.soloask.android.account.presenter.MyCommonPresenter;
 import com.soloask.android.account.view.MyCommonView;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
 import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.util.NetworkManager;
 

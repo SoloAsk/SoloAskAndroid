@@ -7,7 +7,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.soloask.android.R;
-import com.soloask.android.data.model.Question;
 import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;

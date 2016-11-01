@@ -21,7 +21,6 @@ import com.soloask.android.R;
 import com.soloask.android.account.model.UserModel;
 import com.soloask.android.account.view.impl.LoginActivity;
 import com.soloask.android.common.base.BaseFragment;
-import com.soloask.android.data.model.User;
 import com.soloask.android.main.adapter.PersonAdapter;
 import com.soloask.android.main.module.PersonModule;
 import com.soloask.android.main.presenter.PersonPresenter;

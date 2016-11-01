@@ -25,10 +25,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
-import com.soloask.android.data.bmob.QuestionDetailManager;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
 import com.soloask.android.question.injection.QuestionDetailModule;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.presenter.QuestionDetailPresenter;
 import com.soloask.android.question.view.QuestionDetailView;
 import com.soloask.android.util.Constant;
@@ -107,9 +105,9 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
     private AnimationDrawable mAnimationDrawable;
     private IabHelper mHelper;
     private List mSKULists;
-    private Question mQuestion;
-    private User mCurrentUser;
+    private String mCurrentUserId;
     private String mQuestionId;
+    private QuestionModel mQuestion;
     private boolean isIABHelperOK;
     private boolean isPayed, isPaused;
 
@@ -123,6 +121,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
         mAnimImg.setVisibility(View.VISIBLE);
         mPlayImg.setVisibility(View.GONE);
         mQuestionId = getIntent().getStringExtra(Constant.KEY_QUESTION_ID);
+        mCurrentUserId = SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null);
     }
 
     @Override
@@ -131,7 +130,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
         MainApplication.get(this).getAppComponent()
                 .plus(new QuestionDetailModule(this))
                 .inject(this);
-        getCurrentUser(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null));
+        getQuestionDetail();
         initIabHelper();
     }
 
@@ -161,15 +160,15 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
         }
     }
 
-    private void getCurrentUser(String userId) {
+    private void checkUserHeard() {
         if (mPresenter != null) {
-            mPresenter.getCurrentUser(userId);
+            mPresenter.checkUserHeard(mQuestionId, mCurrentUserId);
         }
     }
 
-    private void checkUserHeard() {
+    private void setHeardUser() {
         if (mPresenter != null) {
-            mPresenter.checkUserHeard(mQuestion, mCurrentUser);
+            mPresenter.setHeardUser(mQuestionId, mCurrentUserId);
         }
     }
 
@@ -254,13 +253,13 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
     @OnClick(R.id.tv_retry)
     public void retry() {
         showNetworkError(false);
-        getCurrentUser(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null));
+        getQuestionDetail();
     }
 
     private void downloadAudio(String fileUrl) {
         Log.i("QuestionDetail", fileUrl);
-        BmobFile bmobFile = new BmobFile(mQuestion.getObjectId() + ".aac", "", fileUrl);
-        File saveFile = new File(FileManager.getFilePath(mQuestion.getObjectId() + ".aac"));
+        BmobFile bmobFile = new BmobFile(mQuestion.getId() + ".aac", "", fileUrl);
+        File saveFile = new File(FileManager.getFilePath(mQuestion.getId() + ".aac"));
         bmobFile.download(saveFile, new DownloadFileListener() {
 
             @Override
@@ -290,7 +289,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
         mPriceView.setText(R.string.recording_playing);
         mAnimationDrawable = (AnimationDrawable) mAnimImg.getDrawable();
         mAnimationDrawable.start();
-        MediaManager.playSound(FileManager.getFilePath(mQuestion.getObjectId() + ".aac"), new MediaPlayer.OnCompletionListener() {
+        MediaManager.playSound(FileManager.getFilePath(mQuestion.getId() + ".aac"), new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 mAnimationDrawable.stop();
@@ -310,9 +309,9 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
     }
 
     private void checkFileExist() {
-        if (!FileManager.isFileExits(mQuestion.getObjectId() + ".aac")) {
+        if (!FileManager.isFileExits(mQuestion.getId() + ".aac")) {
             mPriceView.setText(R.string.detail_downloading);
-            downloadAudio(mQuestion.getQuesVoiceURL());
+            downloadAudio(mQuestion.getVoiceURL());
         } else {
             playAudio();
         }
@@ -350,7 +349,7 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
                     mPriceView.setText(R.string.detail_click_to_play);
                     isPayed = true;
                     //纪录偷听用户
-                    new QuestionDetailManager().setHeardUser(mQuestion, mCurrentUser);
+                    setHeardUser();
                 } else {
                     Log.i("QuestionDetail", "consume successfully");
                 }
@@ -440,14 +439,6 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
     }
 
     @Override
-    public void showCurrentUser(User user) {
-        if (user != null) {
-            mCurrentUser = user;
-            getQuestionDetail();
-        }
-    }
-
-    @Override
     public void showUserHeard(boolean heard) {
         isPayed = heard;
         if (isPayed) {
@@ -456,18 +447,18 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
     }
 
     @Override
-    public void showQuestionDetail(Question question) {
+    public void showQuestionDetail(QuestionModel question) {
         if (question != null) {
             mQuestion = question;
             //是否有回答
-            if (question.getQuesVoiceURL() != null) {
+            if (question.getVoiceURL() != null) {
                 mVoiceContainer.setVisibility(View.VISIBLE);
                 mListenersView.setVisibility(View.VISIBLE);
                 mListenersView.setText(String.format(getResources().getString(R.string.format_listerers), question.getListenerNum()));
             }
             //是否是用户本人在看详情(提问者或者回答者)
-            if (question.getAnswerUser().getObjectId().equals(mCurrentUser.getObjectId())
-                    || question.getAskUser().getObjectId().equals(mCurrentUser.getObjectId())) {
+            if (question.getAnswerUser().getUserId().equals(mCurrentUserId)
+                    || question.getAskUser().getUserId().equals(mCurrentUserId)) {
                 isPayed = true;
                 mPriceView.setText(R.string.detail_click_to_play);
             } else {
@@ -489,9 +480,9 @@ public class QuestionDetailActivity extends com.soloask.android.common.base.Base
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mRespondentImg2);
             mQuestionerName.setText(question.getAskUser().getUserName());
-            mQuestionPriceView.setText(String.format(getString(R.string.format_dollar), question.getQuesPrice()));
+            mQuestionPriceView.setText(String.format(getString(R.string.format_dollar), question.getPrice()));
             mTimeView.setText(RelativeDateFormat.format(question.getAskTime(), QuestionDetailActivity.this));
-            mContent.setText(question.getQuesContent());
+            mContent.setText(question.getContent());
             mRespondentView.setText(question.getAnswerUser().getUserName());
             mTitleView.setText(question.getAnswerUser().getUserIntroduce());
             mTimeLengthView.setText(String.format(getString(R.string.format_second), question.getVoiceTime()));

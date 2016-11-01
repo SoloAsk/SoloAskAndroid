@@ -28,11 +28,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseActivity;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
 import com.soloask.android.question.adapter.HistoryQuestionAdapter;
 import com.soloask.android.question.injection.AskModule;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.presenter.AskPresenter;
 import com.soloask.android.question.view.AskView;
 import com.soloask.android.util.Constant;
@@ -81,13 +81,13 @@ public class UserProfileActivity extends BaseActivity implements AskView
 
     private HistoryQuestionAdapter mAdapter;
     private IabHelper mHelper;
-    private List<Question> mDatas = new ArrayList();
+    private List<QuestionModel> mDatas = new ArrayList();
     private String mContent;
     private boolean isPub = true;
     private boolean isIABHelperOK;
     private double mPrice = 0.0;
-    private String mPaymentId;
-    private User mRespondent, mQuestioner;
+    private String mPaymentId, mCurrentUserId;
+    private UserModel mRespondent;
 
     @Override
     protected int getContentViewID() {
@@ -96,7 +96,8 @@ public class UserProfileActivity extends BaseActivity implements AskView
 
     @Override
     protected void initViewsAndData() {
-        mRespondent = (User) getIntent().getSerializableExtra("user");
+        mRespondent = (UserModel) getIntent().getSerializableExtra("user");
+        mCurrentUserId = SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null);
 
         mAdapter = new HistoryQuestionAdapter(mDatas);
         mAdapter.setOnLoadMoreListener(this);
@@ -121,7 +122,6 @@ public class UserProfileActivity extends BaseActivity implements AskView
                 .plus(new AskModule(this))
                 .inject(this);
         initIabHelper();
-        getCurrentUser();
         getUserInfo();
         getUserRelatedQuestions();
     }
@@ -141,25 +141,19 @@ public class UserProfileActivity extends BaseActivity implements AskView
         return super.onOptionsItemSelected(item);
     }
 
-    private void getCurrentUser() {
-        if (mPresenter != null) {
-            mPresenter.getCurrentUser(SharedPreferencesHelper.getPreferenceString(this, Constant.KEY_LOGINED_OBJECT_ID, null));
-        }
-    }
-
     private void getUserInfo() {
         if (mPresenter != null) {
-            mPresenter.getRespondentInfo(mRespondent.getObjectId());
+            mPresenter.getRespondentInfo(mRespondent.getUserId());
         }
     }
 
     private void getUserRelatedQuestions() {
         if (mPresenter != null) {
-            mPresenter.getRespondentRelatedQuestions(mRespondent);
+            mPresenter.getRespondentRelatedQuestions(mRespondent.getUserId());
         }
     }
 
-    private void askQuestions(Question question) {
+    private void askQuestions(QuestionModel question) {
         if (mPresenter != null) {
             mPresenter.askQuestion(question);
         }
@@ -180,14 +174,14 @@ public class UserProfileActivity extends BaseActivity implements AskView
         mFinishView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mQuestioner == null) {
+                if (mCurrentUserId == null) {
                     showToast(R.string.login_account_disable);
                     return;
                 }
                 mContent = mQuestionView.getText().toString();
                 if (TextUtils.isEmpty(mContent)) {
                     mQuestionView.setError(getString(R.string.notice_cannot_null));
-                } else if (mQuestioner.getObjectId().equals(mRespondent.getObjectId())) {
+                } else if (mCurrentUserId.equals(mRespondent.getUserId())) {
                     showToast(R.string.notice_ask_yourself);
                 } else {
                     doPurchase();
@@ -222,15 +216,15 @@ public class UserProfileActivity extends BaseActivity implements AskView
     }
 
     private void setRespondentInfo() {
-        mPaymentId = "payment_" + String.format("%.2f", mRespondent.getUserPrice());
+        mPaymentId = "payment_" + String.format("%.2f", mRespondent.getPrice());
         String summary = String.format(getResources().getString(R.string.format_answered), mRespondent.getAnswerQuesNum())
-                + " , " + String.format(getResources().getString(R.string.format_earned), mRespondent.getUserIncome());
+                + " , " + String.format(getResources().getString(R.string.format_earned), mRespondent.getIncome());
         mSummaryView.setText(summary);
         mNameView.setText(mRespondent.getUserName());
         mTitleView.setText(mRespondent.getUserTitle());
         mIntroduceView.setText(mRespondent.getUserIntroduce());
-        mPriceView.setText(String.format(getString(R.string.format_dollar), mRespondent.getUserPrice()));
-        mPrice = mRespondent.getUserPrice();
+        mPriceView.setText(String.format(getString(R.string.format_dollar), mRespondent.getPrice()));
+        mPrice = mRespondent.getPrice();
         Glide.with(this)
                 .load(mRespondent.getUserIcon())
                 //.placeholder(R.drawable.ic_me_default)
@@ -279,18 +273,13 @@ public class UserProfileActivity extends BaseActivity implements AskView
     }
 
     @Override
-    public void getCurrentUser(User user) {
-        mQuestioner = user;
-    }
-
-    @Override
-    public void showCurrentRespondentInfo(User user) {
+    public void showCurrentRespondentInfo(UserModel user) {
         mRespondent = user;
         setRespondentInfo();
     }
 
     @Override
-    public void showRelatedQuestions(List<Question> questions) {
+    public void showRelatedQuestions(List<QuestionModel> questions) {
         mRefreshLayout.setRefreshing(false);
         mAdapter.notifyDataChangedAfterLoadMore(questions, true);
     }
@@ -307,7 +296,7 @@ public class UserProfileActivity extends BaseActivity implements AskView
     @Override
     public void onItemClick(View view, int i) {
         Intent intent = new Intent(getViewContext(), QuestionDetailActivity.class);
-        intent.putExtra(Constant.KEY_QUESTION_ID, mDatas.get(i).getObjectId());
+        intent.putExtra(Constant.KEY_QUESTION_ID, mDatas.get(i).getId());
         startActivity(intent);
     }
 
@@ -377,13 +366,15 @@ public class UserProfileActivity extends BaseActivity implements AskView
                     return;
                 }
                 if (!fromQuery) {
-                    if (mRespondent != null && mQuestioner != null) {
-                        Question question = new Question();
-                        question.setAskUser(mQuestioner);
+                    if (mRespondent != null && mCurrentUserId != null) {
+                        QuestionModel question = new QuestionModel();
+                        UserModel userModel = new UserModel();
+                        userModel.setUserId(mCurrentUserId);
+                        question.setAskUser(userModel);
                         question.setAnswerUser(mRespondent);
-                        question.setQuesContent(mContent);
-                        question.setPub(isPub);
-                        question.setQuesPrice(mPrice);
+                        question.setContent(mContent);
+                        question.setPublic(isPub);
+                        question.setPrice(mPrice);
                         askQuestions(question);
                     }
                 } else {

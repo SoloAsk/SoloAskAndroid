@@ -21,9 +21,9 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.soloask.android.MainApplication;
 import com.soloask.android.R;
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseActivity;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.question.model.QuestionModel;
 import com.soloask.android.question.view.impl.QuestionDetailActivity;
 import com.soloask.android.question.view.impl.UserProfileActivity;
 import com.soloask.android.search.adapter.SearchPersonAdapter;
@@ -78,8 +78,8 @@ public class SearchActivity extends BaseActivity implements SearchView
 
     private SearchPersonAdapter mPersonAdapter;
     private SearchQuestionAdapter mQuestionAdapter;
-    private List<User> mUsers = new ArrayList<>();
-    private List<Question> mQuestions = new ArrayList<>();
+    private List<UserModel> mUsers = new ArrayList<>();
+    private List<QuestionModel> mQuestions = new ArrayList<>();
     private String mSearchContent;
 
     @OnClick(R.id.btn_clear)
@@ -136,7 +136,7 @@ public class SearchActivity extends BaseActivity implements SearchView
             @Override
             public void onItemClick(View view, int i) {
                 Intent intent = new Intent(getViewContext(), QuestionDetailActivity.class);
-                intent.putExtra(Constant.KEY_QUESTION_ID, mQuestions.get(i).getObjectId());
+                intent.putExtra(Constant.KEY_QUESTION_ID, mQuestions.get(i).getId());
                 getViewContext().startActivity(intent);
             }
         });
@@ -215,13 +215,13 @@ public class SearchActivity extends BaseActivity implements SearchView
     }
 
     @Override
-    public void showQuestions(List<Question> questionList) {
+    public void showQuestions(List<QuestionModel> questionList) {
         mQuestionContainer.setVisibility(questionList.size() > 0 ? View.VISIBLE : View.GONE);
         mQuestionAdapter.notifyDataChangedAfterLoadMore(questionList, false);
     }
 
     @Override
-    public void showPersons(List<User> personList) {
+    public void showPersons(List<UserModel> personList) {
         mPersonContainer.setVisibility(personList.size() > 0 ? View.VISIBLE : View.GONE);
         mPersonAdapter.notifyDataChangedAfterLoadMore(personList, false);
     }

@@ -1,8 +1,8 @@
 package com.soloask.android.search.interactor;
 
+import com.soloask.android.account.model.UserModel;
 import com.soloask.android.common.base.BaseInteractor;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.question.model.QuestionModel;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ public interface SearchMoreInteractor extends BaseInteractor {
     void getSearchResult(boolean isQuestion, String keyword, SearchResultResponseListener listener);
 
     interface SearchResultResponseListener extends BaseResponseListener {
-        void OnSearchQuestionSuccess(List<Question> list);
+        void OnSearchQuestionSuccess(List<QuestionModel> list);
 
-        void OnSearchPersonSuccess(List<User> list);
+        void OnSearchPersonSuccess(List<UserModel> list);
     }
 }

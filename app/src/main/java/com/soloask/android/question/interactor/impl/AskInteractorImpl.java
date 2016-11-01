@@ -1,14 +1,24 @@
 package com.soloask.android.question.interactor.impl;
 
-import com.soloask.android.data.bmob.AskManager;
-import com.soloask.android.data.bmob.UserManager;
-import com.soloask.android.data.model.Question;
-import com.soloask.android.data.model.User;
+import com.soloask.android.common.network.ApiConstant;
+import com.soloask.android.common.network.ApiResponseHandler;
+import com.soloask.android.common.network.ApiSubscriber;
+import com.soloask.android.common.network.ApiWrapper;
+import com.soloask.android.common.network.request.account.MineQuesRequest;
+import com.soloask.android.common.network.request.account.UserRequest;
+import com.soloask.android.common.network.request.question.AskRequest;
+import com.soloask.android.common.network.response.account.UserResponse;
+import com.soloask.android.common.network.response.main.QuesListResponse;
+import com.soloask.android.common.network.response.question.QuestionResponse;
 import com.soloask.android.question.interactor.AskInteractor;
-
-import java.util.List;
+import com.soloask.android.question.model.QuestionModel;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by lebron on 16-8-11.
@@ -16,13 +26,16 @@ import javax.inject.Inject;
 public class AskInteractorImpl implements AskInteractor {
     private boolean isLoading;
     private int mSkipNum = 0;
-    private UserManager mQuestionerManager;
-    private UserManager mRespondentManager;
-    private AskManager mAskManager;
-    private AskManager mQuestionsManager;
+    private ApiWrapper mApiWrapper;
+    private CompositeSubscription mSub;
+    private UserRequest mUserRequest;
+    private MineQuesRequest mRelatedRequest;
+    private AskRequest mAskRequest;
 
     @Inject
-    public AskInteractorImpl() {
+    public AskInteractorImpl(ApiWrapper apiWrapper, CompositeSubscription subscription) {
+        mApiWrapper = apiWrapper;
+        mSub = subscription;
     }
 
     @Override
@@ -51,78 +64,108 @@ public class AskInteractorImpl implements AskInteractor {
     }
 
     @Override
-    public void getCurrentUser(String userId, final AskResponseListener listener) {
-        if (mQuestionerManager == null) {
-            mQuestionerManager = new UserManager();
-        }
-        mQuestionerManager.setUserInfoListener(new UserManager.UserInfoListener() {
-            @Override
-            public void onSuccess(User user) {
-                listener.onGetCurrentUserSuccess(user);
-            }
-
-            @Override
-            public void onFailed() {
-                listener.onResponseFailed();
-            }
-        });
-        mQuestionerManager.getUserInfo(userId);
-    }
-
-    @Override
     public void getRespondentInfo(String userId, final AskResponseListener listener) {
-        if (mRespondentManager == null) {
-            mRespondentManager = new UserManager();
+        if (mUserRequest == null) {
+            mUserRequest = new UserRequest();
         }
-        mRespondentManager.setUserInfoListener(new UserManager.UserInfoListener() {
+        mUserRequest.setId(userId);
+        ApiResponseHandler.CustomHandler<UserResponse> handler = new ApiResponseHandler.CustomHandler<UserResponse>() {
             @Override
-            public void onSuccess(User user) {
-                listener.onGetRespondentInfoSucc(user);
+            public void success(UserResponse userResponse) {
+                if (userResponse.getCode() == ApiConstant.STATUS_CODE_SUCC && userResponse.getUserModel() != null) {
+                    listener.onGetRespondentInfoSucc(userResponse.getUserModel());
+                }
             }
 
             @Override
-            public void onFailed() {
+            public boolean operationError(UserResponse userResponse, int status, String message) {
                 listener.onResponseFailed();
+                return false;
             }
-        });
-        mRespondentManager.getUserInfo(userId);
+
+            @Override
+            public boolean error(Throwable e) {
+                listener.onResponseFailed();
+                return false;
+            }
+        };
+        Subscription subscription = mApiWrapper.getUserInfo(mUserRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber<>(handler));
+        mSub.add(subscription);
     }
 
     @Override
-    public void getRespondentRelatedQuestions(User user, final AskResponseListener listener) {
-        if (mQuestionsManager == null) {
-            mQuestionsManager = new AskManager();
+    public void getRespondentRelatedQuestions(String userId, final AskResponseListener listener) {
+        if (mRelatedRequest == null) {
+            mRelatedRequest = new MineQuesRequest();
         }
-        mQuestionsManager.setOnRespondentQuestionListener(new AskManager.OnRespondentQuestionListener() {
+        mRelatedRequest.setType("history");
+        mRelatedRequest.setUser_id(userId);
+        mRelatedRequest.setOffset(mSkipNum);
+        mRelatedRequest.setSize(10);
+        ApiResponseHandler.CustomHandler<QuesListResponse> handler = new ApiResponseHandler.CustomHandler<QuesListResponse>() {
             @Override
-            public void onSuccess(List<Question> list) {
-                listener.onGetRelatedQuestionsSucc(list);
+            public void success(QuesListResponse quesListResponse) {
+                if (quesListResponse.getCode() == ApiConstant.STATUS_CODE_SUCC && quesListResponse.getQuestionList() != null) {
+                    listener.onGetRelatedQuestionsSucc(quesListResponse.getQuestionList());
+                }
             }
 
             @Override
-            public void onFailed() {
+            public boolean operationError(QuesListResponse quesListResponse, int status, String message) {
                 listener.onResponseFailed();
+                return false;
             }
-        });
-        mQuestionsManager.getHistoryQuestions(mSkipNum, user);
+
+            @Override
+            public boolean error(Throwable e) {
+                listener.onResponseFailed();
+                return false;
+            }
+        };
+        Subscription subscription = mApiWrapper.getRelatedQuesList(mRelatedRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber<>(handler));
+        mSub.add(subscription);
     }
 
     @Override
-    public void askQuestion(Question question, final AskResponseListener listener) {
-        if (mAskManager == null) {
-            mAskManager = new AskManager();
+    public void askQuestion(final QuestionModel question, final AskResponseListener listener) {
+        if (mAskRequest == null) {
+            mAskRequest = new AskRequest();
         }
-        mAskManager.setOnAskQuestionListener(new AskManager.OnAskQuestionListener() {
+        mAskRequest.setContent(question.getContent());
+        mAskRequest.setPrice(question.getPrice());
+        mAskRequest.setIsPublic(question.getPublic() ? 1 : 0);
+        mAskRequest.setAsk_uuid(question.getAskUser().getUserId());
+        mAskRequest.setAnswer_uuid(question.getAnswerUser().getUserId());
+        ApiResponseHandler.CustomHandler<QuestionResponse> handler = new ApiResponseHandler.CustomHandler<QuestionResponse>() {
             @Override
-            public void onSuccess(String objectId) {
-                listener.onAskQuestionSucc(objectId);
+            public void success(QuestionResponse questionResponse) {
+                if (questionResponse.getCode() == ApiConstant.STATUS_CODE_SUCC && questionResponse.getQuestionModel() != null) {
+                    listener.onAskQuestionSucc(String.valueOf(questionResponse.getQuestionModel().getId()));
+                }
             }
 
             @Override
-            public void onFailed() {
+            public boolean operationError(QuestionResponse questionResponse, int status, String message) {
                 listener.onResponseFailed();
+                return false;
             }
-        });
-        mAskManager.askQuestion(question);
+
+            @Override
+            public boolean error(Throwable e) {
+                listener.onResponseFailed();
+                return false;
+            }
+        };
+        Subscription subscription = mApiWrapper.createQuestion(mAskRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber<>(handler));
+        mSub.add(subscription);
     }
 }
